@@ -1,0 +1,68 @@
+package ouvinte
+
+import (
+	"github.com/go-playground/validator/v10"
+	"github.com/yohanalexander/deezefy-music/entity"
+)
+
+// Ouvinte entidade Ouvinte
+type Ouvinte struct {
+	Usuario      string   `validate:"required,email"`
+	PrimeiroNome string   `validate:"required"`
+	Sobrenome    string   `validate:"required"`
+	Telefones    []string `validate:""`
+}
+
+// NewOuvinte cria um novo Ouvinte
+func NewOuvinte(usuario, primeironome, sobrenome string) (*Ouvinte, error) {
+	o := &Ouvinte{
+		Usuario:      usuario,
+		PrimeiroNome: primeironome,
+		Sobrenome:    sobrenome,
+	}
+	err := o.Validate()
+	if err != nil {
+		return nil, err
+	}
+	return o, nil
+}
+
+// Validate valida os dados do Ouvinte
+func (o *Ouvinte) Validate() error {
+	vld := validator.New()
+	if err := vld.Struct(o); err != nil {
+		return entity.ErrInvalidEntity
+	}
+	return nil
+}
+
+// AddTelefone adiciona um Telefone
+func (o *Ouvinte) AddTelefone(telefone string) error {
+	_, err := o.GetTelefone(telefone)
+	if err == nil {
+		return entity.ErrPhoneRegistered
+	}
+	o.Telefones = append(o.Telefones, telefone)
+	return nil
+}
+
+// RemoveTelefone remove um Telefone
+func (o *Ouvinte) RemoveTelefone(telefone string) error {
+	for i, j := range o.Telefones {
+		if j == telefone {
+			o.Telefones = append(o.Telefones[:i], o.Telefones[i+1:]...)
+			return nil
+		}
+	}
+	return entity.ErrNotFound
+}
+
+// GetTelefone get a Telefone
+func (o *Ouvinte) GetTelefone(telefone string) (string, error) {
+	for _, v := range o.Telefones {
+		if v == telefone {
+			return telefone, nil
+		}
+	}
+	return telefone, entity.ErrNotFound
+}
