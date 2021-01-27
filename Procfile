@@ -1,1 +1,1 @@
-web: music-stream-api
+web: deezefy-music
