@@ -5,6 +5,7 @@ import (
 
 	"github.com/yohanalexander/deezefy-music/entity"
 	der "github.com/yohanalexander/deezefy-music/entity/segue"
+	inmem "github.com/yohanalexander/deezefy-music/infrastructure/inmem/repository/segue"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -19,7 +20,7 @@ func newFixtureSegue() *der.Segue {
 func TestCreate(t *testing.T) {
 
 	t.Run("create", func(t *testing.T) {
-		repo := newInmem()
+		repo := inmem.NewInmem()
 		m := NewService(repo)
 		u := newFixtureSegue()
 		_, _, err := m.CreateSegue(u.Artista, u.Ouvinte)
@@ -30,7 +31,7 @@ func TestCreate(t *testing.T) {
 
 func TestSearchAndFind(t *testing.T) {
 
-	repo := newInmem()
+	repo := inmem.NewInmem()
 	m := NewService(repo)
 	u1 := newFixtureSegue()
 	u2 := newFixtureSegue()
@@ -76,7 +77,7 @@ func TestSearchAndFind(t *testing.T) {
 func TestUpdate(t *testing.T) {
 
 	t.Run("update", func(t *testing.T) {
-		repo := newInmem()
+		repo := inmem.NewInmem()
 		m := NewService(repo)
 		u := newFixtureSegue()
 		artista, ouvinte, err := m.CreateSegue(u.Artista, u.Ouvinte)
@@ -91,7 +92,7 @@ func TestUpdate(t *testing.T) {
 
 func TestDelete(t *testing.T) {
 
-	repo := newInmem()
+	repo := inmem.NewInmem()
 	m := NewService(repo)
 	u1 := newFixtureSegue()
 	u2 := newFixtureSegue()

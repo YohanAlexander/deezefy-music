@@ -5,6 +5,7 @@ import (
 
 	"github.com/yohanalexander/deezefy-music/entity"
 	der "github.com/yohanalexander/deezefy-music/entity/curte"
+	inmem "github.com/yohanalexander/deezefy-music/infrastructure/inmem/repository/curte"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -19,7 +20,7 @@ func newFixtureCurte() *der.Curte {
 func TestCreate(t *testing.T) {
 
 	t.Run("create", func(t *testing.T) {
-		repo := newInmem()
+		repo := inmem.NewInmem()
 		m := NewService(repo)
 		u := newFixtureCurte()
 		_, _, err := m.CreateCurte(u.Musica, u.Ouvinte)
@@ -30,7 +31,7 @@ func TestCreate(t *testing.T) {
 
 func TestSearchAndFind(t *testing.T) {
 
-	repo := newInmem()
+	repo := inmem.NewInmem()
 	m := NewService(repo)
 	u1 := newFixtureCurte()
 	u2 := newFixtureCurte()
@@ -76,7 +77,7 @@ func TestSearchAndFind(t *testing.T) {
 func TestUpdate(t *testing.T) {
 
 	t.Run("update", func(t *testing.T) {
-		repo := newInmem()
+		repo := inmem.NewInmem()
 		m := NewService(repo)
 		u := newFixtureCurte()
 		musica, ouvinte, err := m.CreateCurte(u.Musica, u.Ouvinte)
@@ -91,7 +92,7 @@ func TestUpdate(t *testing.T) {
 
 func TestDelete(t *testing.T) {
 
-	repo := newInmem()
+	repo := inmem.NewInmem()
 	m := NewService(repo)
 	u1 := newFixtureCurte()
 	u2 := newFixtureCurte()
