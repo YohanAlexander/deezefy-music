@@ -5,6 +5,7 @@ import (
 
 	"github.com/yohanalexander/deezefy-music/entity"
 	der "github.com/yohanalexander/deezefy-music/entity/local"
+	inmem "github.com/yohanalexander/deezefy-music/infrastructure/inmem/repository/local"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -20,7 +21,7 @@ func newFixtureLocal() *der.Local {
 func TestCreate(t *testing.T) {
 
 	t.Run("create", func(t *testing.T) {
-		repo := newInmem()
+		repo := inmem.NewInmem()
 		m := NewService(repo)
 		u := newFixtureLocal()
 		_, err := m.CreateLocal(u.Cidade, u.Pais, u.ID)
@@ -31,7 +32,7 @@ func TestCreate(t *testing.T) {
 
 func TestSearchAndFind(t *testing.T) {
 
-	repo := newInmem()
+	repo := inmem.NewInmem()
 	m := NewService(repo)
 	u1 := newFixtureLocal()
 	u2 := newFixtureLocal()
@@ -67,7 +68,7 @@ func TestSearchAndFind(t *testing.T) {
 func TestUpdate(t *testing.T) {
 
 	t.Run("update", func(t *testing.T) {
-		repo := newInmem()
+		repo := inmem.NewInmem()
 		m := NewService(repo)
 		u := newFixtureLocal()
 		email, err := m.CreateLocal(u.Cidade, u.Pais, u.ID)
@@ -82,7 +83,7 @@ func TestUpdate(t *testing.T) {
 
 func TestDelete(t *testing.T) {
 
-	repo := newInmem()
+	repo := inmem.NewInmem()
 	m := NewService(repo)
 	u1 := newFixtureLocal()
 	u2 := newFixtureLocal()
