@@ -5,6 +5,7 @@ import (
 
 	"github.com/yohanalexander/deezefy-music/entity"
 	der "github.com/yohanalexander/deezefy-music/entity/usuario"
+	inmem "github.com/yohanalexander/deezefy-music/infrastructure/inmem/repository/usuario"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -20,7 +21,7 @@ func newFixtureUsuario() *der.Usuario {
 func TestCreate(t *testing.T) {
 
 	t.Run("create", func(t *testing.T) {
-		repo := newInmem()
+		repo := inmem.NewInmem()
 		m := NewService(repo)
 		u := newFixtureUsuario()
 		_, err := m.CreateUsuario(u.Email, u.Password, u.Birthday)
@@ -31,7 +32,7 @@ func TestCreate(t *testing.T) {
 
 func TestSearchAndFind(t *testing.T) {
 
-	repo := newInmem()
+	repo := inmem.NewInmem()
 	m := NewService(repo)
 	u1 := newFixtureUsuario()
 	u2 := newFixtureUsuario()
@@ -66,7 +67,7 @@ func TestSearchAndFind(t *testing.T) {
 func TestUpdate(t *testing.T) {
 
 	t.Run("update", func(t *testing.T) {
-		repo := newInmem()
+		repo := inmem.NewInmem()
 		m := NewService(repo)
 		u := newFixtureUsuario()
 		email, err := m.CreateUsuario(u.Email, u.Password, u.Birthday)
@@ -81,7 +82,7 @@ func TestUpdate(t *testing.T) {
 
 func TestDelete(t *testing.T) {
 
-	repo := newInmem()
+	repo := inmem.NewInmem()
 	m := NewService(repo)
 	u1 := newFixtureUsuario()
 	u2 := newFixtureUsuario()
