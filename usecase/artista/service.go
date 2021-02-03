@@ -19,8 +19,8 @@ func NewService(r Repository) *Service {
 }
 
 // CreateArtista Create Artista
-func (s *Service) CreateArtista(usuario, nomeartistico, biografia string, anoformacao int) (string, error) {
-	e, err := entity.NewArtista(usuario, nomeartistico, biografia, anoformacao)
+func (s *Service) CreateArtista(email, password, birthday, nomeartistico, biografia string, anoformacao int) (string, error) {
+	e, err := entity.NewArtista(email, password, birthday, nomeartistico, biografia, anoformacao)
 	if err != nil {
 		return err.Error(), err
 	}

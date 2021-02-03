@@ -10,7 +10,11 @@ import (
 
 func newFixtureArtista() *entity.Artista {
 	return &entity.Artista{
-		Usuario:       "someone@deezefy.com",
+		Usuario: entity.Usuario{
+			Email:    "someone@deezefy.com",
+			Password: "12345678",
+			Birthday: "1998-05-27",
+		},
 		NomeArtistico: "Imagine Dragons",
 		Biografia:     "Indie Rock Band",
 		AnoFormacao:   1998,
@@ -22,8 +26,8 @@ func TestCreate(t *testing.T) {
 	t.Run("create", func(t *testing.T) {
 		repo := newInmem()
 		m := NewService(repo)
-		u := newFixtureArtista()
-		_, err := m.CreateArtista(u.Usuario, u.NomeArtistico, u.Biografia, u.AnoFormacao)
+		a := newFixtureArtista()
+		_, err := m.CreateArtista(a.Usuario.Email, a.Usuario.Password, a.Usuario.Birthday, a.NomeArtistico, a.Biografia, a.AnoFormacao)
 		assert.Nil(t, err)
 	})
 
@@ -33,12 +37,16 @@ func TestSearchAndFind(t *testing.T) {
 
 	repo := newInmem()
 	m := NewService(repo)
-	u1 := newFixtureArtista()
-	u2 := newFixtureArtista()
-	u2.Usuario = "someone2@deezefy.com"
+	a1 := newFixtureArtista()
+	a2 := newFixtureArtista()
+	a2.Usuario = entity.Usuario{
+		Email:    "someone2@deezefy.com",
+		Password: "12345678",
+		Birthday: "1998-05-27",
+	}
 
-	email, _ := m.CreateArtista(u1.Usuario, u1.NomeArtistico, u1.Biografia, u1.AnoFormacao)
-	_, _ = m.CreateArtista(u2.Usuario, u2.NomeArtistico, u2.Biografia, u2.AnoFormacao)
+	email, _ := m.CreateArtista(a1.Usuario.Email, a1.Usuario.Password, a1.Usuario.Birthday, a1.NomeArtistico, a1.Biografia, a1.AnoFormacao)
+	_, _ = m.CreateArtista(a2.Usuario.Email, a2.Usuario.Password, a2.Usuario.Birthday, a2.NomeArtistico, a2.Biografia, a2.AnoFormacao)
 
 	t.Run("search", func(t *testing.T) {
 		c, err := m.SearchArtistas("someone@deezefy.com")
@@ -68,8 +76,8 @@ func TestUpdate(t *testing.T) {
 	t.Run("update", func(t *testing.T) {
 		repo := newInmem()
 		m := NewService(repo)
-		u := newFixtureArtista()
-		email, err := m.CreateArtista(u.Usuario, u.NomeArtistico, u.Biografia, u.AnoFormacao)
+		a := newFixtureArtista()
+		email, err := m.CreateArtista(a.Usuario.Email, a.Usuario.Password, a.Usuario.Birthday, a.NomeArtistico, a.Biografia, a.AnoFormacao)
 		assert.Nil(t, err)
 		saved, _ := m.GetArtista(email)
 		assert.Nil(t, m.UpdateArtista(saved))
@@ -83,14 +91,18 @@ func TestDelete(t *testing.T) {
 
 	repo := newInmem()
 	m := NewService(repo)
-	u1 := newFixtureArtista()
-	u2 := newFixtureArtista()
-	u2.Usuario = "someone2@deezefy.com"
-	email, _ := m.CreateArtista(u2.Usuario, u2.NomeArtistico, u2.Biografia, u2.AnoFormacao)
+	a1 := newFixtureArtista()
+	a2 := newFixtureArtista()
+	a2.Usuario = entity.Usuario{
+		Email:    "someone2@deezefy.com",
+		Password: "12345678",
+		Birthday: "1998-05-27",
+	}
+	email, _ := m.CreateArtista(a2.Usuario.Email, a2.Usuario.Password, a2.Usuario.Birthday, a2.NomeArtistico, a2.Biografia, a2.AnoFormacao)
 
 	t.Run("delete", func(t *testing.T) {
 
-		err := m.DeleteArtista(u1.Usuario)
+		err := m.DeleteArtista(a1.Usuario.Email)
 		assert.Equal(t, entity.ErrNotFound, err)
 
 		err = m.DeleteArtista(email)
@@ -98,8 +110,8 @@ func TestDelete(t *testing.T) {
 		_, err = m.GetArtista(email)
 		assert.Equal(t, entity.ErrNotFound, err)
 
-		u3 := newFixtureArtista()
-		email, _ := m.CreateArtista(u3.Usuario, u3.NomeArtistico, u3.Biografia, u3.AnoFormacao)
+		a3 := newFixtureArtista()
+		email, _ := m.CreateArtista(a3.Usuario.Email, a3.Usuario.Password, a3.Usuario.Birthday, a3.NomeArtistico, a3.Biografia, a3.AnoFormacao)
 		saved, _ := m.GetArtista(email)
 		_ = m.UpdateArtista(saved)
 		err = m.DeleteArtista(email)
