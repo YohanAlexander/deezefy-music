@@ -6,80 +6,103 @@ package mock
 
 import (
 	gomock "github.com/golang/mock/gomock"
-	local "github.com/yohanalexander/deezefy-music/entity/local"
+	entity "github.com/yohanalexander/deezefy-music/entity"
 	reflect "reflect"
 )
 
-// MockLocal is a mock of Local interface
-type MockLocal struct {
+// MockRead is a mock of Read interface
+type MockRead struct {
 	ctrl     *gomock.Controller
-	recorder *MockLocalMockRecorder
+	recorder *MockReadMockRecorder
 }
 
-// MockLocalMockRecorder is the mock recorder for MockLocal
-type MockLocalMockRecorder struct {
-	mock *MockLocal
+// MockReadMockRecorder is the mock recorder for MockRead
+type MockReadMockRecorder struct {
+	mock *MockRead
 }
 
-// NewMockLocal creates a new mock instance
-func NewMockLocal(ctrl *gomock.Controller) *MockLocal {
-	mock := &MockLocal{ctrl: ctrl}
-	mock.recorder = &MockLocalMockRecorder{mock}
+// NewMockRead creates a new mock instance
+func NewMockRead(ctrl *gomock.Controller) *MockRead {
+	mock := &MockRead{ctrl: ctrl}
+	mock.recorder = &MockReadMockRecorder{mock}
 	return mock
 }
 
 // EXPECT returns an object that allows the caller to indicate expected use
-func (m *MockLocal) EXPECT() *MockLocalMockRecorder {
+func (m *MockRead) EXPECT() *MockReadMockRecorder {
 	return m.recorder
 }
 
 // Get mocks base method
-func (m *MockLocal) Get(id int) (*local.Local, error) {
+func (m *MockRead) Get(id int) (*entity.Local, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Get", id)
-	ret0, _ := ret[0].(*local.Local)
+	ret0, _ := ret[0].(*entity.Local)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // Get indicates an expected call of Get
-func (mr *MockLocalMockRecorder) Get(id interface{}) *gomock.Call {
+func (mr *MockReadMockRecorder) Get(id interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Get", reflect.TypeOf((*MockLocal)(nil).Get), id)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Get", reflect.TypeOf((*MockRead)(nil).Get), id)
 }
 
 // Search mocks base method
-func (m *MockLocal) Search(query string) ([]*local.Local, error) {
+func (m *MockRead) Search(query string) ([]*entity.Local, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Search", query)
-	ret0, _ := ret[0].([]*local.Local)
+	ret0, _ := ret[0].([]*entity.Local)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // Search indicates an expected call of Search
-func (mr *MockLocalMockRecorder) Search(query interface{}) *gomock.Call {
+func (mr *MockReadMockRecorder) Search(query interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Search", reflect.TypeOf((*MockLocal)(nil).Search), query)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Search", reflect.TypeOf((*MockRead)(nil).Search), query)
 }
 
 // List mocks base method
-func (m *MockLocal) List() ([]*local.Local, error) {
+func (m *MockRead) List() ([]*entity.Local, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "List")
-	ret0, _ := ret[0].([]*local.Local)
+	ret0, _ := ret[0].([]*entity.Local)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // List indicates an expected call of List
-func (mr *MockLocalMockRecorder) List() *gomock.Call {
+func (mr *MockReadMockRecorder) List() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "List", reflect.TypeOf((*MockLocal)(nil).List))
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "List", reflect.TypeOf((*MockRead)(nil).List))
+}
+
+// MockWrite is a mock of Write interface
+type MockWrite struct {
+	ctrl     *gomock.Controller
+	recorder *MockWriteMockRecorder
+}
+
+// MockWriteMockRecorder is the mock recorder for MockWrite
+type MockWriteMockRecorder struct {
+	mock *MockWrite
+}
+
+// NewMockWrite creates a new mock instance
+func NewMockWrite(ctrl *gomock.Controller) *MockWrite {
+	mock := &MockWrite{ctrl: ctrl}
+	mock.recorder = &MockWriteMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use
+func (m *MockWrite) EXPECT() *MockWriteMockRecorder {
+	return m.recorder
 }
 
 // Create mocks base method
-func (m *MockLocal) Create(e *local.Local) (int, error) {
+func (m *MockWrite) Create(e *entity.Local) (int, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Create", e)
 	ret0, _ := ret[0].(int)
@@ -88,13 +111,13 @@ func (m *MockLocal) Create(e *local.Local) (int, error) {
 }
 
 // Create indicates an expected call of Create
-func (mr *MockLocalMockRecorder) Create(e interface{}) *gomock.Call {
+func (mr *MockWriteMockRecorder) Create(e interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockLocal)(nil).Create), e)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockWrite)(nil).Create), e)
 }
 
 // Update mocks base method
-func (m *MockLocal) Update(e *local.Local) error {
+func (m *MockWrite) Update(e *entity.Local) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Update", e)
 	ret0, _ := ret[0].(error)
@@ -102,13 +125,13 @@ func (m *MockLocal) Update(e *local.Local) error {
 }
 
 // Update indicates an expected call of Update
-func (mr *MockLocalMockRecorder) Update(e interface{}) *gomock.Call {
+func (mr *MockWriteMockRecorder) Update(e interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockLocal)(nil).Update), e)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockWrite)(nil).Update), e)
 }
 
 // Delete mocks base method
-func (m *MockLocal) Delete(id int) error {
+func (m *MockWrite) Delete(id int) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Delete", id)
 	ret0, _ := ret[0].(error)
@@ -116,9 +139,9 @@ func (m *MockLocal) Delete(id int) error {
 }
 
 // Delete indicates an expected call of Delete
-func (mr *MockLocalMockRecorder) Delete(id interface{}) *gomock.Call {
+func (mr *MockWriteMockRecorder) Delete(id interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockLocal)(nil).Delete), id)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockWrite)(nil).Delete), id)
 }
 
 // MockRepository is a mock of Repository interface
@@ -145,10 +168,10 @@ func (m *MockRepository) EXPECT() *MockRepositoryMockRecorder {
 }
 
 // Get mocks base method
-func (m *MockRepository) Get(id int) (*local.Local, error) {
+func (m *MockRepository) Get(id int) (*entity.Local, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Get", id)
-	ret0, _ := ret[0].(*local.Local)
+	ret0, _ := ret[0].(*entity.Local)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -160,10 +183,10 @@ func (mr *MockRepositoryMockRecorder) Get(id interface{}) *gomock.Call {
 }
 
 // Search mocks base method
-func (m *MockRepository) Search(query string) ([]*local.Local, error) {
+func (m *MockRepository) Search(query string) ([]*entity.Local, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Search", query)
-	ret0, _ := ret[0].([]*local.Local)
+	ret0, _ := ret[0].([]*entity.Local)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -175,10 +198,10 @@ func (mr *MockRepositoryMockRecorder) Search(query interface{}) *gomock.Call {
 }
 
 // List mocks base method
-func (m *MockRepository) List() ([]*local.Local, error) {
+func (m *MockRepository) List() ([]*entity.Local, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "List")
-	ret0, _ := ret[0].([]*local.Local)
+	ret0, _ := ret[0].([]*entity.Local)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -190,7 +213,7 @@ func (mr *MockRepositoryMockRecorder) List() *gomock.Call {
 }
 
 // Create mocks base method
-func (m *MockRepository) Create(e *local.Local) (int, error) {
+func (m *MockRepository) Create(e *entity.Local) (int, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Create", e)
 	ret0, _ := ret[0].(int)
@@ -205,7 +228,7 @@ func (mr *MockRepositoryMockRecorder) Create(e interface{}) *gomock.Call {
 }
 
 // Update mocks base method
-func (m *MockRepository) Update(e *local.Local) error {
+func (m *MockRepository) Update(e *entity.Local) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Update", e)
 	ret0, _ := ret[0].(error)
@@ -256,10 +279,10 @@ func (m *MockUseCase) EXPECT() *MockUseCaseMockRecorder {
 }
 
 // GetLocal mocks base method
-func (m *MockUseCase) GetLocal(id int) (*local.Local, error) {
+func (m *MockUseCase) GetLocal(id int) (*entity.Local, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetLocal", id)
-	ret0, _ := ret[0].(*local.Local)
+	ret0, _ := ret[0].(*entity.Local)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -271,10 +294,10 @@ func (mr *MockUseCaseMockRecorder) GetLocal(id interface{}) *gomock.Call {
 }
 
 // SearchLocals mocks base method
-func (m *MockUseCase) SearchLocals(query string) ([]*local.Local, error) {
+func (m *MockUseCase) SearchLocals(query string) ([]*entity.Local, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SearchLocals", query)
-	ret0, _ := ret[0].([]*local.Local)
+	ret0, _ := ret[0].([]*entity.Local)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -286,10 +309,10 @@ func (mr *MockUseCaseMockRecorder) SearchLocals(query interface{}) *gomock.Call 
 }
 
 // ListLocals mocks base method
-func (m *MockUseCase) ListLocals() ([]*local.Local, error) {
+func (m *MockUseCase) ListLocals() ([]*entity.Local, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListLocals")
-	ret0, _ := ret[0].([]*local.Local)
+	ret0, _ := ret[0].([]*entity.Local)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -316,7 +339,7 @@ func (mr *MockUseCaseMockRecorder) CreateLocal(cidade, pais, id interface{}) *go
 }
 
 // UpdateLocal mocks base method
-func (m *MockUseCase) UpdateLocal(e *local.Local) error {
+func (m *MockUseCase) UpdateLocal(e *entity.Local) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdateLocal", e)
 	ret0, _ := ret[0].(error)

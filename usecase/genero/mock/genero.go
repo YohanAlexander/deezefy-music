@@ -6,80 +6,103 @@ package mock
 
 import (
 	gomock "github.com/golang/mock/gomock"
-	genero "github.com/yohanalexander/deezefy-music/entity/genero"
+	entity "github.com/yohanalexander/deezefy-music/entity"
 	reflect "reflect"
 )
 
-// MockGenero is a mock of Genero interface
-type MockGenero struct {
+// MockRead is a mock of Read interface
+type MockRead struct {
 	ctrl     *gomock.Controller
-	recorder *MockGeneroMockRecorder
+	recorder *MockReadMockRecorder
 }
 
-// MockGeneroMockRecorder is the mock recorder for MockGenero
-type MockGeneroMockRecorder struct {
-	mock *MockGenero
+// MockReadMockRecorder is the mock recorder for MockRead
+type MockReadMockRecorder struct {
+	mock *MockRead
 }
 
-// NewMockGenero creates a new mock instance
-func NewMockGenero(ctrl *gomock.Controller) *MockGenero {
-	mock := &MockGenero{ctrl: ctrl}
-	mock.recorder = &MockGeneroMockRecorder{mock}
+// NewMockRead creates a new mock instance
+func NewMockRead(ctrl *gomock.Controller) *MockRead {
+	mock := &MockRead{ctrl: ctrl}
+	mock.recorder = &MockReadMockRecorder{mock}
 	return mock
 }
 
 // EXPECT returns an object that allows the caller to indicate expected use
-func (m *MockGenero) EXPECT() *MockGeneroMockRecorder {
+func (m *MockRead) EXPECT() *MockReadMockRecorder {
 	return m.recorder
 }
 
 // Get mocks base method
-func (m *MockGenero) Get(nome string) (*genero.Genero, error) {
+func (m *MockRead) Get(nome string) (*entity.Genero, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Get", nome)
-	ret0, _ := ret[0].(*genero.Genero)
+	ret0, _ := ret[0].(*entity.Genero)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // Get indicates an expected call of Get
-func (mr *MockGeneroMockRecorder) Get(nome interface{}) *gomock.Call {
+func (mr *MockReadMockRecorder) Get(nome interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Get", reflect.TypeOf((*MockGenero)(nil).Get), nome)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Get", reflect.TypeOf((*MockRead)(nil).Get), nome)
 }
 
 // Search mocks base method
-func (m *MockGenero) Search(query string) ([]*genero.Genero, error) {
+func (m *MockRead) Search(query string) ([]*entity.Genero, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Search", query)
-	ret0, _ := ret[0].([]*genero.Genero)
+	ret0, _ := ret[0].([]*entity.Genero)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // Search indicates an expected call of Search
-func (mr *MockGeneroMockRecorder) Search(query interface{}) *gomock.Call {
+func (mr *MockReadMockRecorder) Search(query interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Search", reflect.TypeOf((*MockGenero)(nil).Search), query)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Search", reflect.TypeOf((*MockRead)(nil).Search), query)
 }
 
 // List mocks base method
-func (m *MockGenero) List() ([]*genero.Genero, error) {
+func (m *MockRead) List() ([]*entity.Genero, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "List")
-	ret0, _ := ret[0].([]*genero.Genero)
+	ret0, _ := ret[0].([]*entity.Genero)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // List indicates an expected call of List
-func (mr *MockGeneroMockRecorder) List() *gomock.Call {
+func (mr *MockReadMockRecorder) List() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "List", reflect.TypeOf((*MockGenero)(nil).List))
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "List", reflect.TypeOf((*MockRead)(nil).List))
+}
+
+// MockWrite is a mock of Write interface
+type MockWrite struct {
+	ctrl     *gomock.Controller
+	recorder *MockWriteMockRecorder
+}
+
+// MockWriteMockRecorder is the mock recorder for MockWrite
+type MockWriteMockRecorder struct {
+	mock *MockWrite
+}
+
+// NewMockWrite creates a new mock instance
+func NewMockWrite(ctrl *gomock.Controller) *MockWrite {
+	mock := &MockWrite{ctrl: ctrl}
+	mock.recorder = &MockWriteMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use
+func (m *MockWrite) EXPECT() *MockWriteMockRecorder {
+	return m.recorder
 }
 
 // Create mocks base method
-func (m *MockGenero) Create(e *genero.Genero) (string, error) {
+func (m *MockWrite) Create(e *entity.Genero) (string, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Create", e)
 	ret0, _ := ret[0].(string)
@@ -88,13 +111,13 @@ func (m *MockGenero) Create(e *genero.Genero) (string, error) {
 }
 
 // Create indicates an expected call of Create
-func (mr *MockGeneroMockRecorder) Create(e interface{}) *gomock.Call {
+func (mr *MockWriteMockRecorder) Create(e interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockGenero)(nil).Create), e)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockWrite)(nil).Create), e)
 }
 
 // Update mocks base method
-func (m *MockGenero) Update(e *genero.Genero) error {
+func (m *MockWrite) Update(e *entity.Genero) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Update", e)
 	ret0, _ := ret[0].(error)
@@ -102,13 +125,13 @@ func (m *MockGenero) Update(e *genero.Genero) error {
 }
 
 // Update indicates an expected call of Update
-func (mr *MockGeneroMockRecorder) Update(e interface{}) *gomock.Call {
+func (mr *MockWriteMockRecorder) Update(e interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockGenero)(nil).Update), e)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockWrite)(nil).Update), e)
 }
 
 // Delete mocks base method
-func (m *MockGenero) Delete(nome string) error {
+func (m *MockWrite) Delete(nome string) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Delete", nome)
 	ret0, _ := ret[0].(error)
@@ -116,9 +139,9 @@ func (m *MockGenero) Delete(nome string) error {
 }
 
 // Delete indicates an expected call of Delete
-func (mr *MockGeneroMockRecorder) Delete(nome interface{}) *gomock.Call {
+func (mr *MockWriteMockRecorder) Delete(nome interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockGenero)(nil).Delete), nome)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockWrite)(nil).Delete), nome)
 }
 
 // MockRepository is a mock of Repository interface
@@ -145,10 +168,10 @@ func (m *MockRepository) EXPECT() *MockRepositoryMockRecorder {
 }
 
 // Get mocks base method
-func (m *MockRepository) Get(nome string) (*genero.Genero, error) {
+func (m *MockRepository) Get(nome string) (*entity.Genero, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Get", nome)
-	ret0, _ := ret[0].(*genero.Genero)
+	ret0, _ := ret[0].(*entity.Genero)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -160,10 +183,10 @@ func (mr *MockRepositoryMockRecorder) Get(nome interface{}) *gomock.Call {
 }
 
 // Search mocks base method
-func (m *MockRepository) Search(query string) ([]*genero.Genero, error) {
+func (m *MockRepository) Search(query string) ([]*entity.Genero, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Search", query)
-	ret0, _ := ret[0].([]*genero.Genero)
+	ret0, _ := ret[0].([]*entity.Genero)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -175,10 +198,10 @@ func (mr *MockRepositoryMockRecorder) Search(query interface{}) *gomock.Call {
 }
 
 // List mocks base method
-func (m *MockRepository) List() ([]*genero.Genero, error) {
+func (m *MockRepository) List() ([]*entity.Genero, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "List")
-	ret0, _ := ret[0].([]*genero.Genero)
+	ret0, _ := ret[0].([]*entity.Genero)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -190,7 +213,7 @@ func (mr *MockRepositoryMockRecorder) List() *gomock.Call {
 }
 
 // Create mocks base method
-func (m *MockRepository) Create(e *genero.Genero) (string, error) {
+func (m *MockRepository) Create(e *entity.Genero) (string, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Create", e)
 	ret0, _ := ret[0].(string)
@@ -205,7 +228,7 @@ func (mr *MockRepositoryMockRecorder) Create(e interface{}) *gomock.Call {
 }
 
 // Update mocks base method
-func (m *MockRepository) Update(e *genero.Genero) error {
+func (m *MockRepository) Update(e *entity.Genero) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Update", e)
 	ret0, _ := ret[0].(error)
@@ -256,10 +279,10 @@ func (m *MockUseCase) EXPECT() *MockUseCaseMockRecorder {
 }
 
 // GetGenero mocks base method
-func (m *MockUseCase) GetGenero(nome string) (*genero.Genero, error) {
+func (m *MockUseCase) GetGenero(nome string) (*entity.Genero, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetGenero", nome)
-	ret0, _ := ret[0].(*genero.Genero)
+	ret0, _ := ret[0].(*entity.Genero)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -271,10 +294,10 @@ func (mr *MockUseCaseMockRecorder) GetGenero(nome interface{}) *gomock.Call {
 }
 
 // SearchGeneros mocks base method
-func (m *MockUseCase) SearchGeneros(query string) ([]*genero.Genero, error) {
+func (m *MockUseCase) SearchGeneros(query string) ([]*entity.Genero, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SearchGeneros", query)
-	ret0, _ := ret[0].([]*genero.Genero)
+	ret0, _ := ret[0].([]*entity.Genero)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -286,10 +309,10 @@ func (mr *MockUseCaseMockRecorder) SearchGeneros(query interface{}) *gomock.Call
 }
 
 // ListGeneros mocks base method
-func (m *MockUseCase) ListGeneros() ([]*genero.Genero, error) {
+func (m *MockUseCase) ListGeneros() ([]*entity.Genero, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListGeneros")
-	ret0, _ := ret[0].([]*genero.Genero)
+	ret0, _ := ret[0].([]*entity.Genero)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -316,7 +339,7 @@ func (mr *MockUseCaseMockRecorder) CreateGenero(nome, estilo interface{}) *gomoc
 }
 
 // UpdateGenero mocks base method
-func (m *MockUseCase) UpdateGenero(e *genero.Genero) error {
+func (m *MockUseCase) UpdateGenero(e *entity.Genero) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdateGenero", e)
 	ret0, _ := ret[0].(error)

@@ -6,80 +6,103 @@ package mock
 
 import (
 	gomock "github.com/golang/mock/gomock"
-	artista "github.com/yohanalexander/deezefy-music/entity/artista"
+	entity "github.com/yohanalexander/deezefy-music/entity"
 	reflect "reflect"
 )
 
-// MockArtista is a mock of Artista interface
-type MockArtista struct {
+// MockRead is a mock of Read interface
+type MockRead struct {
 	ctrl     *gomock.Controller
-	recorder *MockArtistaMockRecorder
+	recorder *MockReadMockRecorder
 }
 
-// MockArtistaMockRecorder is the mock recorder for MockArtista
-type MockArtistaMockRecorder struct {
-	mock *MockArtista
+// MockReadMockRecorder is the mock recorder for MockRead
+type MockReadMockRecorder struct {
+	mock *MockRead
 }
 
-// NewMockArtista creates a new mock instance
-func NewMockArtista(ctrl *gomock.Controller) *MockArtista {
-	mock := &MockArtista{ctrl: ctrl}
-	mock.recorder = &MockArtistaMockRecorder{mock}
+// NewMockRead creates a new mock instance
+func NewMockRead(ctrl *gomock.Controller) *MockRead {
+	mock := &MockRead{ctrl: ctrl}
+	mock.recorder = &MockReadMockRecorder{mock}
 	return mock
 }
 
 // EXPECT returns an object that allows the caller to indicate expected use
-func (m *MockArtista) EXPECT() *MockArtistaMockRecorder {
+func (m *MockRead) EXPECT() *MockReadMockRecorder {
 	return m.recorder
 }
 
 // Get mocks base method
-func (m *MockArtista) Get(email string) (*artista.Artista, error) {
+func (m *MockRead) Get(email string) (*entity.Artista, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Get", email)
-	ret0, _ := ret[0].(*artista.Artista)
+	ret0, _ := ret[0].(*entity.Artista)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // Get indicates an expected call of Get
-func (mr *MockArtistaMockRecorder) Get(email interface{}) *gomock.Call {
+func (mr *MockReadMockRecorder) Get(email interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Get", reflect.TypeOf((*MockArtista)(nil).Get), email)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Get", reflect.TypeOf((*MockRead)(nil).Get), email)
 }
 
 // Search mocks base method
-func (m *MockArtista) Search(query string) ([]*artista.Artista, error) {
+func (m *MockRead) Search(query string) ([]*entity.Artista, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Search", query)
-	ret0, _ := ret[0].([]*artista.Artista)
+	ret0, _ := ret[0].([]*entity.Artista)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // Search indicates an expected call of Search
-func (mr *MockArtistaMockRecorder) Search(query interface{}) *gomock.Call {
+func (mr *MockReadMockRecorder) Search(query interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Search", reflect.TypeOf((*MockArtista)(nil).Search), query)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Search", reflect.TypeOf((*MockRead)(nil).Search), query)
 }
 
 // List mocks base method
-func (m *MockArtista) List() ([]*artista.Artista, error) {
+func (m *MockRead) List() ([]*entity.Artista, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "List")
-	ret0, _ := ret[0].([]*artista.Artista)
+	ret0, _ := ret[0].([]*entity.Artista)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // List indicates an expected call of List
-func (mr *MockArtistaMockRecorder) List() *gomock.Call {
+func (mr *MockReadMockRecorder) List() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "List", reflect.TypeOf((*MockArtista)(nil).List))
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "List", reflect.TypeOf((*MockRead)(nil).List))
+}
+
+// MockWrite is a mock of Write interface
+type MockWrite struct {
+	ctrl     *gomock.Controller
+	recorder *MockWriteMockRecorder
+}
+
+// MockWriteMockRecorder is the mock recorder for MockWrite
+type MockWriteMockRecorder struct {
+	mock *MockWrite
+}
+
+// NewMockWrite creates a new mock instance
+func NewMockWrite(ctrl *gomock.Controller) *MockWrite {
+	mock := &MockWrite{ctrl: ctrl}
+	mock.recorder = &MockWriteMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use
+func (m *MockWrite) EXPECT() *MockWriteMockRecorder {
+	return m.recorder
 }
 
 // Create mocks base method
-func (m *MockArtista) Create(e *artista.Artista) (string, error) {
+func (m *MockWrite) Create(e *entity.Artista) (string, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Create", e)
 	ret0, _ := ret[0].(string)
@@ -88,13 +111,13 @@ func (m *MockArtista) Create(e *artista.Artista) (string, error) {
 }
 
 // Create indicates an expected call of Create
-func (mr *MockArtistaMockRecorder) Create(e interface{}) *gomock.Call {
+func (mr *MockWriteMockRecorder) Create(e interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockArtista)(nil).Create), e)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockWrite)(nil).Create), e)
 }
 
 // Update mocks base method
-func (m *MockArtista) Update(e *artista.Artista) error {
+func (m *MockWrite) Update(e *entity.Artista) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Update", e)
 	ret0, _ := ret[0].(error)
@@ -102,13 +125,13 @@ func (m *MockArtista) Update(e *artista.Artista) error {
 }
 
 // Update indicates an expected call of Update
-func (mr *MockArtistaMockRecorder) Update(e interface{}) *gomock.Call {
+func (mr *MockWriteMockRecorder) Update(e interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockArtista)(nil).Update), e)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockWrite)(nil).Update), e)
 }
 
 // Delete mocks base method
-func (m *MockArtista) Delete(email string) error {
+func (m *MockWrite) Delete(email string) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Delete", email)
 	ret0, _ := ret[0].(error)
@@ -116,9 +139,9 @@ func (m *MockArtista) Delete(email string) error {
 }
 
 // Delete indicates an expected call of Delete
-func (mr *MockArtistaMockRecorder) Delete(email interface{}) *gomock.Call {
+func (mr *MockWriteMockRecorder) Delete(email interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockArtista)(nil).Delete), email)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockWrite)(nil).Delete), email)
 }
 
 // MockRepository is a mock of Repository interface
@@ -145,10 +168,10 @@ func (m *MockRepository) EXPECT() *MockRepositoryMockRecorder {
 }
 
 // Get mocks base method
-func (m *MockRepository) Get(email string) (*artista.Artista, error) {
+func (m *MockRepository) Get(email string) (*entity.Artista, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Get", email)
-	ret0, _ := ret[0].(*artista.Artista)
+	ret0, _ := ret[0].(*entity.Artista)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -160,10 +183,10 @@ func (mr *MockRepositoryMockRecorder) Get(email interface{}) *gomock.Call {
 }
 
 // Search mocks base method
-func (m *MockRepository) Search(query string) ([]*artista.Artista, error) {
+func (m *MockRepository) Search(query string) ([]*entity.Artista, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Search", query)
-	ret0, _ := ret[0].([]*artista.Artista)
+	ret0, _ := ret[0].([]*entity.Artista)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -175,10 +198,10 @@ func (mr *MockRepositoryMockRecorder) Search(query interface{}) *gomock.Call {
 }
 
 // List mocks base method
-func (m *MockRepository) List() ([]*artista.Artista, error) {
+func (m *MockRepository) List() ([]*entity.Artista, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "List")
-	ret0, _ := ret[0].([]*artista.Artista)
+	ret0, _ := ret[0].([]*entity.Artista)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -190,7 +213,7 @@ func (mr *MockRepositoryMockRecorder) List() *gomock.Call {
 }
 
 // Create mocks base method
-func (m *MockRepository) Create(e *artista.Artista) (string, error) {
+func (m *MockRepository) Create(e *entity.Artista) (string, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Create", e)
 	ret0, _ := ret[0].(string)
@@ -205,7 +228,7 @@ func (mr *MockRepositoryMockRecorder) Create(e interface{}) *gomock.Call {
 }
 
 // Update mocks base method
-func (m *MockRepository) Update(e *artista.Artista) error {
+func (m *MockRepository) Update(e *entity.Artista) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Update", e)
 	ret0, _ := ret[0].(error)
@@ -256,10 +279,10 @@ func (m *MockUseCase) EXPECT() *MockUseCaseMockRecorder {
 }
 
 // GetArtista mocks base method
-func (m *MockUseCase) GetArtista(email string) (*artista.Artista, error) {
+func (m *MockUseCase) GetArtista(email string) (*entity.Artista, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetArtista", email)
-	ret0, _ := ret[0].(*artista.Artista)
+	ret0, _ := ret[0].(*entity.Artista)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -271,10 +294,10 @@ func (mr *MockUseCaseMockRecorder) GetArtista(email interface{}) *gomock.Call {
 }
 
 // SearchArtistas mocks base method
-func (m *MockUseCase) SearchArtistas(query string) ([]*artista.Artista, error) {
+func (m *MockUseCase) SearchArtistas(query string) ([]*entity.Artista, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SearchArtistas", query)
-	ret0, _ := ret[0].([]*artista.Artista)
+	ret0, _ := ret[0].([]*entity.Artista)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -286,10 +309,10 @@ func (mr *MockUseCaseMockRecorder) SearchArtistas(query interface{}) *gomock.Cal
 }
 
 // ListArtistas mocks base method
-func (m *MockUseCase) ListArtistas() ([]*artista.Artista, error) {
+func (m *MockUseCase) ListArtistas() ([]*entity.Artista, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListArtistas")
-	ret0, _ := ret[0].([]*artista.Artista)
+	ret0, _ := ret[0].([]*entity.Artista)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -301,22 +324,22 @@ func (mr *MockUseCaseMockRecorder) ListArtistas() *gomock.Call {
 }
 
 // CreateArtista mocks base method
-func (m *MockUseCase) CreateArtista(usuario, nomeartistico, biografia string, anoformacao int) (string, error) {
+func (m *MockUseCase) CreateArtista(email, password, birthday, nomeartistico, biografia string, anoformacao int) (string, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CreateArtista", usuario, nomeartistico, biografia, anoformacao)
+	ret := m.ctrl.Call(m, "CreateArtista", email, password, birthday, nomeartistico, biografia, anoformacao)
 	ret0, _ := ret[0].(string)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // CreateArtista indicates an expected call of CreateArtista
-func (mr *MockUseCaseMockRecorder) CreateArtista(usuario, nomeartistico, biografia, anoformacao interface{}) *gomock.Call {
+func (mr *MockUseCaseMockRecorder) CreateArtista(email, password, birthday, nomeartistico, biografia, anoformacao interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateArtista", reflect.TypeOf((*MockUseCase)(nil).CreateArtista), usuario, nomeartistico, biografia, anoformacao)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateArtista", reflect.TypeOf((*MockUseCase)(nil).CreateArtista), email, password, birthday, nomeartistico, biografia, anoformacao)
 }
 
 // UpdateArtista mocks base method
-func (m *MockUseCase) UpdateArtista(e *artista.Artista) error {
+func (m *MockUseCase) UpdateArtista(e *entity.Artista) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdateArtista", e)
 	ret0, _ := ret[0].(error)
