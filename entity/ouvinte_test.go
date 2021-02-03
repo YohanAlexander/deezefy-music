@@ -252,3 +252,64 @@ func TestGetCurteMusica(t *testing.T) {
 	})
 
 }
+
+func TestAddPlaylist(t *testing.T) {
+
+	t.Run("Playlist criado com sucesso", func(t *testing.T) {
+		o, _ := NewOuvinte("vancejoy@gmail.com", "somepassword", "2018-02-10", "Vance", "Joy")
+		p, _ := NewPlaylist("Indie Rock", "ativo")
+		err := o.AddPlaylist(*p)
+		assert.Nil(t, err)
+		assert.Equal(t, 1, len(o.Playlists))
+	})
+
+	t.Run("Playlist já registrado", func(t *testing.T) {
+		o, _ := NewOuvinte("vancejoy@gmail.com", "somepassword", "2018-02-10", "Vance", "Joy")
+		p, _ := NewPlaylist("Indie Rock", "ativo")
+		err := o.AddPlaylist(*p)
+		assert.Nil(t, err)
+		p, _ = NewPlaylist("Indie Rock", "ativo")
+		err = o.AddPlaylist(*p)
+		assert.Equal(t, ErrPlaylistRegistered, err)
+	})
+
+}
+
+func TestRemovePlaylist(t *testing.T) {
+
+	t.Run("Playlist não cadastrado", func(t *testing.T) {
+		o, _ := NewOuvinte("vancejoy@gmail.com", "somepassword", "2018-02-10", "Vance", "Joy")
+		p, _ := NewPlaylist("Indie Rock", "ativo")
+		err := o.RemovePlaylist(*p)
+		assert.Equal(t, ErrNotFound, err)
+	})
+
+	t.Run("Playlist removido com sucesso", func(t *testing.T) {
+		o, _ := NewOuvinte("vancejoy@gmail.com", "somepassword", "2018-02-10", "Vance", "Joy")
+		p, _ := NewPlaylist("Indie Rock", "ativo")
+		_ = o.AddPlaylist(*p)
+		err := o.RemovePlaylist(*p)
+		assert.Nil(t, err)
+	})
+
+}
+
+func TestGetPlaylist(t *testing.T) {
+
+	t.Run("Playlist cadastrado encontrado", func(t *testing.T) {
+		o, _ := NewOuvinte("vancejoy@gmail.com", "somepassword", "2018-02-10", "Vance", "Joy")
+		p, _ := NewPlaylist("Indie Rock", "ativo")
+		_ = o.AddPlaylist(*p)
+		playlist, err := o.GetPlaylist(*p)
+		assert.Nil(t, err)
+		assert.Equal(t, playlist, *p)
+	})
+
+	t.Run("Playlist não cadastrado", func(t *testing.T) {
+		o, _ := NewOuvinte("vancejoy@gmail.com", "somepassword", "2018-02-10", "Vance", "Joy")
+		p, _ := NewPlaylist("Indie Rock", "ativo")
+		_, err := o.GetPlaylist(*p)
+		assert.Equal(t, ErrNotFound, err)
+	})
+
+}
