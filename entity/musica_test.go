@@ -309,3 +309,64 @@ func TestGetMusicaAlbum(t *testing.T) {
 	})
 
 }
+
+func TestAddMusicaGenero(t *testing.T) {
+
+	t.Run("Genero criado com sucesso", func(t *testing.T) {
+		m, _ := NewMusica(1, 420, "Creep")
+		g, _ := NewGenero("Indie Rock", "rock")
+		err := m.AddGenero(*g)
+		assert.Nil(t, err)
+		assert.Equal(t, 1, len(m.Generos))
+	})
+
+	t.Run("Genero já registrado", func(t *testing.T) {
+		m, _ := NewMusica(1, 420, "Creep")
+		g, _ := NewGenero("Indie Rock", "rock")
+		err := m.AddGenero(*g)
+		assert.Nil(t, err)
+		g, _ = NewGenero("Indie Rock", "rock")
+		err = m.AddGenero(*g)
+		assert.Equal(t, ErrGeneroRegistered, err)
+	})
+
+}
+
+func TestRemoveMusicaGenero(t *testing.T) {
+
+	t.Run("Genero não cadastrado", func(t *testing.T) {
+		m, _ := NewMusica(1, 420, "Creep")
+		g, _ := NewGenero("Indie Rock", "rock")
+		err := m.RemoveGenero(*g)
+		assert.Equal(t, ErrNotFound, err)
+	})
+
+	t.Run("Genero removido com sucesso", func(t *testing.T) {
+		m, _ := NewMusica(1, 420, "Creep")
+		g, _ := NewGenero("Indie Rock", "rock")
+		_ = m.AddGenero(*g)
+		err := m.RemoveGenero(*g)
+		assert.Nil(t, err)
+	})
+
+}
+
+func TestGetMusicaGenero(t *testing.T) {
+
+	t.Run("Genero cadastrado encontrado", func(t *testing.T) {
+		m, _ := NewMusica(1, 420, "Creep")
+		g, _ := NewGenero("Indie Rock", "rock")
+		_ = m.AddGenero(*g)
+		genero, err := m.GetGenero(*g)
+		assert.Nil(t, err)
+		assert.Equal(t, genero, *g)
+	})
+
+	t.Run("Genero não cadastrado", func(t *testing.T) {
+		m, _ := NewMusica(1, 420, "Creep")
+		g, _ := NewGenero("Indie Rock", "rock")
+		_, err := m.GetGenero(*g)
+		assert.Equal(t, ErrNotFound, err)
+	})
+
+}
