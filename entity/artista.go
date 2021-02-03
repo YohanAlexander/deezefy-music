@@ -12,6 +12,7 @@ type Artista struct {
 	AnoFormacao   int       `validate:"gte=1000"`
 	Seguidores    []Ouvinte `validate:""`
 	Grava         []Musica  `validate:""`
+	Perfis        []Perfil  `validate:""`
 }
 
 // NewArtista cria um novo Artista
@@ -102,4 +103,35 @@ func (a *Artista) GetMusica(musica Musica) (Musica, error) {
 		}
 	}
 	return musica, ErrNotFound
+}
+
+// AddPerfil adiciona um Perfil
+func (a *Artista) AddPerfil(perfil Perfil) error {
+	_, err := a.GetPerfil(perfil)
+	if err == nil {
+		return ErrPerfilRegistered
+	}
+	a.Perfis = append(a.Perfis, perfil)
+	return nil
+}
+
+// RemovePerfil remove um Perfil
+func (a *Artista) RemovePerfil(perfil Perfil) error {
+	for i, j := range a.Perfis {
+		if j.ID == perfil.ID {
+			a.Perfis = append(a.Perfis[:i], a.Perfis[i+1:]...)
+			return nil
+		}
+	}
+	return ErrNotFound
+}
+
+// GetPerfil get a Perfil
+func (a *Artista) GetPerfil(perfil Perfil) (Perfil, error) {
+	for _, v := range a.Perfis {
+		if v.ID == perfil.ID {
+			return perfil, nil
+		}
+	}
+	return perfil, ErrNotFound
 }
