@@ -257,7 +257,7 @@ func TestAddPlaylist(t *testing.T) {
 
 	t.Run("Playlist criado com sucesso", func(t *testing.T) {
 		o, _ := NewOuvinte("vancejoy@gmail.com", "somepassword", "2018-02-10", "Vance", "Joy")
-		p, _ := NewPlaylist("Indie Rock", "ativo")
+		p, _ := NewPlaylist("Indie Rock", "ativo", "2006-01-02")
 		err := o.AddPlaylist(*p)
 		assert.Nil(t, err)
 		assert.Equal(t, 1, len(o.Playlists))
@@ -265,10 +265,10 @@ func TestAddPlaylist(t *testing.T) {
 
 	t.Run("Playlist já registrado", func(t *testing.T) {
 		o, _ := NewOuvinte("vancejoy@gmail.com", "somepassword", "2018-02-10", "Vance", "Joy")
-		p, _ := NewPlaylist("Indie Rock", "ativo")
+		p, _ := NewPlaylist("Indie Rock", "ativo", "2006-01-02")
 		err := o.AddPlaylist(*p)
 		assert.Nil(t, err)
-		p, _ = NewPlaylist("Indie Rock", "ativo")
+		p, _ = NewPlaylist("Indie Rock", "ativo", "2006-01-02")
 		err = o.AddPlaylist(*p)
 		assert.Equal(t, ErrPlaylistRegistered, err)
 	})
@@ -279,14 +279,14 @@ func TestRemovePlaylist(t *testing.T) {
 
 	t.Run("Playlist não cadastrado", func(t *testing.T) {
 		o, _ := NewOuvinte("vancejoy@gmail.com", "somepassword", "2018-02-10", "Vance", "Joy")
-		p, _ := NewPlaylist("Indie Rock", "ativo")
+		p, _ := NewPlaylist("Indie Rock", "ativo", "2006-01-02")
 		err := o.RemovePlaylist(*p)
 		assert.Equal(t, ErrNotFound, err)
 	})
 
 	t.Run("Playlist removido com sucesso", func(t *testing.T) {
 		o, _ := NewOuvinte("vancejoy@gmail.com", "somepassword", "2018-02-10", "Vance", "Joy")
-		p, _ := NewPlaylist("Indie Rock", "ativo")
+		p, _ := NewPlaylist("Indie Rock", "ativo", "2006-01-02")
 		_ = o.AddPlaylist(*p)
 		err := o.RemovePlaylist(*p)
 		assert.Nil(t, err)
@@ -298,7 +298,7 @@ func TestGetPlaylist(t *testing.T) {
 
 	t.Run("Playlist cadastrado encontrado", func(t *testing.T) {
 		o, _ := NewOuvinte("vancejoy@gmail.com", "somepassword", "2018-02-10", "Vance", "Joy")
-		p, _ := NewPlaylist("Indie Rock", "ativo")
+		p, _ := NewPlaylist("Indie Rock", "ativo", "2006-01-02")
 		_ = o.AddPlaylist(*p)
 		playlist, err := o.GetPlaylist(*p)
 		assert.Nil(t, err)
@@ -307,7 +307,7 @@ func TestGetPlaylist(t *testing.T) {
 
 	t.Run("Playlist não cadastrado", func(t *testing.T) {
 		o, _ := NewOuvinte("vancejoy@gmail.com", "somepassword", "2018-02-10", "Vance", "Joy")
-		p, _ := NewPlaylist("Indie Rock", "ativo")
+		p, _ := NewPlaylist("Indie Rock", "ativo", "2006-01-02")
 		_, err := o.GetPlaylist(*p)
 		assert.Equal(t, ErrNotFound, err)
 	})
