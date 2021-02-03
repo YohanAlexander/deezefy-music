@@ -11,6 +11,7 @@ type Album struct {
 	Titulo        string    `validate:"required,gte=1"`
 	AnoLancamento int       `validate:"required,gte=1000"`
 	Salvou        []Ouvinte `validate:""`
+	Musicas       []Musica  `validate:""`
 }
 
 // NewAlbum cria um novo Album
@@ -70,4 +71,35 @@ func (a *Album) GetOuvinte(ouvinte Ouvinte) (Ouvinte, error) {
 		}
 	}
 	return ouvinte, ErrNotFound
+}
+
+// AddMusica adiciona um Musica
+func (a *Album) AddMusica(musica Musica) error {
+	_, err := a.GetMusica(musica)
+	if err == nil {
+		return ErrMusicaRegistered
+	}
+	a.Musicas = append(a.Musicas, musica)
+	return nil
+}
+
+// RemoveMusica remove um Musica
+func (a *Album) RemoveMusica(musica Musica) error {
+	for i, j := range a.Musicas {
+		if j.ID == musica.ID {
+			a.Musicas = append(a.Musicas[:i], a.Musicas[i+1:]...)
+			return nil
+		}
+	}
+	return ErrNotFound
+}
+
+// GetMusica get a Musica
+func (a *Album) GetMusica(musica Musica) (Musica, error) {
+	for _, v := range a.Musicas {
+		if v.ID == musica.ID {
+			return musica, nil
+		}
+	}
+	return musica, ErrNotFound
 }
