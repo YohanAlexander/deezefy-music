@@ -10,8 +10,9 @@ import (
 
 func newFixturePlaylist() *entity.Playlist {
 	return &entity.Playlist{
-		Nome:   "Indie Rock",
-		Status: "ativo",
+		Nome:        "Indie Rock",
+		Status:      "ativo",
+		DataCriacao: "2010-01-21",
 	}
 }
 
@@ -21,7 +22,7 @@ func TestCreate(t *testing.T) {
 		repo := newInmem()
 		m := NewService(repo)
 		u := newFixturePlaylist()
-		_, err := m.CreatePlaylist(u.Nome, u.Status)
+		_, err := m.CreatePlaylist(u.Nome, u.Status, u.DataCriacao)
 		assert.Nil(t, err)
 	})
 
@@ -35,8 +36,8 @@ func TestSearchAndFind(t *testing.T) {
 	u2 := newFixturePlaylist()
 	u2.Nome = "Pop Rock"
 
-	email, _ := m.CreatePlaylist(u1.Nome, u1.Status)
-	_, _ = m.CreatePlaylist(u2.Nome, u2.Status)
+	email, _ := m.CreatePlaylist(u1.Nome, u1.Status, u1.DataCriacao)
+	_, _ = m.CreatePlaylist(u2.Nome, u2.Status, u2.DataCriacao)
 
 	t.Run("search", func(t *testing.T) {
 		c, err := m.SearchPlaylists("Indie Rock")
@@ -67,7 +68,7 @@ func TestUpdate(t *testing.T) {
 		repo := newInmem()
 		m := NewService(repo)
 		u := newFixturePlaylist()
-		email, err := m.CreatePlaylist(u.Nome, u.Status)
+		email, err := m.CreatePlaylist(u.Nome, u.Status, u.DataCriacao)
 		assert.Nil(t, err)
 		saved, _ := m.GetPlaylist(email)
 		assert.Nil(t, m.UpdatePlaylist(saved))
@@ -84,7 +85,7 @@ func TestDelete(t *testing.T) {
 	u1 := newFixturePlaylist()
 	u2 := newFixturePlaylist()
 	u2.Nome = "someone2@deezefy.com"
-	email, _ := m.CreatePlaylist(u2.Nome, u2.Status)
+	email, _ := m.CreatePlaylist(u2.Nome, u2.Status, u2.DataCriacao)
 
 	t.Run("delete", func(t *testing.T) {
 
@@ -97,7 +98,7 @@ func TestDelete(t *testing.T) {
 		assert.Equal(t, entity.ErrNotFound, err)
 
 		u3 := newFixturePlaylist()
-		email, _ := m.CreatePlaylist(u3.Nome, u3.Status)
+		email, _ := m.CreatePlaylist(u3.Nome, u3.Status, u3.DataCriacao)
 		saved, _ := m.GetPlaylist(email)
 		_ = m.UpdatePlaylist(saved)
 		err = m.DeletePlaylist(email)
