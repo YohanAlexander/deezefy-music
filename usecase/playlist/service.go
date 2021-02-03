@@ -19,8 +19,8 @@ func NewService(r Repository) *Service {
 }
 
 // CreatePlaylist Create Playlist
-func (s *Service) CreatePlaylist(nome, status string) (string, error) {
-	e, err := entity.NewPlaylist(nome, status)
+func (s *Service) CreatePlaylist(nome, status, datacriacao string) (string, error) {
+	e, err := entity.NewPlaylist(nome, status, datacriacao)
 	if err != nil {
 		return err.Error(), err
 	}
@@ -28,8 +28,8 @@ func (s *Service) CreatePlaylist(nome, status string) (string, error) {
 }
 
 // GetPlaylist Get Playlist
-func (s *Service) GetPlaylist(email string) (*entity.Playlist, error) {
-	return s.repo.Get(email)
+func (s *Service) GetPlaylist(nome string) (*entity.Playlist, error) {
+	return s.repo.Get(nome)
 }
 
 // SearchPlaylists Search Playlists
@@ -43,15 +43,15 @@ func (s *Service) ListPlaylists() ([]*entity.Playlist, error) {
 }
 
 // DeletePlaylist Delete Playlist
-func (s *Service) DeletePlaylist(email string) error {
-	u, err := s.GetPlaylist(email)
+func (s *Service) DeletePlaylist(nome string) error {
+	u, err := s.GetPlaylist(nome)
 	if u == nil {
 		return entity.ErrNotFound
 	}
 	if err != nil {
 		return err
 	}
-	return s.repo.Delete(email)
+	return s.repo.Delete(nome)
 }
 
 // UpdatePlaylist Update Playlist

@@ -26,11 +26,11 @@ func (r *inmem) Create(e *entity.Playlist) (string, error) {
 }
 
 // Get Playlist
-func (r *inmem) Get(email string) (*entity.Playlist, error) {
-	if r.m[email] == nil {
+func (r *inmem) Get(nome string) (*entity.Playlist, error) {
+	if r.m[nome] == nil {
 		return nil, entity.ErrNotFound
 	}
-	return r.m[email], nil
+	return r.m[nome], nil
 }
 
 // Update Playlist
@@ -68,10 +68,10 @@ func (r *inmem) List() ([]*entity.Playlist, error) {
 }
 
 // Delete Playlist
-func (r *inmem) Delete(email string) error {
-	if r.m[email] == nil {
+func (r *inmem) Delete(nome string) error {
+	if r.m[nome] == nil {
 		return entity.ErrNotFound
 	}
-	r.m[email] = nil
+	r.m[nome] = nil
 	return nil
 }

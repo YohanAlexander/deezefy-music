@@ -2,11 +2,15 @@ package playlist
 
 import "github.com/yohanalexander/deezefy-music/entity"
 
-// Playlist interface
-type Playlist interface {
+// Read interface
+type Read interface {
 	Get(nome string) (*entity.Playlist, error)
 	Search(query string) ([]*entity.Playlist, error)
 	List() ([]*entity.Playlist, error)
+}
+
+// Write interface
+type Write interface {
 	Create(e *entity.Playlist) (string, error)
 	Update(e *entity.Playlist) error
 	Delete(nome string) error
@@ -14,7 +18,8 @@ type Playlist interface {
 
 // Repository interface
 type Repository interface {
-	Playlist
+	Read
+	Write
 }
 
 // UseCase interface
@@ -22,7 +27,7 @@ type UseCase interface {
 	GetPlaylist(nome string) (*entity.Playlist, error)
 	SearchPlaylists(query string) ([]*entity.Playlist, error)
 	ListPlaylists() ([]*entity.Playlist, error)
-	CreatePlaylist(nome, status string) (string, error)
+	CreatePlaylist(nome, status, datacriacao string) (string, error)
 	UpdatePlaylist(e *entity.Playlist) error
 	DeletePlaylist(nome string) error
 }
