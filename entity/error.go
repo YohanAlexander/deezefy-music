@@ -34,3 +34,6 @@ var ErrPerfilRegistered = errors.New("Perfil already registered")
 
 // ErrGeneroRegistered cannot register
 var ErrGeneroRegistered = errors.New("Genero already registered")
+
+// ErrEventoRegistered cannot register
+var ErrEventoRegistered = errors.New("Evento already registered")
