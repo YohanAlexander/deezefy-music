@@ -6,11 +6,12 @@ import (
 
 // Musica entidade Musica
 type Musica struct {
-	ID      int       `validate:"required,gte=1"`
-	Duracao int       `validate:"required,gte=100"`
-	Nome    string    `validate:"required,gte=1"`
-	Curtiu  []Ouvinte `validate:""`
-	Gravou  []Artista `validate:""`
+	ID        int        `validate:"required,gte=1"`
+	Duracao   int        `validate:"required,gte=100"`
+	Nome      string     `validate:"required,gte=1"`
+	Curtiu    []Ouvinte  `validate:""`
+	Gravou    []Artista  `validate:""`
+	Playlists []Playlist `validate:""`
 }
 
 // NewMusica cria um novo Musica
@@ -96,4 +97,35 @@ func (m *Musica) GetArtista(artista Artista) (Artista, error) {
 		}
 	}
 	return artista, ErrNotFound
+}
+
+// AddPlaylist adiciona um Playlist
+func (m *Musica) AddPlaylist(playlist Playlist) error {
+	_, err := m.GetPlaylist(playlist)
+	if err == nil {
+		return ErrPlaylistRegistered
+	}
+	m.Playlists = append(m.Playlists, playlist)
+	return nil
+}
+
+// RemovePlaylist remove um Playlist
+func (m *Musica) RemovePlaylist(playlist Playlist) error {
+	for i, j := range m.Playlists {
+		if j.Nome == playlist.Nome {
+			m.Playlists = append(m.Playlists[:i], m.Playlists[i+1:]...)
+			return nil
+		}
+	}
+	return ErrNotFound
+}
+
+// GetPlaylist get a Playlist
+func (m *Musica) GetPlaylist(playlist Playlist) (Playlist, error) {
+	for _, v := range m.Playlists {
+		if v.Nome == playlist.Nome {
+			return playlist, nil
+		}
+	}
+	return playlist, ErrNotFound
 }
