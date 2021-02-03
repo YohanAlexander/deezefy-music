@@ -26,11 +26,11 @@ func (r *inmem) Create(e *entity.Genero) (string, error) {
 }
 
 // Get Genero
-func (r *inmem) Get(email string) (*entity.Genero, error) {
-	if r.m[email] == nil {
+func (r *inmem) Get(nome string) (*entity.Genero, error) {
+	if r.m[nome] == nil {
 		return nil, entity.ErrNotFound
 	}
-	return r.m[email], nil
+	return r.m[nome], nil
 }
 
 // Update Genero
@@ -68,10 +68,10 @@ func (r *inmem) List() ([]*entity.Genero, error) {
 }
 
 // Delete Genero
-func (r *inmem) Delete(email string) error {
-	if r.m[email] == nil {
+func (r *inmem) Delete(nome string) error {
+	if r.m[nome] == nil {
 		return entity.ErrNotFound
 	}
-	r.m[email] = nil
+	r.m[nome] = nil
 	return nil
 }
