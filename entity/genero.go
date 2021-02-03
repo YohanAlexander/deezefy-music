@@ -9,6 +9,7 @@ type Genero struct {
 	Nome     string    `validate:"required,gte=1"`
 	Estilo   string    `validate:"required,oneof=blues rock mpb samba sertanejo jazz classica"`
 	Artistas []Artista `validate:""`
+	Musicas  []Musica  `validate:""`
 }
 
 // NewGenero cria um novo Genero
@@ -62,4 +63,35 @@ func (g *Genero) GetArtista(artista Artista) (Artista, error) {
 		}
 	}
 	return artista, ErrNotFound
+}
+
+// AddMusica adiciona um Musica
+func (g *Genero) AddMusica(musica Musica) error {
+	_, err := g.GetMusica(musica)
+	if err == nil {
+		return ErrMusicaRegistered
+	}
+	g.Musicas = append(g.Musicas, musica)
+	return nil
+}
+
+// RemoveMusica remove um Musica
+func (g *Genero) RemoveMusica(musica Musica) error {
+	for i, j := range g.Musicas {
+		if j.ID == musica.ID {
+			g.Musicas = append(g.Musicas[:i], g.Musicas[i+1:]...)
+			return nil
+		}
+	}
+	return ErrNotFound
+}
+
+// GetMusica get a Musica
+func (g *Genero) GetMusica(musica Musica) (Musica, error) {
+	for _, v := range g.Musicas {
+		if v.ID == musica.ID {
+			return musica, nil
+		}
+	}
+	return musica, ErrNotFound
 }
