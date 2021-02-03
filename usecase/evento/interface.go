@@ -2,11 +2,15 @@ package evento
 
 import "github.com/yohanalexander/deezefy-music/entity"
 
-// Evento interface
-type Evento interface {
+// Read interface
+type Read interface {
 	Get(id int) (*entity.Evento, error)
 	Search(query string) ([]*entity.Evento, error)
 	List() ([]*entity.Evento, error)
+}
+
+// Write interface
+type Write interface {
 	Create(e *entity.Evento) (int, error)
 	Update(e *entity.Evento) error
 	Delete(id int) error
@@ -14,7 +18,8 @@ type Evento interface {
 
 // Repository interface
 type Repository interface {
-	Evento
+	Read
+	Write
 }
 
 // UseCase interface
@@ -22,7 +27,7 @@ type UseCase interface {
 	GetEvento(id int) (*entity.Evento, error)
 	SearchEventos(query string) ([]*entity.Evento, error)
 	ListEventos() ([]*entity.Evento, error)
-	CreateEvento(usuario, nome string, id int) (int, error)
+	CreateEvento(email, password, birthday, nome, data string, id int) (int, error)
 	UpdateEvento(e *entity.Evento) error
 	DeleteEvento(id int) error
 }

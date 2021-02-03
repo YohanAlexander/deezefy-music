@@ -10,9 +10,14 @@ import (
 
 func newFixtureEvento() *entity.Evento {
 	return &entity.Evento{
-		ID:      815,
-		Nome:    "Lollapalooza",
-		Usuario: "someone@spotify.com",
+		ID:   815,
+		Nome: "Lollapalooza",
+		Data: "1998-05-27",
+		Usuario: entity.Usuario{
+			Email:    "someone@deezefy.com",
+			Password: "12345678",
+			Birthday: "1998-05-27",
+		},
 	}
 }
 
@@ -21,8 +26,8 @@ func TestCreate(t *testing.T) {
 	t.Run("create", func(t *testing.T) {
 		repo := newInmem()
 		m := NewService(repo)
-		u := newFixtureEvento()
-		_, err := m.CreateEvento(u.Usuario, u.Nome, u.ID)
+		e := newFixtureEvento()
+		_, err := m.CreateEvento(e.Usuario.Email, e.Usuario.Password, e.Usuario.Birthday, e.Nome, e.Data, e.ID)
 		assert.Nil(t, err)
 	})
 
@@ -32,13 +37,13 @@ func TestSearchAndFind(t *testing.T) {
 
 	repo := newInmem()
 	m := NewService(repo)
-	u1 := newFixtureEvento()
-	u2 := newFixtureEvento()
-	u2.ID = 200
-	u2.Nome = "Rock in Rio"
+	e1 := newFixtureEvento()
+	e2 := newFixtureEvento()
+	e2.ID = 200
+	e2.Nome = "Rock in Rio"
 
-	email, _ := m.CreateEvento(u1.Usuario, u1.Nome, u1.ID)
-	_, _ = m.CreateEvento(u2.Usuario, u2.Nome, u2.ID)
+	email, _ := m.CreateEvento(e1.Usuario.Email, e1.Usuario.Password, e1.Usuario.Birthday, e1.Nome, e1.Data, e1.ID)
+	_, _ = m.CreateEvento(e2.Usuario.Email, e2.Usuario.Password, e2.Usuario.Birthday, e2.Nome, e2.Data, e2.ID)
 
 	t.Run("search", func(t *testing.T) {
 		c, err := m.SearchEventos("Lollapalooza")
@@ -68,8 +73,8 @@ func TestUpdate(t *testing.T) {
 	t.Run("update", func(t *testing.T) {
 		repo := newInmem()
 		m := NewService(repo)
-		u := newFixtureEvento()
-		email, err := m.CreateEvento(u.Usuario, u.Nome, u.ID)
+		e := newFixtureEvento()
+		email, err := m.CreateEvento(e.Usuario.Email, e.Usuario.Password, e.Usuario.Birthday, e.Nome, e.Data, e.ID)
 		assert.Nil(t, err)
 		saved, _ := m.GetEvento(email)
 		assert.Nil(t, m.UpdateEvento(saved))
@@ -83,14 +88,14 @@ func TestDelete(t *testing.T) {
 
 	repo := newInmem()
 	m := NewService(repo)
-	u1 := newFixtureEvento()
-	u2 := newFixtureEvento()
-	u2.ID = 200
-	email, _ := m.CreateEvento(u2.Usuario, u2.Nome, u2.ID)
+	e1 := newFixtureEvento()
+	e2 := newFixtureEvento()
+	e2.ID = 200
+	email, _ := m.CreateEvento(e2.Usuario.Email, e2.Usuario.Password, e2.Usuario.Birthday, e2.Nome, e2.Data, e2.ID)
 
 	t.Run("delete", func(t *testing.T) {
 
-		err := m.DeleteEvento(u1.ID)
+		err := m.DeleteEvento(e1.ID)
 		assert.Equal(t, entity.ErrNotFound, err)
 
 		err = m.DeleteEvento(email)
@@ -98,8 +103,8 @@ func TestDelete(t *testing.T) {
 		_, err = m.GetEvento(email)
 		assert.Equal(t, entity.ErrNotFound, err)
 
-		u3 := newFixtureEvento()
-		email, _ := m.CreateEvento(u3.Usuario, u3.Nome, u3.ID)
+		e3 := newFixtureEvento()
+		email, _ := m.CreateEvento(e3.Usuario.Email, e3.Usuario.Password, e3.Usuario.Birthday, e3.Nome, e3.Data, e3.ID)
 		saved, _ := m.GetEvento(email)
 		_ = m.UpdateEvento(saved)
 		err = m.DeleteEvento(email)
