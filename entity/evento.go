@@ -7,20 +7,22 @@ import (
 // Evento entidade Evento
 type Evento struct {
 	Usuario Usuario `validate:"required"`
-	Nome    string  `validate:"required,gte=1"`
 	ID      int     `validate:"required,gte=1"`
+	Nome    string  `validate:"required,gte=1"`
+	Data    string  `validate:"required,datetime=2006-01-02"`
 }
 
 // NewEvento cria um novo Evento
-func NewEvento(email, password, birthday, nome string, id int) (*Evento, error) {
+func NewEvento(email, password, birthday, nome, data string, id int) (*Evento, error) {
 	u, err := NewUsuario(email, password, birthday)
 	if err != nil {
 		return nil, err
 	}
 	e := &Evento{
 		Usuario: *u,
-		Nome:    nome,
 		ID:      id,
+		Nome:    nome,
+		Data:    data,
 	}
 	err = e.Validate()
 	if err != nil {
