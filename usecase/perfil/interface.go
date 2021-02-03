@@ -2,11 +2,15 @@ package perfil
 
 import "github.com/yohanalexander/deezefy-music/entity"
 
-// Perfil interface
-type Perfil interface {
+// Read interface
+type Read interface {
 	Get(id int) (*entity.Perfil, error)
 	Search(query string) ([]*entity.Perfil, error)
 	List() ([]*entity.Perfil, error)
+}
+
+// Write interface
+type Write interface {
 	Create(e *entity.Perfil) (int, error)
 	Update(e *entity.Perfil) error
 	Delete(id int) error
@@ -14,7 +18,8 @@ type Perfil interface {
 
 // Repository interface
 type Repository interface {
-	Perfil
+	Read
+	Write
 }
 
 // UseCase interface
@@ -22,7 +27,7 @@ type UseCase interface {
 	GetPerfil(id int) (*entity.Perfil, error)
 	SearchPerfils(query string) ([]*entity.Perfil, error)
 	ListPerfils() ([]*entity.Perfil, error)
-	CreatePerfil(ouvinte, informacoesrelevantes string, id int) (int, error)
+	CreatePerfil(email, password, birthday, primeironome, sobrenome, informacoesrelevantes string, id int) (int, error)
 	UpdatePerfil(e *entity.Perfil) error
 	DeletePerfil(id int) error
 }

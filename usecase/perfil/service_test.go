@@ -10,8 +10,16 @@ import (
 
 func newFixturePerfil() *entity.Perfil {
 	return &entity.Perfil{
-		ID:                    815,
-		Ouvinte:               "someone@spotify.com",
+		ID: 815,
+		Ouvinte: entity.Ouvinte{
+			Usuario: entity.Usuario{
+				Email:    "someone@deezefy.com",
+				Password: "12345678",
+				Birthday: "1998-05-27",
+			},
+			PrimeiroNome: "Imagine",
+			Sobrenome:    "Dragons",
+		},
 		InformacoesRelevantes: "Mais ouvidas",
 	}
 }
@@ -21,8 +29,8 @@ func TestCreate(t *testing.T) {
 	t.Run("create", func(t *testing.T) {
 		repo := newInmem()
 		m := NewService(repo)
-		u := newFixturePerfil()
-		_, err := m.CreatePerfil(u.Ouvinte, u.InformacoesRelevantes, u.ID)
+		p := newFixturePerfil()
+		_, err := m.CreatePerfil(p.Ouvinte.Usuario.Email, p.Ouvinte.Usuario.Password, p.Ouvinte.Usuario.Birthday, p.Ouvinte.PrimeiroNome, p.Ouvinte.Sobrenome, p.InformacoesRelevantes, p.ID)
 		assert.Nil(t, err)
 	})
 
@@ -32,13 +40,13 @@ func TestSearchAndFind(t *testing.T) {
 
 	repo := newInmem()
 	m := NewService(repo)
-	u1 := newFixturePerfil()
-	u2 := newFixturePerfil()
-	u2.ID = 200
-	u2.InformacoesRelevantes = "Mais compartilhadas"
+	p1 := newFixturePerfil()
+	p2 := newFixturePerfil()
+	p2.ID = 200
+	p2.InformacoesRelevantes = "Mais compartilhadas"
 
-	email, _ := m.CreatePerfil(u1.Ouvinte, u1.InformacoesRelevantes, u1.ID)
-	_, _ = m.CreatePerfil(u2.Ouvinte, u2.InformacoesRelevantes, u2.ID)
+	email, _ := m.CreatePerfil(p1.Ouvinte.Usuario.Email, p1.Ouvinte.Usuario.Password, p1.Ouvinte.Usuario.Birthday, p1.Ouvinte.PrimeiroNome, p1.Ouvinte.Sobrenome, p1.InformacoesRelevantes, p1.ID)
+	_, _ = m.CreatePerfil(p2.Ouvinte.Usuario.Email, p2.Ouvinte.Usuario.Password, p2.Ouvinte.Usuario.Birthday, p2.Ouvinte.PrimeiroNome, p2.Ouvinte.Sobrenome, p2.InformacoesRelevantes, p2.ID)
 
 	t.Run("search", func(t *testing.T) {
 		c, err := m.SearchPerfils("Mais ouvidas")
@@ -68,8 +76,8 @@ func TestUpdate(t *testing.T) {
 	t.Run("update", func(t *testing.T) {
 		repo := newInmem()
 		m := NewService(repo)
-		u := newFixturePerfil()
-		email, err := m.CreatePerfil(u.Ouvinte, u.InformacoesRelevantes, u.ID)
+		p := newFixturePerfil()
+		email, err := m.CreatePerfil(p.Ouvinte.Usuario.Email, p.Ouvinte.Usuario.Password, p.Ouvinte.Usuario.Birthday, p.Ouvinte.PrimeiroNome, p.Ouvinte.Sobrenome, p.InformacoesRelevantes, p.ID)
 		assert.Nil(t, err)
 		saved, _ := m.GetPerfil(email)
 		assert.Nil(t, m.UpdatePerfil(saved))
@@ -83,14 +91,14 @@ func TestDelete(t *testing.T) {
 
 	repo := newInmem()
 	m := NewService(repo)
-	u1 := newFixturePerfil()
-	u2 := newFixturePerfil()
-	u2.ID = 200
-	email, _ := m.CreatePerfil(u2.Ouvinte, u2.InformacoesRelevantes, u2.ID)
+	p1 := newFixturePerfil()
+	p2 := newFixturePerfil()
+	p2.ID = 200
+	email, _ := m.CreatePerfil(p2.Ouvinte.Usuario.Email, p2.Ouvinte.Usuario.Password, p2.Ouvinte.Usuario.Birthday, p2.Ouvinte.PrimeiroNome, p2.Ouvinte.Sobrenome, p2.InformacoesRelevantes, p2.ID)
 
 	t.Run("delete", func(t *testing.T) {
 
-		err := m.DeletePerfil(u1.ID)
+		err := m.DeletePerfil(p1.ID)
 		assert.Equal(t, entity.ErrNotFound, err)
 
 		err = m.DeletePerfil(email)
@@ -98,8 +106,8 @@ func TestDelete(t *testing.T) {
 		_, err = m.GetPerfil(email)
 		assert.Equal(t, entity.ErrNotFound, err)
 
-		u3 := newFixturePerfil()
-		email, _ := m.CreatePerfil(u3.Ouvinte, u3.InformacoesRelevantes, u3.ID)
+		p3 := newFixturePerfil()
+		email, _ := m.CreatePerfil(p3.Ouvinte.Usuario.Email, p3.Ouvinte.Usuario.Password, p3.Ouvinte.Usuario.Birthday, p3.Ouvinte.PrimeiroNome, p3.Ouvinte.Sobrenome, p3.InformacoesRelevantes, p3.ID)
 		saved, _ := m.GetPerfil(email)
 		_ = m.UpdatePerfil(saved)
 		err = m.DeletePerfil(email)

@@ -19,8 +19,8 @@ func NewService(r Repository) *Service {
 }
 
 // CreatePerfil Create Perfil
-func (s *Service) CreatePerfil(ouvinte, informacoesrelevantes string, id int) (int, error) {
-	e, err := entity.NewPerfil(ouvinte, informacoesrelevantes, id)
+func (s *Service) CreatePerfil(email, password, birthday, primeironome, sobrenome, informacoesrelevantes string, id int) (int, error) {
+	e, err := entity.NewPerfil(email, password, birthday, primeironome, sobrenome, informacoesrelevantes, id)
 	if err != nil {
 		return e.ID, err
 	}
