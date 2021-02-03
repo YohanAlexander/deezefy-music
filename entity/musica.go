@@ -13,6 +13,7 @@ type Musica struct {
 	Gravou    []Artista  `validate:""`
 	Playlists []Playlist `validate:""`
 	Albums    []Album    `validate:""`
+	Generos   []Genero   `validate:""`
 }
 
 // NewMusica cria um novo Musica
@@ -160,4 +161,35 @@ func (m *Musica) GetAlbum(album Album) (Album, error) {
 		}
 	}
 	return album, ErrNotFound
+}
+
+// AddGenero adiciona um Genero
+func (m *Musica) AddGenero(genero Genero) error {
+	_, err := m.GetGenero(genero)
+	if err == nil {
+		return ErrGeneroRegistered
+	}
+	m.Generos = append(m.Generos, genero)
+	return nil
+}
+
+// RemoveGenero remove um Genero
+func (m *Musica) RemoveGenero(genero Genero) error {
+	for i, j := range m.Generos {
+		if j.Nome == genero.Nome {
+			m.Generos = append(m.Generos[:i], m.Generos[i+1:]...)
+			return nil
+		}
+	}
+	return ErrNotFound
+}
+
+// GetGenero get a Genero
+func (m *Musica) GetGenero(genero Genero) (Genero, error) {
+	for _, v := range m.Generos {
+		if v.Nome == genero.Nome {
+			return genero, nil
+		}
+	}
+	return genero, ErrNotFound
 }
