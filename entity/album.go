@@ -6,10 +6,11 @@ import (
 
 // Album entidade Album
 type Album struct {
-	Artista       Artista `validate:"required"`
-	ID            int     `validate:"required,gte=1"`
-	Titulo        string  `validate:"required,gte=1"`
-	AnoLancamento int     `validate:"required,gte=1000"`
+	Artista       Artista   `validate:"required"`
+	ID            int       `validate:"required,gte=1"`
+	Titulo        string    `validate:"required,gte=1"`
+	AnoLancamento int       `validate:"required,gte=1000"`
+	Salvou        []Ouvinte `validate:""`
 }
 
 // NewAlbum cria um novo Album
@@ -38,4 +39,35 @@ func (a *Album) Validate() error {
 		return ErrInvalidEntity
 	}
 	return nil
+}
+
+// AddOuvinte adiciona um Ouvinte
+func (a *Album) AddOuvinte(ouvinte Ouvinte) error {
+	_, err := a.GetOuvinte(ouvinte)
+	if err == nil {
+		return ErrOuvinteRegistered
+	}
+	a.Salvou = append(a.Salvou, ouvinte)
+	return nil
+}
+
+// RemoveOuvinte remove um Ouvinte
+func (a *Album) RemoveOuvinte(ouvinte Ouvinte) error {
+	for i, j := range a.Salvou {
+		if j.Usuario.Email == ouvinte.Usuario.Email {
+			a.Salvou = append(a.Salvou[:i], a.Salvou[i+1:]...)
+			return nil
+		}
+	}
+	return ErrNotFound
+}
+
+// GetOuvinte get a Ouvinte
+func (a *Album) GetOuvinte(ouvinte Ouvinte) (Ouvinte, error) {
+	for _, v := range a.Salvou {
+		if v.Usuario.Email == ouvinte.Usuario.Email {
+			return ouvinte, nil
+		}
+	}
+	return ouvinte, ErrNotFound
 }

@@ -313,3 +313,64 @@ func TestGetPlaylist(t *testing.T) {
 	})
 
 }
+
+func TestAddAlbum(t *testing.T) {
+
+	t.Run("Album criado com sucesso", func(t *testing.T) {
+		o, _ := NewOuvinte("vancejoy@gmail.com", "somepassword", "2018-02-10", "Vance", "Joy")
+		a, _ := NewAlbum("coldplay@gmail.com", "somepassword", "2018-02-10", "Coldplay", "British Band", "Viva la vida", 2000, 2006, 1)
+		err := o.AddAlbum(*a)
+		assert.Nil(t, err)
+		assert.Equal(t, 1, len(o.Albums))
+	})
+
+	t.Run("Album já registrado", func(t *testing.T) {
+		o, _ := NewOuvinte("vancejoy@gmail.com", "somepassword", "2018-02-10", "Vance", "Joy")
+		a, _ := NewAlbum("coldplay@gmail.com", "somepassword", "2018-02-10", "Coldplay", "British Band", "Viva la vida", 2000, 2006, 1)
+		err := o.AddAlbum(*a)
+		assert.Nil(t, err)
+		a, _ = NewAlbum("coldplay@gmail.com", "somepassword", "2018-02-10", "Coldplay", "British Band", "Viva la vida", 2000, 2006, 1)
+		err = o.AddAlbum(*a)
+		assert.Equal(t, ErrAlbumRegistered, err)
+	})
+
+}
+
+func TestRemoveAlbum(t *testing.T) {
+
+	t.Run("Album não cadastrado", func(t *testing.T) {
+		o, _ := NewOuvinte("vancejoy@gmail.com", "somepassword", "2018-02-10", "Vance", "Joy")
+		a, _ := NewAlbum("coldplay@gmail.com", "somepassword", "2018-02-10", "Coldplay", "British Band", "Viva la vida", 2000, 2006, 1)
+		err := o.RemoveAlbum(*a)
+		assert.Equal(t, ErrNotFound, err)
+	})
+
+	t.Run("Album removido com sucesso", func(t *testing.T) {
+		o, _ := NewOuvinte("vancejoy@gmail.com", "somepassword", "2018-02-10", "Vance", "Joy")
+		a, _ := NewAlbum("coldplay@gmail.com", "somepassword", "2018-02-10", "Coldplay", "British Band", "Viva la vida", 2000, 2006, 1)
+		_ = o.AddAlbum(*a)
+		err := o.RemoveAlbum(*a)
+		assert.Nil(t, err)
+	})
+
+}
+
+func TestGetAlbum(t *testing.T) {
+
+	t.Run("Album cadastrado encontrado", func(t *testing.T) {
+		o, _ := NewOuvinte("vancejoy@gmail.com", "somepassword", "2018-02-10", "Vance", "Joy")
+		a, _ := NewAlbum("coldplay@gmail.com", "somepassword", "2018-02-10", "Coldplay", "British Band", "Viva la vida", 2000, 2006, 1)
+		_ = o.AddAlbum(*a)
+		Album, err := o.GetAlbum(*a)
+		assert.Nil(t, err)
+		assert.Equal(t, Album, *a)
+	})
+
+	t.Run("Album não cadastrado", func(t *testing.T) {
+		o, _ := NewOuvinte("vancejoy@gmail.com", "somepassword", "2018-02-10", "Vance", "Joy")
+		a, _ := NewAlbum("coldplay@gmail.com", "somepassword", "2018-02-10", "Coldplay", "British Band", "Viva la vida", 2000, 2006, 1)
+		_, err := o.GetAlbum(*a)
+		assert.Equal(t, ErrNotFound, err)
+	})
+
+}
