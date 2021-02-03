@@ -6,9 +6,10 @@ import (
 
 // Perfil entidade Perfil
 type Perfil struct {
-	Ouvinte               Ouvinte `validate:"required"`
-	ID                    int     `validate:"required,gte=1"`
-	InformacoesRelevantes string  `validate:"required,gte=1"`
+	Ouvinte               Ouvinte   `validate:"required"`
+	ID                    int       `validate:"required,gte=1"`
+	InformacoesRelevantes string    `validate:"required,gte=1"`
+	ArtistasFavoritos     []Artista `validate:""`
 }
 
 // NewPerfil cria um novo Perfil
@@ -36,4 +37,35 @@ func (p *Perfil) Validate() error {
 		return ErrInvalidEntity
 	}
 	return nil
+}
+
+// AddArtista adiciona um Artista
+func (p *Perfil) AddArtista(artista Artista) error {
+	_, err := p.GetArtista(artista)
+	if err == nil {
+		return ErrArtistaRegistered
+	}
+	p.ArtistasFavoritos = append(p.ArtistasFavoritos, artista)
+	return nil
+}
+
+// RemoveArtista remove um Artista
+func (p *Perfil) RemoveArtista(artista Artista) error {
+	for i, j := range p.ArtistasFavoritos {
+		if j.Usuario.Email == artista.Usuario.Email {
+			p.ArtistasFavoritos = append(p.ArtistasFavoritos[:i], p.ArtistasFavoritos[i+1:]...)
+			return nil
+		}
+	}
+	return ErrNotFound
+}
+
+// GetArtista get a Artista
+func (p *Perfil) GetArtista(artista Artista) (Artista, error) {
+	for _, v := range p.ArtistasFavoritos {
+		if v.Usuario.Email == artista.Usuario.Email {
+			return artista, nil
+		}
+	}
+	return artista, ErrNotFound
 }

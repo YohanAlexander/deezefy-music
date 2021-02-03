@@ -28,3 +28,6 @@ var ErrPlaylistRegistered = errors.New("Playlist already registered")
 
 // ErrAlbumRegistered cannot register
 var ErrAlbumRegistered = errors.New("Album already registered")
+
+// ErrPerfilRegistered cannot register
+var ErrPerfilRegistered = errors.New("Perfil already registered")
