@@ -11,6 +11,7 @@ type Artista struct {
 	Biografia     string    `validate:"gte=1"`
 	AnoFormacao   int       `validate:"gte=1000"`
 	Seguidores    []Ouvinte `validate:""`
+	Grava         []Musica  `validate:""`
 }
 
 // NewArtista cria um novo Artista
@@ -70,4 +71,35 @@ func (a *Artista) GetOuvinte(ouvinte Ouvinte) (Ouvinte, error) {
 		}
 	}
 	return ouvinte, ErrNotFound
+}
+
+// AddMusica adiciona um Musica
+func (a *Artista) AddMusica(musica Musica) error {
+	_, err := a.GetMusica(musica)
+	if err == nil {
+		return ErrMusicaRegistered
+	}
+	a.Grava = append(a.Grava, musica)
+	return nil
+}
+
+// RemoveMusica remove um Musica
+func (a *Artista) RemoveMusica(musica Musica) error {
+	for i, j := range a.Grava {
+		if j.ID == musica.ID {
+			a.Grava = append(a.Grava[:i], a.Grava[i+1:]...)
+			return nil
+		}
+	}
+	return ErrNotFound
+}
+
+// GetMusica get a Musica
+func (a *Artista) GetMusica(musica Musica) (Musica, error) {
+	for _, v := range a.Grava {
+		if v.ID == musica.ID {
+			return musica, nil
+		}
+	}
+	return musica, ErrNotFound
 }

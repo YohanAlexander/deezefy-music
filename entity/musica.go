@@ -10,6 +10,7 @@ type Musica struct {
 	Duracao int       `validate:"required,gte=100"`
 	Nome    string    `validate:"required,gte=1"`
 	Curtiu  []Ouvinte `validate:""`
+	Gravou  []Artista `validate:""`
 }
 
 // NewMusica cria um novo Musica
@@ -64,4 +65,35 @@ func (m *Musica) GetOuvinte(ouvinte Ouvinte) (Ouvinte, error) {
 		}
 	}
 	return ouvinte, ErrNotFound
+}
+
+// AddArtista adiciona um Artista
+func (m *Musica) AddArtista(artista Artista) error {
+	_, err := m.GetArtista(artista)
+	if err == nil {
+		return ErrArtistaRegistered
+	}
+	m.Gravou = append(m.Gravou, artista)
+	return nil
+}
+
+// RemoveArtista remove um Artista
+func (m *Musica) RemoveArtista(artista Artista) error {
+	for i, j := range m.Gravou {
+		if j.Usuario.Email == artista.Usuario.Email {
+			m.Gravou = append(m.Gravou[:i], m.Gravou[i+1:]...)
+			return nil
+		}
+	}
+	return ErrNotFound
+}
+
+// GetArtista get a Artista
+func (m *Musica) GetArtista(artista Artista) (Artista, error) {
+	for _, v := range m.Gravou {
+		if v.Usuario.Email == artista.Usuario.Email {
+			return artista, nil
+		}
+	}
+	return artista, ErrNotFound
 }
