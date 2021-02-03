@@ -19,3 +19,6 @@ var ErrArtistaRegistered = errors.New("Artista already registered")
 
 // ErrOuvinteRegistered cannot register
 var ErrOuvinteRegistered = errors.New("Ouvinte already registered")
+
+// ErrMusicaRegistered cannot register
+var ErrMusicaRegistered = errors.New("Musica already registered")

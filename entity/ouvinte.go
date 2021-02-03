@@ -11,6 +11,7 @@ type Ouvinte struct {
 	Sobrenome    string    `validate:"required,gte=1"`
 	Telefones    []string  `validate:""`
 	Seguindo     []Artista `validate:""`
+	Curtidas     []Musica  `validate:""`
 }
 
 // NewOuvinte cria um novo Ouvinte
@@ -100,4 +101,35 @@ func (o *Ouvinte) GetArtista(artista Artista) (Artista, error) {
 		}
 	}
 	return artista, ErrNotFound
+}
+
+// AddMusica adiciona um Musica
+func (o *Ouvinte) AddMusica(musica Musica) error {
+	_, err := o.GetMusica(musica)
+	if err == nil {
+		return ErrMusicaRegistered
+	}
+	o.Curtidas = append(o.Curtidas, musica)
+	return nil
+}
+
+// RemoveMusica remove um Musica
+func (o *Ouvinte) RemoveMusica(musica Musica) error {
+	for i, j := range o.Curtidas {
+		if j.ID == musica.ID {
+			o.Curtidas = append(o.Curtidas[:i], o.Curtidas[i+1:]...)
+			return nil
+		}
+	}
+	return ErrNotFound
+}
+
+// GetMusica get a Musica
+func (o *Ouvinte) GetMusica(musica Musica) (Musica, error) {
+	for _, v := range o.Curtidas {
+		if v.ID == musica.ID {
+			return musica, nil
+		}
+	}
+	return musica, ErrNotFound
 }
