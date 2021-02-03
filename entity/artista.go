@@ -13,6 +13,7 @@ type Artista struct {
 	Seguidores    []Ouvinte `validate:""`
 	Grava         []Musica  `validate:""`
 	Perfis        []Perfil  `validate:""`
+	Generos       []Genero  `validate:""`
 }
 
 // NewArtista cria um novo Artista
@@ -134,4 +135,35 @@ func (a *Artista) GetPerfil(perfil Perfil) (Perfil, error) {
 		}
 	}
 	return perfil, ErrNotFound
+}
+
+// AddGenero adiciona um Genero
+func (a *Artista) AddGenero(genero Genero) error {
+	_, err := a.GetGenero(genero)
+	if err == nil {
+		return ErrGeneroRegistered
+	}
+	a.Generos = append(a.Generos, genero)
+	return nil
+}
+
+// RemoveGenero remove um Genero
+func (a *Artista) RemoveGenero(genero Genero) error {
+	for i, j := range a.Generos {
+		if j.Nome == genero.Nome {
+			a.Generos = append(a.Generos[:i], a.Generos[i+1:]...)
+			return nil
+		}
+	}
+	return ErrNotFound
+}
+
+// GetGenero get a Genero
+func (a *Artista) GetGenero(genero Genero) (Genero, error) {
+	for _, v := range a.Generos {
+		if v.Nome == genero.Nome {
+			return genero, nil
+		}
+	}
+	return genero, ErrNotFound
 }

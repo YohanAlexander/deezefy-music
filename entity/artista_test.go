@@ -275,3 +275,64 @@ func TestGetPerfil(t *testing.T) {
 	})
 
 }
+
+func TestAddArtistaGenero(t *testing.T) {
+
+	t.Run("Genero criado com sucesso", func(t *testing.T) {
+		a, _ := NewArtista("vancejoy@gmail.com", "somepassword", "2018-02-10", "Vance Joy", "Australian Singer", 2006)
+		g, _ := NewGenero("Indie Rock", "rock")
+		err := a.AddGenero(*g)
+		assert.Nil(t, err)
+		assert.Equal(t, 1, len(a.Generos))
+	})
+
+	t.Run("Genero já registrado", func(t *testing.T) {
+		a, _ := NewArtista("vancejoy@gmail.com", "somepassword", "2018-02-10", "Vance Joy", "Australian Singer", 2006)
+		g, _ := NewGenero("Indie Rock", "rock")
+		err := a.AddGenero(*g)
+		assert.Nil(t, err)
+		g, _ = NewGenero("Indie Rock", "rock")
+		err = a.AddGenero(*g)
+		assert.Equal(t, ErrGeneroRegistered, err)
+	})
+
+}
+
+func TestRemoveArtistaGenero(t *testing.T) {
+
+	t.Run("Genero não cadastrado", func(t *testing.T) {
+		a, _ := NewArtista("vancejoy@gmail.com", "somepassword", "2018-02-10", "Vance Joy", "Australian Singer", 2006)
+		g, _ := NewGenero("Indie Rock", "rock")
+		err := a.RemoveGenero(*g)
+		assert.Equal(t, ErrNotFound, err)
+	})
+
+	t.Run("Genero removido com sucesso", func(t *testing.T) {
+		a, _ := NewArtista("vancejoy@gmail.com", "somepassword", "2018-02-10", "Vance Joy", "Australian Singer", 2006)
+		g, _ := NewGenero("Indie Rock", "rock")
+		_ = a.AddGenero(*g)
+		err := a.RemoveGenero(*g)
+		assert.Nil(t, err)
+	})
+
+}
+
+func TestGetArtistaGenero(t *testing.T) {
+
+	t.Run("Genero cadastrado encontrado", func(t *testing.T) {
+		a, _ := NewArtista("vancejoy@gmail.com", "somepassword", "2018-02-10", "Vance Joy", "Australian Singer", 2006)
+		g, _ := NewGenero("Indie Rock", "rock")
+		_ = a.AddGenero(*g)
+		genero, err := a.GetGenero(*g)
+		assert.Nil(t, err)
+		assert.Equal(t, genero, *g)
+	})
+
+	t.Run("Genero não cadastrado", func(t *testing.T) {
+		a, _ := NewArtista("vancejoy@gmail.com", "somepassword", "2018-02-10", "Vance Joy", "Australian Singer", 2006)
+		g, _ := NewGenero("Indie Rock", "rock")
+		_, err := a.GetGenero(*g)
+		assert.Equal(t, ErrNotFound, err)
+	})
+
+}
