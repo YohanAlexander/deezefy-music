@@ -14,6 +14,7 @@ type Artista struct {
 	Grava         []Musica  `validate:""`
 	Perfis        []Perfil  `validate:""`
 	Generos       []Genero  `validate:""`
+	Albums        []Album   `validate:""`
 }
 
 // NewArtista cria um novo Artista
@@ -166,4 +167,35 @@ func (a *Artista) GetGenero(genero Genero) (Genero, error) {
 		}
 	}
 	return genero, ErrNotFound
+}
+
+// AddAlbum adiciona um Album
+func (a *Artista) AddAlbum(album Album) error {
+	_, err := a.GetAlbum(album)
+	if err == nil {
+		return ErrArtistaRegistered
+	}
+	a.Albums = append(a.Albums, album)
+	return nil
+}
+
+// RemoveAlbum remove um Album
+func (a *Artista) RemoveAlbum(album Album) error {
+	for i, j := range a.Albums {
+		if j.ID == album.ID {
+			a.Albums = append(a.Albums[:i], a.Albums[i+1:]...)
+			return nil
+		}
+	}
+	return ErrNotFound
+}
+
+// GetAlbum get a Album
+func (a *Artista) GetAlbum(album Album) (Album, error) {
+	for _, v := range a.Albums {
+		if v.ID == album.ID {
+			return album, nil
+		}
+	}
+	return album, ErrNotFound
 }
