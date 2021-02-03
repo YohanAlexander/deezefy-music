@@ -10,6 +10,7 @@ type Genero struct {
 	Estilo   string    `validate:"required,oneof=blues rock mpb samba sertanejo jazz classica"`
 	Artistas []Artista `validate:""`
 	Musicas  []Musica  `validate:""`
+	Perfis   []Perfil  `validate:""`
 }
 
 // NewGenero cria um novo Genero
@@ -94,4 +95,35 @@ func (g *Genero) GetMusica(musica Musica) (Musica, error) {
 		}
 	}
 	return musica, ErrNotFound
+}
+
+// AddPerfil adiciona um Perfil
+func (g *Genero) AddPerfil(perfil Perfil) error {
+	_, err := g.GetPerfil(perfil)
+	if err == nil {
+		return ErrPerfilRegistered
+	}
+	g.Perfis = append(g.Perfis, perfil)
+	return nil
+}
+
+// RemovePerfil remove um Perfil
+func (g *Genero) RemovePerfil(perfil Perfil) error {
+	for i, j := range g.Perfis {
+		if j.ID == perfil.ID {
+			g.Perfis = append(g.Perfis[:i], g.Perfis[i+1:]...)
+			return nil
+		}
+	}
+	return ErrNotFound
+}
+
+// GetPerfil get a Perfil
+func (g *Genero) GetPerfil(perfil Perfil) (Perfil, error) {
+	for _, v := range g.Perfis {
+		if v.ID == perfil.ID {
+			return perfil, nil
+		}
+	}
+	return perfil, ErrNotFound
 }
