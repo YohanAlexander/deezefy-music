@@ -28,8 +28,8 @@ func (s *Service) CreateGenero(nome, estilo string) (string, error) {
 }
 
 // GetGenero Get Genero
-func (s *Service) GetGenero(email string) (*entity.Genero, error) {
-	return s.repo.Get(email)
+func (s *Service) GetGenero(nome string) (*entity.Genero, error) {
+	return s.repo.Get(nome)
 }
 
 // SearchGeneros Search Generos
@@ -43,15 +43,15 @@ func (s *Service) ListGeneros() ([]*entity.Genero, error) {
 }
 
 // DeleteGenero Delete Genero
-func (s *Service) DeleteGenero(email string) error {
-	u, err := s.GetGenero(email)
+func (s *Service) DeleteGenero(nome string) error {
+	u, err := s.GetGenero(nome)
 	if u == nil {
 		return entity.ErrNotFound
 	}
 	if err != nil {
 		return err
 	}
-	return s.repo.Delete(email)
+	return s.repo.Delete(nome)
 }
 
 // UpdateGenero Update Genero

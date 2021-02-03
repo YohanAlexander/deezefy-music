@@ -2,11 +2,15 @@ package genero
 
 import "github.com/yohanalexander/deezefy-music/entity"
 
-// Genero interface
-type Genero interface {
+// Read interface
+type Read interface {
 	Get(nome string) (*entity.Genero, error)
 	Search(query string) ([]*entity.Genero, error)
 	List() ([]*entity.Genero, error)
+}
+
+// Write interface
+type Write interface {
 	Create(e *entity.Genero) (string, error)
 	Update(e *entity.Genero) error
 	Delete(nome string) error
@@ -14,7 +18,8 @@ type Genero interface {
 
 // Repository interface
 type Repository interface {
-	Genero
+	Read
+	Write
 }
 
 // UseCase interface
