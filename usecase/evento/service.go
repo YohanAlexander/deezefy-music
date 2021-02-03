@@ -19,8 +19,8 @@ func NewService(r Repository) *Service {
 }
 
 // CreateEvento Create Evento
-func (s *Service) CreateEvento(usuario, nome string, id int) (int, error) {
-	e, err := entity.NewEvento(usuario, nome, id)
+func (s *Service) CreateEvento(email, password, birthday, nome, data string, id int) (int, error) {
+	e, err := entity.NewEvento(email, password, birthday, nome, data, id)
 	if err != nil {
 		return e.ID, err
 	}
