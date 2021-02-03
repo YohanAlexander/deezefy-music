@@ -7,8 +7,8 @@ import (
 // Musica entidade Musica
 type Musica struct {
 	ID        int        `validate:"required,gte=1"`
-	Duracao   int        `validate:"required,gte=100"`
 	Nome      string     `validate:"required,gte=1"`
+	Duracao   int        `validate:"required,gte=100"`
 	Curtiu    []Ouvinte  `validate:""`
 	Gravou    []Artista  `validate:""`
 	Playlists []Playlist `validate:""`
@@ -17,11 +17,11 @@ type Musica struct {
 }
 
 // NewMusica cria um novo Musica
-func NewMusica(id, duracao int, nome string) (*Musica, error) {
+func NewMusica(nome string, duracao, id int) (*Musica, error) {
 	m := &Musica{
 		ID:      id,
-		Duracao: duracao,
 		Nome:    nome,
+		Duracao: duracao,
 	}
 	err := m.Validate()
 	if err != nil {
