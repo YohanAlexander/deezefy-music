@@ -21,8 +21,8 @@ func newInmem() *inmem {
 
 // Create Ouvinte
 func (r *inmem) Create(e *entity.Ouvinte) (string, error) {
-	r.m[e.Usuario] = e
-	return e.Usuario, nil
+	r.m[e.Usuario.Email] = e
+	return e.Usuario.Email, nil
 }
 
 // Get Ouvinte
@@ -35,11 +35,11 @@ func (r *inmem) Get(email string) (*entity.Ouvinte, error) {
 
 // Update Ouvinte
 func (r *inmem) Update(e *entity.Ouvinte) error {
-	_, err := r.Get(e.Usuario)
+	_, err := r.Get(e.Usuario.Email)
 	if err != nil {
 		return err
 	}
-	r.m[e.Usuario] = e
+	r.m[e.Usuario.Email] = e
 	return nil
 }
 
@@ -47,7 +47,7 @@ func (r *inmem) Update(e *entity.Ouvinte) error {
 func (r *inmem) Search(query string) ([]*entity.Ouvinte, error) {
 	var d []*entity.Ouvinte
 	for _, j := range r.m {
-		if strings.Contains(strings.ToLower(j.Usuario), query) {
+		if strings.Contains(strings.ToLower(j.Usuario.Email), query) {
 			d = append(d, j)
 		}
 	}
