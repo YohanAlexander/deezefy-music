@@ -19,8 +19,8 @@ func NewService(r Repository) *Service {
 }
 
 // CreateAlbum Create Album
-func (s *Service) CreateAlbum(id, anolancamento int, titulo, artista string) (int, error) {
-	e, err := entity.NewAlbum(id, anolancamento, titulo, artista)
+func (s *Service) CreateAlbum(email, password, birthday, nomeartistico, biografia, titulo string, anoformacao, anolancamento, id int) (int, error) {
+	e, err := entity.NewAlbum(email, password, birthday, nomeartistico, biografia, titulo, anoformacao, anolancamento, id)
 	if err != nil {
 		return e.ID, err
 	}

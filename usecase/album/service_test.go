@@ -13,7 +13,16 @@ func newFixtureAlbum() *entity.Album {
 		ID:            815,
 		AnoLancamento: 1998,
 		Titulo:        "Cage The Elephant",
-		Artista:       "someone@spotify.com",
+		Artista: entity.Artista{
+			Usuario: entity.Usuario{
+				Email:    "someone@deezefy.com",
+				Password: "12345678",
+				Birthday: "1998-05-27",
+			},
+			NomeArtistico: "Imagine Dragons",
+			Biografia:     "Indie Rock Band",
+			AnoFormacao:   1998,
+		},
 	}
 }
 
@@ -22,8 +31,8 @@ func TestCreate(t *testing.T) {
 	t.Run("create", func(t *testing.T) {
 		repo := newInmem()
 		m := NewService(repo)
-		u := newFixtureAlbum()
-		_, err := m.CreateAlbum(u.ID, u.AnoLancamento, u.Titulo, u.Artista)
+		a := newFixtureAlbum()
+		_, err := m.CreateAlbum(a.Artista.Usuario.Email, a.Artista.Usuario.Password, a.Artista.Usuario.Birthday, a.Artista.NomeArtistico, a.Artista.Biografia, a.Titulo, a.Artista.AnoFormacao, a.AnoLancamento, a.ID)
 		assert.Nil(t, err)
 	})
 
@@ -33,13 +42,13 @@ func TestSearchAndFind(t *testing.T) {
 
 	repo := newInmem()
 	m := NewService(repo)
-	u1 := newFixtureAlbum()
-	u2 := newFixtureAlbum()
-	u2.ID = 200
-	u2.Titulo = "Radioactive"
+	a1 := newFixtureAlbum()
+	a2 := newFixtureAlbum()
+	a2.ID = 200
+	a2.Titulo = "Radioactive"
 
-	email, _ := m.CreateAlbum(u1.ID, u1.AnoLancamento, u1.Titulo, u1.Artista)
-	_, _ = m.CreateAlbum(u2.ID, u2.AnoLancamento, u2.Titulo, u2.Artista)
+	email, _ := m.CreateAlbum(a1.Artista.Usuario.Email, a1.Artista.Usuario.Password, a1.Artista.Usuario.Birthday, a1.Artista.NomeArtistico, a1.Artista.Biografia, a1.Titulo, a1.Artista.AnoFormacao, a1.AnoLancamento, a1.ID)
+	_, _ = m.CreateAlbum(a2.Artista.Usuario.Email, a2.Artista.Usuario.Password, a2.Artista.Usuario.Birthday, a2.Artista.NomeArtistico, a2.Artista.Biografia, a2.Titulo, a2.Artista.AnoFormacao, a2.AnoLancamento, a2.ID)
 
 	t.Run("search", func(t *testing.T) {
 		c, err := m.SearchAlbums("Cage The Elephant")
@@ -69,8 +78,8 @@ func TestUpdate(t *testing.T) {
 	t.Run("update", func(t *testing.T) {
 		repo := newInmem()
 		m := NewService(repo)
-		u := newFixtureAlbum()
-		email, err := m.CreateAlbum(u.ID, u.AnoLancamento, u.Titulo, u.Artista)
+		a := newFixtureAlbum()
+		email, err := m.CreateAlbum(a.Artista.Usuario.Email, a.Artista.Usuario.Password, a.Artista.Usuario.Birthday, a.Artista.NomeArtistico, a.Artista.Biografia, a.Titulo, a.Artista.AnoFormacao, a.AnoLancamento, a.ID)
 		assert.Nil(t, err)
 		saved, _ := m.GetAlbum(email)
 		assert.Nil(t, m.UpdateAlbum(saved))
@@ -84,14 +93,14 @@ func TestDelete(t *testing.T) {
 
 	repo := newInmem()
 	m := NewService(repo)
-	u1 := newFixtureAlbum()
-	u2 := newFixtureAlbum()
-	u2.ID = 200
-	email, _ := m.CreateAlbum(u2.ID, u2.AnoLancamento, u2.Titulo, u2.Artista)
+	a1 := newFixtureAlbum()
+	a2 := newFixtureAlbum()
+	a2.ID = 200
+	email, _ := m.CreateAlbum(a2.Artista.Usuario.Email, a2.Artista.Usuario.Password, a2.Artista.Usuario.Birthday, a2.Artista.NomeArtistico, a2.Artista.Biografia, a2.Titulo, a2.Artista.AnoFormacao, a2.AnoLancamento, a2.ID)
 
 	t.Run("delete", func(t *testing.T) {
 
-		err := m.DeleteAlbum(u1.ID)
+		err := m.DeleteAlbum(a1.ID)
 		assert.Equal(t, entity.ErrNotFound, err)
 
 		err = m.DeleteAlbum(email)
@@ -99,8 +108,8 @@ func TestDelete(t *testing.T) {
 		_, err = m.GetAlbum(email)
 		assert.Equal(t, entity.ErrNotFound, err)
 
-		u3 := newFixtureAlbum()
-		email, _ := m.CreateAlbum(u3.ID, u3.AnoLancamento, u3.Titulo, u3.Artista)
+		a3 := newFixtureAlbum()
+		email, _ := m.CreateAlbum(a3.Artista.Usuario.Email, a3.Artista.Usuario.Password, a3.Artista.Usuario.Birthday, a3.Artista.NomeArtistico, a3.Artista.Biografia, a3.Titulo, a3.Artista.AnoFormacao, a3.AnoLancamento, a3.ID)
 		saved, _ := m.GetAlbum(email)
 		_ = m.UpdateAlbum(saved)
 		err = m.DeleteAlbum(email)
