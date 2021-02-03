@@ -5,7 +5,6 @@ import (
 
 	"github.com/yohanalexander/deezefy-music/entity"
 	der "github.com/yohanalexander/deezefy-music/entity/grava"
-	inmem "github.com/yohanalexander/deezefy-music/infrastructure/inmem/repository/grava"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -20,7 +19,7 @@ func newFixtureGrava() *der.Grava {
 func TestCreate(t *testing.T) {
 
 	t.Run("create", func(t *testing.T) {
-		repo := inmem.NewInmem()
+		repo := newInmem()
 		m := NewService(repo)
 		u := newFixtureGrava()
 		_, _, err := m.CreateGrava(u.Musica, u.Artista)
@@ -31,7 +30,7 @@ func TestCreate(t *testing.T) {
 
 func TestSearchAndFind(t *testing.T) {
 
-	repo := inmem.NewInmem()
+	repo := newInmem()
 	m := NewService(repo)
 	u1 := newFixtureGrava()
 	u2 := newFixtureGrava()
@@ -77,7 +76,7 @@ func TestSearchAndFind(t *testing.T) {
 func TestUpdate(t *testing.T) {
 
 	t.Run("update", func(t *testing.T) {
-		repo := inmem.NewInmem()
+		repo := newInmem()
 		m := NewService(repo)
 		u := newFixtureGrava()
 		musica, artista, err := m.CreateGrava(u.Musica, u.Artista)
@@ -92,7 +91,7 @@ func TestUpdate(t *testing.T) {
 
 func TestDelete(t *testing.T) {
 
-	repo := inmem.NewInmem()
+	repo := newInmem()
 	m := NewService(repo)
 	u1 := newFixtureGrava()
 	u2 := newFixtureGrava()

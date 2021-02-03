@@ -5,7 +5,6 @@ import (
 
 	"github.com/yohanalexander/deezefy-music/entity"
 	der "github.com/yohanalexander/deezefy-music/entity/evento"
-	inmem "github.com/yohanalexander/deezefy-music/infrastructure/inmem/repository/evento"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -21,7 +20,7 @@ func newFixtureEvento() *der.Evento {
 func TestCreate(t *testing.T) {
 
 	t.Run("create", func(t *testing.T) {
-		repo := inmem.NewInmem()
+		repo := newInmem()
 		m := NewService(repo)
 		u := newFixtureEvento()
 		_, err := m.CreateEvento(u.Usuario, u.Nome, u.ID)
@@ -32,7 +31,7 @@ func TestCreate(t *testing.T) {
 
 func TestSearchAndFind(t *testing.T) {
 
-	repo := inmem.NewInmem()
+	repo := newInmem()
 	m := NewService(repo)
 	u1 := newFixtureEvento()
 	u2 := newFixtureEvento()
@@ -68,7 +67,7 @@ func TestSearchAndFind(t *testing.T) {
 func TestUpdate(t *testing.T) {
 
 	t.Run("update", func(t *testing.T) {
-		repo := inmem.NewInmem()
+		repo := newInmem()
 		m := NewService(repo)
 		u := newFixtureEvento()
 		email, err := m.CreateEvento(u.Usuario, u.Nome, u.ID)
@@ -83,7 +82,7 @@ func TestUpdate(t *testing.T) {
 
 func TestDelete(t *testing.T) {
 
-	repo := inmem.NewInmem()
+	repo := newInmem()
 	m := NewService(repo)
 	u1 := newFixtureEvento()
 	u2 := newFixtureEvento()
