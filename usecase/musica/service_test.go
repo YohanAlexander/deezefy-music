@@ -22,7 +22,7 @@ func TestCreate(t *testing.T) {
 		repo := newInmem()
 		m := NewService(repo)
 		u := newFixtureMusica()
-		_, err := m.CreateMusica(u.ID, u.Duracao, u.Nome)
+		_, err := m.CreateMusica(u.Nome, u.Duracao, u.ID)
 		assert.Nil(t, err)
 	})
 
@@ -37,8 +37,8 @@ func TestSearchAndFind(t *testing.T) {
 	u2.ID = 200
 	u2.Nome = "Radioactive"
 
-	email, _ := m.CreateMusica(u1.ID, u1.Duracao, u1.Nome)
-	_, _ = m.CreateMusica(u2.ID, u2.Duracao, u2.Nome)
+	email, _ := m.CreateMusica(u1.Nome, u1.Duracao, u1.ID)
+	_, _ = m.CreateMusica(u2.Nome, u2.Duracao, u2.ID)
 
 	t.Run("search", func(t *testing.T) {
 		c, err := m.SearchMusicas("Sultans of Swing")
@@ -69,7 +69,7 @@ func TestUpdate(t *testing.T) {
 		repo := newInmem()
 		m := NewService(repo)
 		u := newFixtureMusica()
-		email, err := m.CreateMusica(u.ID, u.Duracao, u.Nome)
+		email, err := m.CreateMusica(u.Nome, u.Duracao, u.ID)
 		assert.Nil(t, err)
 		saved, _ := m.GetMusica(email)
 		assert.Nil(t, m.UpdateMusica(saved))
@@ -86,7 +86,7 @@ func TestDelete(t *testing.T) {
 	u1 := newFixtureMusica()
 	u2 := newFixtureMusica()
 	u2.ID = 200
-	email, _ := m.CreateMusica(u2.ID, u2.Duracao, u2.Nome)
+	email, _ := m.CreateMusica(u2.Nome, u2.Duracao, u2.ID)
 
 	t.Run("delete", func(t *testing.T) {
 
@@ -99,7 +99,7 @@ func TestDelete(t *testing.T) {
 		assert.Equal(t, entity.ErrNotFound, err)
 
 		u3 := newFixtureMusica()
-		email, _ := m.CreateMusica(u3.ID, u3.Duracao, u3.Nome)
+		email, _ := m.CreateMusica(u3.Nome, u3.Duracao, u3.ID)
 		saved, _ := m.GetMusica(email)
 		_ = m.UpdateMusica(saved)
 		err = m.DeleteMusica(email)
