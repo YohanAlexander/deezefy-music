@@ -92,3 +92,64 @@ func TestArtista_Validate(t *testing.T) {
 	}
 
 }
+
+func TestAddOuvinte(t *testing.T) {
+
+	t.Run("Ouvinte criado com sucesso", func(t *testing.T) {
+		a, _ := NewArtista("vancejoy@gmail.com", "somepassword", "2018-02-10", "Vance Joy", "Australian Singer", 2006)
+		o, _ := NewOuvinte("vancejoy@gmail.com", "somepassword", "2018-02-10", "Vance", "Joy")
+		err := a.AddOuvinte(*o)
+		assert.Nil(t, err)
+		assert.Equal(t, 1, len(a.Seguidores))
+	})
+
+	t.Run("Ouvinte já registrado", func(t *testing.T) {
+		a, _ := NewArtista("vancejoy@gmail.com", "somepassword", "2018-02-10", "Vance Joy", "Australian Singer", 2006)
+		o, _ := NewOuvinte("vancejoy@gmail.com", "somepassword", "2018-02-10", "Vance", "Joy")
+		err := a.AddOuvinte(*o)
+		assert.Nil(t, err)
+		o, _ = NewOuvinte("vancejoy@gmail.com", "somepassword", "2018-02-10", "Vance", "Joy")
+		err = a.AddOuvinte(*o)
+		assert.Equal(t, ErrOuvinteRegistered, err)
+	})
+
+}
+
+func TestRemoveOuvinte(t *testing.T) {
+
+	t.Run("Ouvinte não cadastrado", func(t *testing.T) {
+		a, _ := NewArtista("vancejoy@gmail.com", "somepassword", "2018-02-10", "Vance Joy", "Australian Singer", 2006)
+		o, _ := NewOuvinte("vancejoy@gmail.com", "somepassword", "2018-02-10", "Vance", "Joy")
+		err := a.RemoveOuvinte(*o)
+		assert.Equal(t, ErrNotFound, err)
+	})
+
+	t.Run("Ouvinte removido com sucesso", func(t *testing.T) {
+		a, _ := NewArtista("vancejoy@gmail.com", "somepassword", "2018-02-10", "Vance Joy", "Australian Singer", 2006)
+		o, _ := NewOuvinte("vancejoy@gmail.com", "somepassword", "2018-02-10", "Vance", "Joy")
+		_ = a.AddOuvinte(*o)
+		err := a.RemoveOuvinte(*o)
+		assert.Nil(t, err)
+	})
+
+}
+
+func TestGetOuvinte(t *testing.T) {
+
+	t.Run("Ouvinte cadastrado encontrado", func(t *testing.T) {
+		a, _ := NewArtista("vancejoy@gmail.com", "somepassword", "2018-02-10", "Vance Joy", "Australian Singer", 2006)
+		o, _ := NewOuvinte("vancejoy@gmail.com", "somepassword", "2018-02-10", "Vance", "Joy")
+		_ = a.AddOuvinte(*o)
+		ouvinte, err := a.GetOuvinte(*o)
+		assert.Nil(t, err)
+		assert.Equal(t, ouvinte, *o)
+	})
+
+	t.Run("Ouvinte não cadastrado", func(t *testing.T) {
+		a, _ := NewArtista("vancejoy@gmail.com", "somepassword", "2018-02-10", "Vance Joy", "Australian Singer", 2006)
+		o, _ := NewOuvinte("vancejoy@gmail.com", "somepassword", "2018-02-10", "Vance", "Joy")
+		_, err := a.GetOuvinte(*o)
+		assert.Equal(t, ErrNotFound, err)
+	})
+
+}
