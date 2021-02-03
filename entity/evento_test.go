@@ -9,7 +9,7 @@ import (
 func TestNewEvento(t *testing.T) {
 
 	t.Run("Evento criado com sucesso", func(t *testing.T) {
-		e, err := NewEvento("radiohead@gmail.com", "Lollapalooza", 1)
+		e, err := NewEvento("radiohead@spotify.com", "somepassword", "2018-02-10", "Lollapalooza", 1)
 		assert.Nil(t, err)
 		assert.Equal(t, e.Nome, "Lollapalooza")
 	})
@@ -18,9 +18,15 @@ func TestNewEvento(t *testing.T) {
 
 func TestEvento_Validate(t *testing.T) {
 
+	type user struct {
+		email    string
+		password string
+		birthday string
+	}
+
 	type test struct {
 		name    string
-		usuario string
+		usuario user
 		nome    string
 		id      int
 		want    error
@@ -28,38 +34,43 @@ func TestEvento_Validate(t *testing.T) {
 
 	tests := []test{
 		{
-			name:    "Campos válidos",
-			usuario: "radiohead@gmail.com",
-			nome:    "Lollapalooza",
-			id:      1,
-			want:    nil,
+			name: "Campos válidos",
+			usuario: user{
+				email:    "vancejoy@gmail.com",
+				password: "new_password",
+				birthday: "2006-01-02",
+			},
+			nome: "Lollapalooza",
+			id:   1,
+			want: nil,
 		},
 		{
-			name:    "Email inválido (user@company.com)",
-			usuario: "",
-			nome:    "Lollapalooza",
-			id:      1,
-			want:    ErrInvalidEntity,
+			name: "Nome inválido",
+			usuario: user{
+				email:    "vancejoy@gmail.com",
+				password: "new_password",
+				birthday: "2006-01-02",
+			},
+			nome: "",
+			id:   1,
+			want: ErrInvalidEntity,
 		},
 		{
-			name:    "Nome inválido",
-			usuario: "radiohead@gmail.com",
-			nome:    "",
-			id:      1,
-			want:    ErrInvalidEntity,
-		},
-		{
-			name:    "ID inválido",
-			usuario: "radiohead@gmail.com",
-			nome:    "Lollapalooza",
-			id:      0,
-			want:    ErrInvalidEntity,
+			name: "ID inválido",
+			usuario: user{
+				email:    "vancejoy@gmail.com",
+				password: "new_password",
+				birthday: "2006-01-02",
+			},
+			nome: "Lollapalooza",
+			id:   0,
+			want: ErrInvalidEntity,
 		},
 	}
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			_, err := NewEvento(tc.usuario, tc.nome, tc.id)
+			_, err := NewEvento(tc.usuario.email, tc.usuario.password, tc.usuario.birthday, tc.nome, tc.id)
 			assert.Equal(t, err, tc.want)
 		})
 	}
