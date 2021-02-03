@@ -6,20 +6,24 @@ import (
 
 // Ouvinte entidade Ouvinte
 type Ouvinte struct {
-	Usuario      string   `validate:"required,email"`
+	Usuario      Usuario  `validate:"required"`
 	PrimeiroNome string   `validate:"required"`
 	Sobrenome    string   `validate:"required"`
 	Telefones    []string `validate:""`
 }
 
 // NewOuvinte cria um novo Ouvinte
-func NewOuvinte(usuario, primeironome, sobrenome string) (*Ouvinte, error) {
+func NewOuvinte(email, password, birthday, primeironome, sobrenome string) (*Ouvinte, error) {
+	u, err := NewUsuario(email, password, birthday)
+	if err != nil {
+		return nil, err
+	}
 	o := &Ouvinte{
-		Usuario:      usuario,
+		Usuario:      *u,
 		PrimeiroNome: primeironome,
 		Sobrenome:    sobrenome,
 	}
-	err := o.Validate()
+	err = o.Validate()
 	if err != nil {
 		return nil, err
 	}
