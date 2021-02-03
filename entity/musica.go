@@ -12,6 +12,7 @@ type Musica struct {
 	Curtiu    []Ouvinte  `validate:""`
 	Gravou    []Artista  `validate:""`
 	Playlists []Playlist `validate:""`
+	Albums    []Album    `validate:""`
 }
 
 // NewMusica cria um novo Musica
@@ -128,4 +129,35 @@ func (m *Musica) GetPlaylist(playlist Playlist) (Playlist, error) {
 		}
 	}
 	return playlist, ErrNotFound
+}
+
+// AddAlbum adiciona um Album
+func (m *Musica) AddAlbum(album Album) error {
+	_, err := m.GetAlbum(album)
+	if err == nil {
+		return ErrAlbumRegistered
+	}
+	m.Albums = append(m.Albums, album)
+	return nil
+}
+
+// RemoveAlbum remove um Album
+func (m *Musica) RemoveAlbum(album Album) error {
+	for i, j := range m.Albums {
+		if j.ID == album.ID {
+			m.Albums = append(m.Albums[:i], m.Albums[i+1:]...)
+			return nil
+		}
+	}
+	return ErrNotFound
+}
+
+// GetAlbum get a Album
+func (m *Musica) GetAlbum(album Album) (Album, error) {
+	for _, v := range m.Albums {
+		if v.ID == album.ID {
+			return album, nil
+		}
+	}
+	return album, ErrNotFound
 }
