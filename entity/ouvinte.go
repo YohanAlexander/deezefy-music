@@ -13,6 +13,7 @@ type Ouvinte struct {
 	Seguindo     []Artista  `validate:""`
 	Curtidas     []Musica   `validate:""`
 	Playlists    []Playlist `validate:""`
+	Albums       []Album    `validate:""`
 }
 
 // NewOuvinte cria um novo Ouvinte
@@ -164,4 +165,35 @@ func (o *Ouvinte) GetPlaylist(playlist Playlist) (Playlist, error) {
 		}
 	}
 	return playlist, ErrNotFound
+}
+
+// AddAlbum adiciona um Album
+func (o *Ouvinte) AddAlbum(album Album) error {
+	_, err := o.GetAlbum(album)
+	if err == nil {
+		return ErrAlbumRegistered
+	}
+	o.Albums = append(o.Albums, album)
+	return nil
+}
+
+// RemoveAlbum remove um Album
+func (o *Ouvinte) RemoveAlbum(album Album) error {
+	for i, j := range o.Albums {
+		if j.ID == album.ID {
+			o.Albums = append(o.Albums[:i], o.Albums[i+1:]...)
+			return nil
+		}
+	}
+	return ErrNotFound
+}
+
+// GetAlbum get a Album
+func (o *Ouvinte) GetAlbum(album Album) (Album, error) {
+	for _, v := range o.Albums {
+		if v.ID == album.ID {
+			return album, nil
+		}
+	}
+	return album, ErrNotFound
 }
