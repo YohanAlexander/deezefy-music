@@ -1,14 +1,14 @@
 package artista
 
-import der "github.com/yohanalexander/deezefy-music/entity/artista"
+import "github.com/yohanalexander/deezefy-music/entity"
 
 // Artista interface
 type Artista interface {
-	Get(email string) (*der.Artista, error)
-	Search(query string) ([]*der.Artista, error)
-	List() ([]*der.Artista, error)
-	Create(e *der.Artista) (string, error)
-	Update(e *der.Artista) error
+	Get(email string) (*entity.Artista, error)
+	Search(query string) ([]*entity.Artista, error)
+	List() ([]*entity.Artista, error)
+	Create(e *entity.Artista) (string, error)
+	Update(e *entity.Artista) error
 	Delete(email string) error
 }
 
@@ -19,10 +19,10 @@ type Repository interface {
 
 // UseCase interface
 type UseCase interface {
-	GetArtista(email string) (*der.Artista, error)
-	SearchArtistas(query string) ([]*der.Artista, error)
-	ListArtistas() ([]*der.Artista, error)
+	GetArtista(email string) (*entity.Artista, error)
+	SearchArtistas(query string) ([]*entity.Artista, error)
+	ListArtistas() ([]*entity.Artista, error)
 	CreateArtista(usuario, nomeartistico, biografia string, anoformacao int) (string, error)
-	UpdateArtista(e *der.Artista) error
+	UpdateArtista(e *entity.Artista) error
 	DeleteArtista(email string) error
 }

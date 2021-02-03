@@ -4,13 +4,12 @@ import (
 	"testing"
 
 	"github.com/yohanalexander/deezefy-music/entity"
-	der "github.com/yohanalexander/deezefy-music/entity/genero"
 
 	"github.com/stretchr/testify/assert"
 )
 
-func newFixtureGenero() *der.Genero {
-	return &der.Genero{
+func newFixtureGenero() *entity.Genero {
+	return &entity.Genero{
 		Nome:   "Indie Rock",
 		Estilo: "rock",
 	}

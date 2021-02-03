@@ -4,13 +4,12 @@ import (
 	"testing"
 
 	"github.com/yohanalexander/deezefy-music/entity"
-	der "github.com/yohanalexander/deezefy-music/entity/playlist"
 
 	"github.com/stretchr/testify/assert"
 )
 
-func newFixturePlaylist() *der.Playlist {
-	return &der.Playlist{
+func newFixturePlaylist() *entity.Playlist {
+	return &entity.Playlist{
 		Nome:   "Indie Rock",
 		Status: "ativo",
 	}

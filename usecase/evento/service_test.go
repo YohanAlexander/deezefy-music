@@ -4,13 +4,12 @@ import (
 	"testing"
 
 	"github.com/yohanalexander/deezefy-music/entity"
-	der "github.com/yohanalexander/deezefy-music/entity/evento"
 
 	"github.com/stretchr/testify/assert"
 )
 
-func newFixtureEvento() *der.Evento {
-	return &der.Evento{
+func newFixtureEvento() *entity.Evento {
+	return &entity.Evento{
 		ID:      815,
 		Nome:    "Lollapalooza",
 		Usuario: "someone@spotify.com",

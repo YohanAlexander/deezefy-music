@@ -4,13 +4,12 @@ import (
 	"testing"
 
 	"github.com/yohanalexander/deezefy-music/entity"
-	der "github.com/yohanalexander/deezefy-music/entity/musica"
 
 	"github.com/stretchr/testify/assert"
 )
 
-func newFixtureMusica() *der.Musica {
-	return &der.Musica{
+func newFixtureMusica() *entity.Musica {
+	return &entity.Musica{
 		ID:      1998,
 		Duracao: 815,
 		Nome:    "Sultans of Swing",

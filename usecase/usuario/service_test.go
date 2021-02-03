@@ -4,13 +4,12 @@ import (
 	"testing"
 
 	"github.com/yohanalexander/deezefy-music/entity"
-	der "github.com/yohanalexander/deezefy-music/entity/usuario"
 
 	"github.com/stretchr/testify/assert"
 )
 
-func newFixtureUsuario() *der.Usuario {
-	return &der.Usuario{
+func newFixtureUsuario() *entity.Usuario {
+	return &entity.Usuario{
 		Email:    "someone@deezefy.com",
 		Password: "12345678",
 		Birthday: "1998-05-27",

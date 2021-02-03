@@ -1,14 +1,14 @@
 package usuario
 
-import der "github.com/yohanalexander/deezefy-music/entity/usuario"
+import "github.com/yohanalexander/deezefy-music/entity"
 
 // Usuario interface
 type Usuario interface {
-	Get(email string) (*der.Usuario, error)
-	Search(query string) ([]*der.Usuario, error)
-	List() ([]*der.Usuario, error)
-	Create(e *der.Usuario) (string, error)
-	Update(e *der.Usuario) error
+	Get(email string) (*entity.Usuario, error)
+	Search(query string) ([]*entity.Usuario, error)
+	List() ([]*entity.Usuario, error)
+	Create(e *entity.Usuario) (string, error)
+	Update(e *entity.Usuario) error
 	Delete(email string) error
 }
 
@@ -19,10 +19,10 @@ type Repository interface {
 
 // UseCase interface
 type UseCase interface {
-	GetUsuario(email string) (*der.Usuario, error)
-	SearchUsuarios(query string) ([]*der.Usuario, error)
-	ListUsuarios() ([]*der.Usuario, error)
+	GetUsuario(email string) (*entity.Usuario, error)
+	SearchUsuarios(query string) ([]*entity.Usuario, error)
+	ListUsuarios() ([]*entity.Usuario, error)
 	CreateUsuario(email, password, birthday string) (string, error)
-	UpdateUsuario(e *der.Usuario) error
+	UpdateUsuario(e *entity.Usuario) error
 	DeleteUsuario(email string) error
 }

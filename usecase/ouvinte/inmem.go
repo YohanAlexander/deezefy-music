@@ -4,30 +4,29 @@ import (
 	"strings"
 
 	"github.com/yohanalexander/deezefy-music/entity"
-	der "github.com/yohanalexander/deezefy-music/entity/ouvinte"
 )
 
 // inmem in memory repo
 type inmem struct {
-	m map[string]*der.Ouvinte
+	m map[string]*entity.Ouvinte
 }
 
 // newInmem create new repository
 func newInmem() *inmem {
-	var m = map[string]*der.Ouvinte{}
+	var m = map[string]*entity.Ouvinte{}
 	return &inmem{
 		m: m,
 	}
 }
 
 // Create Ouvinte
-func (r *inmem) Create(e *der.Ouvinte) (string, error) {
+func (r *inmem) Create(e *entity.Ouvinte) (string, error) {
 	r.m[e.Usuario] = e
 	return e.Usuario, nil
 }
 
 // Get Ouvinte
-func (r *inmem) Get(email string) (*der.Ouvinte, error) {
+func (r *inmem) Get(email string) (*entity.Ouvinte, error) {
 	if r.m[email] == nil {
 		return nil, entity.ErrNotFound
 	}
@@ -35,7 +34,7 @@ func (r *inmem) Get(email string) (*der.Ouvinte, error) {
 }
 
 // Update Ouvinte
-func (r *inmem) Update(e *der.Ouvinte) error {
+func (r *inmem) Update(e *entity.Ouvinte) error {
 	_, err := r.Get(e.Usuario)
 	if err != nil {
 		return err
@@ -45,8 +44,8 @@ func (r *inmem) Update(e *der.Ouvinte) error {
 }
 
 // Search Ouvintes
-func (r *inmem) Search(query string) ([]*der.Ouvinte, error) {
-	var d []*der.Ouvinte
+func (r *inmem) Search(query string) ([]*entity.Ouvinte, error) {
+	var d []*entity.Ouvinte
 	for _, j := range r.m {
 		if strings.Contains(strings.ToLower(j.Usuario), query) {
 			d = append(d, j)
@@ -60,8 +59,8 @@ func (r *inmem) Search(query string) ([]*der.Ouvinte, error) {
 }
 
 // List Ouvintes
-func (r *inmem) List() ([]*der.Ouvinte, error) {
-	var d []*der.Ouvinte
+func (r *inmem) List() ([]*entity.Ouvinte, error) {
+	var d []*entity.Ouvinte
 	for _, j := range r.m {
 		d = append(d, j)
 	}

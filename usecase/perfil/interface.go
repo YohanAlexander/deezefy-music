@@ -1,14 +1,14 @@
 package perfil
 
-import der "github.com/yohanalexander/deezefy-music/entity/perfil"
+import "github.com/yohanalexander/deezefy-music/entity"
 
 // Perfil interface
 type Perfil interface {
-	Get(id int) (*der.Perfil, error)
-	Search(query string) ([]*der.Perfil, error)
-	List() ([]*der.Perfil, error)
-	Create(e *der.Perfil) (int, error)
-	Update(e *der.Perfil) error
+	Get(id int) (*entity.Perfil, error)
+	Search(query string) ([]*entity.Perfil, error)
+	List() ([]*entity.Perfil, error)
+	Create(e *entity.Perfil) (int, error)
+	Update(e *entity.Perfil) error
 	Delete(id int) error
 }
 
@@ -19,10 +19,10 @@ type Repository interface {
 
 // UseCase interface
 type UseCase interface {
-	GetPerfil(id int) (*der.Perfil, error)
-	SearchPerfils(query string) ([]*der.Perfil, error)
-	ListPerfils() ([]*der.Perfil, error)
+	GetPerfil(id int) (*entity.Perfil, error)
+	SearchPerfils(query string) ([]*entity.Perfil, error)
+	ListPerfils() ([]*entity.Perfil, error)
 	CreatePerfil(ouvinte, informacoesrelevantes string, id int) (int, error)
-	UpdatePerfil(e *der.Perfil) error
+	UpdatePerfil(e *entity.Perfil) error
 	DeletePerfil(id int) error
 }

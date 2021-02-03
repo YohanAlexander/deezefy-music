@@ -4,13 +4,12 @@ import (
 	"testing"
 
 	"github.com/yohanalexander/deezefy-music/entity"
-	der "github.com/yohanalexander/deezefy-music/entity/local"
 
 	"github.com/stretchr/testify/assert"
 )
 
-func newFixtureLocal() *der.Local {
-	return &der.Local{
+func newFixtureLocal() *entity.Local {
+	return &entity.Local{
 		ID:     815,
 		Cidade: "Londres",
 		Pais:   "Inglaterra",

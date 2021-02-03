@@ -4,13 +4,12 @@ import (
 	"testing"
 
 	"github.com/yohanalexander/deezefy-music/entity"
-	der "github.com/yohanalexander/deezefy-music/entity/perfil"
 
 	"github.com/stretchr/testify/assert"
 )
 
-func newFixturePerfil() *der.Perfil {
-	return &der.Perfil{
+func newFixturePerfil() *entity.Perfil {
+	return &entity.Perfil{
 		ID:                    815,
 		Ouvinte:               "someone@spotify.com",
 		InformacoesRelevantes: "Mais ouvidas",

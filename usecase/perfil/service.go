@@ -4,7 +4,6 @@ import (
 	"strings"
 
 	"github.com/yohanalexander/deezefy-music/entity"
-	der "github.com/yohanalexander/deezefy-music/entity/perfil"
 )
 
 // Service  interface
@@ -21,7 +20,7 @@ func NewService(r Repository) *Service {
 
 // CreatePerfil Create Perfil
 func (s *Service) CreatePerfil(ouvinte, informacoesrelevantes string, id int) (int, error) {
-	e, err := der.NewPerfil(ouvinte, informacoesrelevantes, id)
+	e, err := entity.NewPerfil(ouvinte, informacoesrelevantes, id)
 	if err != nil {
 		return e.ID, err
 	}
@@ -29,17 +28,17 @@ func (s *Service) CreatePerfil(ouvinte, informacoesrelevantes string, id int) (i
 }
 
 // GetPerfil Get Perfil
-func (s *Service) GetPerfil(id int) (*der.Perfil, error) {
+func (s *Service) GetPerfil(id int) (*entity.Perfil, error) {
 	return s.repo.Get(id)
 }
 
 // SearchPerfils Search Perfils
-func (s *Service) SearchPerfils(query string) ([]*der.Perfil, error) {
+func (s *Service) SearchPerfils(query string) ([]*entity.Perfil, error) {
 	return s.repo.Search(strings.ToLower(query))
 }
 
 // ListPerfils List Perfils
-func (s *Service) ListPerfils() ([]*der.Perfil, error) {
+func (s *Service) ListPerfils() ([]*entity.Perfil, error) {
 	return s.repo.List()
 }
 
@@ -56,7 +55,7 @@ func (s *Service) DeletePerfil(id int) error {
 }
 
 // UpdatePerfil Update Perfil
-func (s *Service) UpdatePerfil(e *der.Perfil) error {
+func (s *Service) UpdatePerfil(e *entity.Perfil) error {
 	err := e.Validate()
 	if err != nil {
 		return entity.ErrInvalidEntity

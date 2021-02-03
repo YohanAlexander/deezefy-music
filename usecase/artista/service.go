@@ -4,7 +4,6 @@ import (
 	"strings"
 
 	"github.com/yohanalexander/deezefy-music/entity"
-	der "github.com/yohanalexander/deezefy-music/entity/artista"
 )
 
 // Service  interface
@@ -21,7 +20,7 @@ func NewService(r Repository) *Service {
 
 // CreateArtista Create Artista
 func (s *Service) CreateArtista(usuario, nomeartistico, biografia string, anoformacao int) (string, error) {
-	e, err := der.NewArtista(usuario, nomeartistico, biografia, anoformacao)
+	e, err := entity.NewArtista(usuario, nomeartistico, biografia, anoformacao)
 	if err != nil {
 		return err.Error(), err
 	}
@@ -29,17 +28,17 @@ func (s *Service) CreateArtista(usuario, nomeartistico, biografia string, anofor
 }
 
 // GetArtista Get Artista
-func (s *Service) GetArtista(email string) (*der.Artista, error) {
+func (s *Service) GetArtista(email string) (*entity.Artista, error) {
 	return s.repo.Get(email)
 }
 
 // SearchArtistas Search Artistas
-func (s *Service) SearchArtistas(query string) ([]*der.Artista, error) {
+func (s *Service) SearchArtistas(query string) ([]*entity.Artista, error) {
 	return s.repo.Search(strings.ToLower(query))
 }
 
 // ListArtistas List Artistas
-func (s *Service) ListArtistas() ([]*der.Artista, error) {
+func (s *Service) ListArtistas() ([]*entity.Artista, error) {
 	return s.repo.List()
 }
 
@@ -56,7 +55,7 @@ func (s *Service) DeleteArtista(email string) error {
 }
 
 // UpdateArtista Update Artista
-func (s *Service) UpdateArtista(e *der.Artista) error {
+func (s *Service) UpdateArtista(e *entity.Artista) error {
 	err := e.Validate()
 	if err != nil {
 		return entity.ErrInvalidEntity

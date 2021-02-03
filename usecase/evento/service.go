@@ -4,7 +4,6 @@ import (
 	"strings"
 
 	"github.com/yohanalexander/deezefy-music/entity"
-	der "github.com/yohanalexander/deezefy-music/entity/evento"
 )
 
 // Service  interface
@@ -21,7 +20,7 @@ func NewService(r Repository) *Service {
 
 // CreateEvento Create Evento
 func (s *Service) CreateEvento(usuario, nome string, id int) (int, error) {
-	e, err := der.NewEvento(usuario, nome, id)
+	e, err := entity.NewEvento(usuario, nome, id)
 	if err != nil {
 		return e.ID, err
 	}
@@ -29,17 +28,17 @@ func (s *Service) CreateEvento(usuario, nome string, id int) (int, error) {
 }
 
 // GetEvento Get Evento
-func (s *Service) GetEvento(id int) (*der.Evento, error) {
+func (s *Service) GetEvento(id int) (*entity.Evento, error) {
 	return s.repo.Get(id)
 }
 
 // SearchEventos Search Eventos
-func (s *Service) SearchEventos(query string) ([]*der.Evento, error) {
+func (s *Service) SearchEventos(query string) ([]*entity.Evento, error) {
 	return s.repo.Search(strings.ToLower(query))
 }
 
 // ListEventos List Eventos
-func (s *Service) ListEventos() ([]*der.Evento, error) {
+func (s *Service) ListEventos() ([]*entity.Evento, error) {
 	return s.repo.List()
 }
 
@@ -56,7 +55,7 @@ func (s *Service) DeleteEvento(id int) error {
 }
 
 // UpdateEvento Update Evento
-func (s *Service) UpdateEvento(e *der.Evento) error {
+func (s *Service) UpdateEvento(e *entity.Evento) error {
 	err := e.Validate()
 	if err != nil {
 		return entity.ErrInvalidEntity

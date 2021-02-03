@@ -1,14 +1,14 @@
 package album
 
-import der "github.com/yohanalexander/deezefy-music/entity/album"
+import "github.com/yohanalexander/deezefy-music/entity"
 
 // Album interface
 type Album interface {
-	Get(id int) (*der.Album, error)
-	Search(query string) ([]*der.Album, error)
-	List() ([]*der.Album, error)
-	Create(e *der.Album) (int, error)
-	Update(e *der.Album) error
+	Get(id int) (*entity.Album, error)
+	Search(query string) ([]*entity.Album, error)
+	List() ([]*entity.Album, error)
+	Create(e *entity.Album) (int, error)
+	Update(e *entity.Album) error
 	Delete(id int) error
 }
 
@@ -19,10 +19,10 @@ type Repository interface {
 
 // UseCase interface
 type UseCase interface {
-	GetAlbum(id int) (*der.Album, error)
-	SearchAlbums(query string) ([]*der.Album, error)
-	ListAlbums() ([]*der.Album, error)
+	GetAlbum(id int) (*entity.Album, error)
+	SearchAlbums(query string) ([]*entity.Album, error)
+	ListAlbums() ([]*entity.Album, error)
 	CreateAlbum(id, anolancamento int, titulo, artista string) (int, error)
-	UpdateAlbum(e *der.Album) error
+	UpdateAlbum(e *entity.Album) error
 	DeleteAlbum(id int) error
 }

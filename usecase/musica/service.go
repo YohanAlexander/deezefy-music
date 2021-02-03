@@ -4,7 +4,6 @@ import (
 	"strings"
 
 	"github.com/yohanalexander/deezefy-music/entity"
-	der "github.com/yohanalexander/deezefy-music/entity/musica"
 )
 
 // Service  interface
@@ -21,7 +20,7 @@ func NewService(r Repository) *Service {
 
 // CreateMusica Create Musica
 func (s *Service) CreateMusica(id, duracao int, nome string) (int, error) {
-	e, err := der.NewMusica(id, duracao, nome)
+	e, err := entity.NewMusica(id, duracao, nome)
 	if err != nil {
 		return e.ID, err
 	}
@@ -29,17 +28,17 @@ func (s *Service) CreateMusica(id, duracao int, nome string) (int, error) {
 }
 
 // GetMusica Get Musica
-func (s *Service) GetMusica(id int) (*der.Musica, error) {
+func (s *Service) GetMusica(id int) (*entity.Musica, error) {
 	return s.repo.Get(id)
 }
 
 // SearchMusicas Search Musicas
-func (s *Service) SearchMusicas(query string) ([]*der.Musica, error) {
+func (s *Service) SearchMusicas(query string) ([]*entity.Musica, error) {
 	return s.repo.Search(strings.ToLower(query))
 }
 
 // ListMusicas List Musicas
-func (s *Service) ListMusicas() ([]*der.Musica, error) {
+func (s *Service) ListMusicas() ([]*entity.Musica, error) {
 	return s.repo.List()
 }
 
@@ -56,7 +55,7 @@ func (s *Service) DeleteMusica(id int) error {
 }
 
 // UpdateMusica Update Musica
-func (s *Service) UpdateMusica(e *der.Musica) error {
+func (s *Service) UpdateMusica(e *entity.Musica) error {
 	err := e.Validate()
 	if err != nil {
 		return entity.ErrInvalidEntity

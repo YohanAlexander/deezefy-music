@@ -1,14 +1,14 @@
 package playlist
 
-import der "github.com/yohanalexander/deezefy-music/entity/playlist"
+import "github.com/yohanalexander/deezefy-music/entity"
 
 // Playlist interface
 type Playlist interface {
-	Get(nome string) (*der.Playlist, error)
-	Search(query string) ([]*der.Playlist, error)
-	List() ([]*der.Playlist, error)
-	Create(e *der.Playlist) (string, error)
-	Update(e *der.Playlist) error
+	Get(nome string) (*entity.Playlist, error)
+	Search(query string) ([]*entity.Playlist, error)
+	List() ([]*entity.Playlist, error)
+	Create(e *entity.Playlist) (string, error)
+	Update(e *entity.Playlist) error
 	Delete(nome string) error
 }
 
@@ -19,10 +19,10 @@ type Repository interface {
 
 // UseCase interface
 type UseCase interface {
-	GetPlaylist(nome string) (*der.Playlist, error)
-	SearchPlaylists(query string) ([]*der.Playlist, error)
-	ListPlaylists() ([]*der.Playlist, error)
+	GetPlaylist(nome string) (*entity.Playlist, error)
+	SearchPlaylists(query string) ([]*entity.Playlist, error)
+	ListPlaylists() ([]*entity.Playlist, error)
 	CreatePlaylist(nome, status string) (string, error)
-	UpdatePlaylist(e *der.Playlist) error
+	UpdatePlaylist(e *entity.Playlist) error
 	DeletePlaylist(nome string) error
 }
