@@ -10,6 +10,7 @@ type Perfil struct {
 	ID                    int       `validate:"required,gte=1"`
 	InformacoesRelevantes string    `validate:"required,gte=1"`
 	ArtistasFavoritos     []Artista `validate:""`
+	GenerosFavoritos      []Genero  `validate:""`
 }
 
 // NewPerfil cria um novo Perfil
@@ -68,4 +69,35 @@ func (p *Perfil) GetArtista(artista Artista) (Artista, error) {
 		}
 	}
 	return artista, ErrNotFound
+}
+
+// AddGenero adiciona um Genero
+func (p *Perfil) AddGenero(genero Genero) error {
+	_, err := p.GetGenero(genero)
+	if err == nil {
+		return ErrGeneroRegistered
+	}
+	p.GenerosFavoritos = append(p.GenerosFavoritos, genero)
+	return nil
+}
+
+// RemoveGenero remove um Genero
+func (p *Perfil) RemoveGenero(genero Genero) error {
+	for i, j := range p.GenerosFavoritos {
+		if j.Nome == genero.Nome {
+			p.GenerosFavoritos = append(p.GenerosFavoritos[:i], p.GenerosFavoritos[i+1:]...)
+			return nil
+		}
+	}
+	return ErrNotFound
+}
+
+// GetGenero get a Genero
+func (p *Perfil) GetGenero(genero Genero) (Genero, error) {
+	for _, v := range p.GenerosFavoritos {
+		if v.Nome == genero.Nome {
+			return genero, nil
+		}
+	}
+	return genero, ErrNotFound
 }

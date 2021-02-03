@@ -176,3 +176,64 @@ func TestGetGeneroMusica(t *testing.T) {
 	})
 
 }
+
+func TestAddGeneroPerfil(t *testing.T) {
+
+	t.Run("Perfil criado com sucesso", func(t *testing.T) {
+		g, _ := NewGenero("Indie Rock", "rock")
+		p, _ := NewPerfil("syml@spotify.com", "somepassword", "2018-02-10", "Vance", "Joy", "Where is my love", 1)
+		err := g.AddPerfil(*p)
+		assert.Nil(t, err)
+		assert.Equal(t, 1, len(g.Perfis))
+	})
+
+	t.Run("Perfil já registrado", func(t *testing.T) {
+		g, _ := NewGenero("Indie Rock", "rock")
+		p, _ := NewPerfil("syml@spotify.com", "somepassword", "2018-02-10", "Vance", "Joy", "Where is my love", 1)
+		err := g.AddPerfil(*p)
+		assert.Nil(t, err)
+		p, _ = NewPerfil("syml@spotify.com", "somepassword", "2018-02-10", "Vance", "Joy", "Where is my love", 1)
+		err = g.AddPerfil(*p)
+		assert.Equal(t, ErrPerfilRegistered, err)
+	})
+
+}
+
+func TestRemoveGeneroPerfil(t *testing.T) {
+
+	t.Run("Perfil não cadastrado", func(t *testing.T) {
+		g, _ := NewGenero("Indie Rock", "rock")
+		p, _ := NewPerfil("syml@spotify.com", "somepassword", "2018-02-10", "Vance", "Joy", "Where is my love", 1)
+		err := g.RemovePerfil(*p)
+		assert.Equal(t, ErrNotFound, err)
+	})
+
+	t.Run("Perfil removido com sucesso", func(t *testing.T) {
+		g, _ := NewGenero("Indie Rock", "rock")
+		p, _ := NewPerfil("syml@spotify.com", "somepassword", "2018-02-10", "Vance", "Joy", "Where is my love", 1)
+		_ = g.AddPerfil(*p)
+		err := g.RemovePerfil(*p)
+		assert.Nil(t, err)
+	})
+
+}
+
+func TestGetGeneroPerfil(t *testing.T) {
+
+	t.Run("Perfil cadastrado encontrado", func(t *testing.T) {
+		g, _ := NewGenero("Indie Rock", "rock")
+		p, _ := NewPerfil("syml@spotify.com", "somepassword", "2018-02-10", "Vance", "Joy", "Where is my love", 1)
+		_ = g.AddPerfil(*p)
+		perfil, err := g.GetPerfil(*p)
+		assert.Nil(t, err)
+		assert.Equal(t, perfil, *p)
+	})
+
+	t.Run("Perfil não cadastrado", func(t *testing.T) {
+		g, _ := NewGenero("Indie Rock", "rock")
+		p, _ := NewPerfil("syml@spotify.com", "somepassword", "2018-02-10", "Vance", "Joy", "Where is my love", 1)
+		_, err := g.GetPerfil(*p)
+		assert.Equal(t, ErrNotFound, err)
+	})
+
+}
