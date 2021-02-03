@@ -13,3 +13,9 @@ var ErrCannotBeDeleted = errors.New("Cannot Be Deleted")
 
 // ErrPhoneRegistered cannot register
 var ErrPhoneRegistered = errors.New("Phone already registered")
+
+// ErrArtistaRegistered cannot register
+var ErrArtistaRegistered = errors.New("Artista already registered")
+
+// ErrOuvinteRegistered cannot register
+var ErrOuvinteRegistered = errors.New("Ouvinte already registered")
