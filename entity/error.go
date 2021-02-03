@@ -22,3 +22,6 @@ var ErrOuvinteRegistered = errors.New("Ouvinte already registered")
 
 // ErrMusicaRegistered cannot register
 var ErrMusicaRegistered = errors.New("Musica already registered")
+
+// ErrPlaylistRegistered cannot register
+var ErrPlaylistRegistered = errors.New("Playlist already registered")
