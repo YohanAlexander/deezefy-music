@@ -2,19 +2,25 @@ package usuario
 
 import "github.com/yohanalexander/deezefy-music/entity"
 
-// Usuario interface
-type Usuario interface {
+// Read interface
+type Read interface {
 	Get(email string) (*entity.Usuario, error)
 	Search(query string) ([]*entity.Usuario, error)
 	List() ([]*entity.Usuario, error)
+}
+
+// Write interface
+type Write interface {
 	Create(e *entity.Usuario) (string, error)
 	Update(e *entity.Usuario) error
 	Delete(email string) error
 }
 
+
 // Repository interface
 type Repository interface {
-	Usuario
+	Read
+	Write
 }
 
 // UseCase interface
