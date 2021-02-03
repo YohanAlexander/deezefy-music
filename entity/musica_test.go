@@ -248,3 +248,64 @@ func TestGetMusicaPlaylist(t *testing.T) {
 	})
 
 }
+
+func TestAddMusicaAlbum(t *testing.T) {
+
+	t.Run("Album criado com sucesso", func(t *testing.T) {
+		m, _ := NewMusica(1, 420, "Creep")
+		a, _ := NewAlbum("coldplay@gmail.com", "somepassword", "2018-02-10", "Coldplay", "British Band", "Viva la vida", 2000, 2006, 1)
+		err := m.AddAlbum(*a)
+		assert.Nil(t, err)
+		assert.Equal(t, 1, len(m.Albums))
+	})
+
+	t.Run("Album já registrado", func(t *testing.T) {
+		m, _ := NewMusica(1, 420, "Creep")
+		a, _ := NewAlbum("coldplay@gmail.com", "somepassword", "2018-02-10", "Coldplay", "British Band", "Viva la vida", 2000, 2006, 1)
+		err := m.AddAlbum(*a)
+		assert.Nil(t, err)
+		a, _ = NewAlbum("coldplay@gmail.com", "somepassword", "2018-02-10", "Coldplay", "British Band", "Viva la vida", 2000, 2006, 1)
+		err = m.AddAlbum(*a)
+		assert.Equal(t, ErrAlbumRegistered, err)
+	})
+
+}
+
+func TestRemoveMusicaAlbum(t *testing.T) {
+
+	t.Run("Album não cadastrado", func(t *testing.T) {
+		m, _ := NewMusica(1, 420, "Creep")
+		a, _ := NewAlbum("coldplay@gmail.com", "somepassword", "2018-02-10", "Coldplay", "British Band", "Viva la vida", 2000, 2006, 1)
+		err := m.RemoveAlbum(*a)
+		assert.Equal(t, ErrNotFound, err)
+	})
+
+	t.Run("Album removido com sucesso", func(t *testing.T) {
+		m, _ := NewMusica(1, 420, "Creep")
+		a, _ := NewAlbum("coldplay@gmail.com", "somepassword", "2018-02-10", "Coldplay", "British Band", "Viva la vida", 2000, 2006, 1)
+		_ = m.AddAlbum(*a)
+		err := m.RemoveAlbum(*a)
+		assert.Nil(t, err)
+	})
+
+}
+
+func TestGetMusicaAlbum(t *testing.T) {
+
+	t.Run("Album cadastrado encontrado", func(t *testing.T) {
+		m, _ := NewMusica(1, 420, "Creep")
+		a, _ := NewAlbum("coldplay@gmail.com", "somepassword", "2018-02-10", "Coldplay", "British Band", "Viva la vida", 2000, 2006, 1)
+		_ = m.AddAlbum(*a)
+		album, err := m.GetAlbum(*a)
+		assert.Nil(t, err)
+		assert.Equal(t, album, *a)
+	})
+
+	t.Run("Album não cadastrado", func(t *testing.T) {
+		m, _ := NewMusica(1, 420, "Creep")
+		a, _ := NewAlbum("coldplay@gmail.com", "somepassword", "2018-02-10", "Coldplay", "British Band", "Viva la vida", 2000, 2006, 1)
+		_, err := m.GetAlbum(*a)
+		assert.Equal(t, ErrNotFound, err)
+	})
+
+}
