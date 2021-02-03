@@ -6,9 +6,10 @@ import (
 
 // Playlist entidade Playlist
 type Playlist struct {
-	Nome   string    `validate:"required,gte=1"`
-	Status string    `validate:"required,oneof=ativo inativo"`
-	Salvou []Ouvinte `validate:""`
+	Nome    string    `validate:"required,gte=1"`
+	Status  string    `validate:"required,oneof=ativo inativo"`
+	Salvou  []Ouvinte `validate:""`
+	Musicas []Musica  `validate:""`
 }
 
 // NewPlaylist cria um novo Playlist
@@ -62,4 +63,35 @@ func (p *Playlist) GetOuvinte(ouvinte Ouvinte) (Ouvinte, error) {
 		}
 	}
 	return ouvinte, ErrNotFound
+}
+
+// AddMusica adiciona um Musica
+func (p *Playlist) AddMusica(musica Musica) error {
+	_, err := p.GetMusica(musica)
+	if err == nil {
+		return ErrMusicaRegistered
+	}
+	p.Musicas = append(p.Musicas, musica)
+	return nil
+}
+
+// RemoveMusica remove um Musica
+func (p *Playlist) RemoveMusica(musica Musica) error {
+	for i, j := range p.Musicas {
+		if j.ID == musica.ID {
+			p.Musicas = append(p.Musicas[:i], p.Musicas[i+1:]...)
+			return nil
+		}
+	}
+	return ErrNotFound
+}
+
+// GetMusica get a Musica
+func (p *Playlist) GetMusica(musica Musica) (Musica, error) {
+	for _, v := range p.Musicas {
+		if v.ID == musica.ID {
+			return musica, nil
+		}
+	}
+	return musica, ErrNotFound
 }

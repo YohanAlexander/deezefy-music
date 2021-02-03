@@ -187,3 +187,64 @@ func TestGetGravaArtista(t *testing.T) {
 	})
 
 }
+
+func TestAddMusicaPlaylist(t *testing.T) {
+
+	t.Run("Playlist criado com sucesso", func(t *testing.T) {
+		m, _ := NewMusica(1, 420, "Creep")
+		p, _ := NewPlaylist("Indie Rock", "ativo")
+		err := m.AddPlaylist(*p)
+		assert.Nil(t, err)
+		assert.Equal(t, 1, len(m.Playlists))
+	})
+
+	t.Run("Playlist já registrado", func(t *testing.T) {
+		m, _ := NewMusica(1, 420, "Creep")
+		p, _ := NewPlaylist("Indie Rock", "ativo")
+		err := m.AddPlaylist(*p)
+		assert.Nil(t, err)
+		p, _ = NewPlaylist("Indie Rock", "ativo")
+		err = m.AddPlaylist(*p)
+		assert.Equal(t, ErrPlaylistRegistered, err)
+	})
+
+}
+
+func TestRemoveMusicaPlaylist(t *testing.T) {
+
+	t.Run("Playlist não cadastrado", func(t *testing.T) {
+		m, _ := NewMusica(1, 420, "Creep")
+		p, _ := NewPlaylist("Indie Rock", "ativo")
+		err := m.RemovePlaylist(*p)
+		assert.Equal(t, ErrNotFound, err)
+	})
+
+	t.Run("Playlist removido com sucesso", func(t *testing.T) {
+		m, _ := NewMusica(1, 420, "Creep")
+		p, _ := NewPlaylist("Indie Rock", "ativo")
+		_ = m.AddPlaylist(*p)
+		err := m.RemovePlaylist(*p)
+		assert.Nil(t, err)
+	})
+
+}
+
+func TestGetMusicaPlaylist(t *testing.T) {
+
+	t.Run("Playlist cadastrado encontrado", func(t *testing.T) {
+		m, _ := NewMusica(1, 420, "Creep")
+		p, _ := NewPlaylist("Indie Rock", "ativo")
+		_ = m.AddPlaylist(*p)
+		playlist, err := m.GetPlaylist(*p)
+		assert.Nil(t, err)
+		assert.Equal(t, playlist, *p)
+	})
+
+	t.Run("Playlist não cadastrado", func(t *testing.T) {
+		m, _ := NewMusica(1, 420, "Creep")
+		p, _ := NewPlaylist("Indie Rock", "ativo")
+		_, err := m.GetPlaylist(*p)
+		assert.Equal(t, ErrNotFound, err)
+	})
+
+}
