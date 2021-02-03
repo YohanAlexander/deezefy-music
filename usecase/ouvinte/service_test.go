@@ -10,7 +10,11 @@ import (
 
 func newFixtureOuvinte() *entity.Ouvinte {
 	return &entity.Ouvinte{
-		Usuario:      "someone@deezefy.com",
+		Usuario: entity.Usuario{
+			Email:    "someone@deezefy.com",
+			Password: "12345678",
+			Birthday: "1998-05-27",
+		},
 		PrimeiroNome: "Imagine",
 		Sobrenome:    "Dragons",
 	}
@@ -21,8 +25,8 @@ func TestCreate(t *testing.T) {
 	t.Run("create", func(t *testing.T) {
 		repo := newInmem()
 		m := NewService(repo)
-		u := newFixtureOuvinte()
-		_, err := m.CreateOuvinte(u.Usuario, u.PrimeiroNome, u.Sobrenome)
+		o := newFixtureOuvinte()
+		_, err := m.CreateOuvinte(o.Usuario.Email, o.Usuario.Password, o.Usuario.Birthday, o.PrimeiroNome, o.Sobrenome)
 		assert.Nil(t, err)
 	})
 
@@ -32,12 +36,16 @@ func TestSearchAndFind(t *testing.T) {
 
 	repo := newInmem()
 	m := NewService(repo)
-	u1 := newFixtureOuvinte()
-	u2 := newFixtureOuvinte()
-	u2.Usuario = "someone2@deezefy.com"
+	o1 := newFixtureOuvinte()
+	o2 := newFixtureOuvinte()
+	o2.Usuario = entity.Usuario{
+		Email:    "someone2@deezefy.com",
+		Password: "12345678",
+		Birthday: "1998-05-27",
+	}
 
-	email, _ := m.CreateOuvinte(u1.Usuario, u1.PrimeiroNome, u1.Sobrenome)
-	_, _ = m.CreateOuvinte(u2.Usuario, u2.PrimeiroNome, u2.Sobrenome)
+	email, _ := m.CreateOuvinte(o1.Usuario.Email, o1.Usuario.Password, o1.Usuario.Birthday, o1.PrimeiroNome, o1.Sobrenome)
+	_, _ = m.CreateOuvinte(o2.Usuario.Email, o2.Usuario.Password, o2.Usuario.Birthday, o2.PrimeiroNome, o2.Sobrenome)
 
 	t.Run("search", func(t *testing.T) {
 		c, err := m.SearchOuvintes("someone@deezefy.com")
@@ -67,8 +75,8 @@ func TestUpdate(t *testing.T) {
 	t.Run("update", func(t *testing.T) {
 		repo := newInmem()
 		m := NewService(repo)
-		u := newFixtureOuvinte()
-		email, err := m.CreateOuvinte(u.Usuario, u.PrimeiroNome, u.Sobrenome)
+		o := newFixtureOuvinte()
+		email, err := m.CreateOuvinte(o.Usuario.Email, o.Usuario.Password, o.Usuario.Birthday, o.PrimeiroNome, o.Sobrenome)
 		assert.Nil(t, err)
 		saved, _ := m.GetOuvinte(email)
 		assert.Nil(t, m.UpdateOuvinte(saved))
@@ -82,14 +90,18 @@ func TestDelete(t *testing.T) {
 
 	repo := newInmem()
 	m := NewService(repo)
-	u1 := newFixtureOuvinte()
-	u2 := newFixtureOuvinte()
-	u2.Usuario = "someone2@deezefy.com"
-	email, _ := m.CreateOuvinte(u2.Usuario, u2.PrimeiroNome, u2.Sobrenome)
+	o1 := newFixtureOuvinte()
+	o2 := newFixtureOuvinte()
+	o2.Usuario = entity.Usuario{
+		Email:    "someone2@deezefy.com",
+		Password: "12345678",
+		Birthday: "1998-05-27",
+	}
+	email, _ := m.CreateOuvinte(o2.Usuario.Email, o2.Usuario.Password, o2.Usuario.Birthday, o2.PrimeiroNome, o2.Sobrenome)
 
 	t.Run("delete", func(t *testing.T) {
 
-		err := m.DeleteOuvinte(u1.Usuario)
+		err := m.DeleteOuvinte(o1.Usuario.Email)
 		assert.Equal(t, entity.ErrNotFound, err)
 
 		err = m.DeleteOuvinte(email)
@@ -97,8 +109,8 @@ func TestDelete(t *testing.T) {
 		_, err = m.GetOuvinte(email)
 		assert.Equal(t, entity.ErrNotFound, err)
 
-		u3 := newFixtureOuvinte()
-		email, _ := m.CreateOuvinte(u3.Usuario, u3.PrimeiroNome, u3.Sobrenome)
+		o3 := newFixtureOuvinte()
+		email, _ := m.CreateOuvinte(o3.Usuario.Email, o3.Usuario.Password, o3.Usuario.Birthday, o3.PrimeiroNome, o3.Sobrenome)
 		saved, _ := m.GetOuvinte(email)
 		_ = m.UpdateOuvinte(saved)
 		err = m.DeleteOuvinte(email)

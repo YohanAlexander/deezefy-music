@@ -19,8 +19,8 @@ func NewService(r Repository) *Service {
 }
 
 // CreateOuvinte Create Ouvinte
-func (s *Service) CreateOuvinte(usuario, primeironome, sobrenome string) (string, error) {
-	e, err := entity.NewOuvinte(usuario, primeironome, sobrenome)
+func (s *Service) CreateOuvinte(email, password, birthday, primeironome, sobrenome string) (string, error) {
+	e, err := entity.NewOuvinte(email, password, birthday, primeironome, sobrenome)
 	if err != nil {
 		return err.Error(), err
 	}
