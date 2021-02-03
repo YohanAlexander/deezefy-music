@@ -9,7 +9,7 @@ import (
 func TestNewAlbum(t *testing.T) {
 
 	t.Run("Album criado com sucesso", func(t *testing.T) {
-		a, err := NewAlbum(1, 2000, "Viva la vida", "coldplay@gmail.com")
+		a, err := NewAlbum("coldplay@gmail.com", "somepassword", "2018-02-10", "Coldplay", "British Band", "Viva la vida", 2000, 2006, 1)
 		assert.Nil(t, err)
 		assert.Equal(t, a.Titulo, "Viva la vida")
 	})
@@ -18,9 +18,18 @@ func TestNewAlbum(t *testing.T) {
 
 func TestAlbum_Validate(t *testing.T) {
 
+	type artista struct {
+		email         string
+		password      string
+		birthday      string
+		nomeartistico string
+		biografia     string
+		anoformacao   int
+	}
+
 	type test struct {
 		name          string
-		artista       string
+		artista       artista
 		id            int
 		titulo        string
 		anolancamento int
@@ -29,40 +38,60 @@ func TestAlbum_Validate(t *testing.T) {
 
 	tests := []test{
 		{
-			name:          "Campos válidos",
-			artista:       "coldplay@gmail.com",
+			name: "Campos válidos",
+			artista: artista{
+				email:         "vancejoy@gmail.com",
+				password:      "new_password",
+				birthday:      "2006-01-02",
+				nomeartistico: "Vance Joy",
+				biografia:     "Australian Singer",
+				anoformacao:   2006,
+			},
 			id:            1,
 			titulo:        "Yellow",
 			anolancamento: 2000,
 			want:          nil,
 		},
 		{
-			name:          "Email inválido (user@company.com)",
-			artista:       "",
-			id:            1,
-			titulo:        "Yellow",
-			anolancamento: 2000,
-			want:          ErrInvalidEntity,
-		},
-		{
-			name:          "ID inválido",
-			artista:       "coldplay@gmail.com",
+			name: "ID inválido",
+			artista: artista{
+				email:         "vancejoy@gmail.com",
+				password:      "new_password",
+				birthday:      "2006-01-02",
+				nomeartistico: "Vance Joy",
+				biografia:     "Australian Singer",
+				anoformacao:   2006,
+			},
 			id:            0,
 			titulo:        "Yellow",
 			anolancamento: 2000,
 			want:          ErrInvalidEntity,
 		},
 		{
-			name:          "Título inválido",
-			artista:       "coldplay@gmail.com",
+			name: "Título inválido",
+			artista: artista{
+				email:         "vancejoy@gmail.com",
+				password:      "new_password",
+				birthday:      "2006-01-02",
+				nomeartistico: "Vance Joy",
+				biografia:     "Australian Singer",
+				anoformacao:   2006,
+			},
 			id:            1,
 			titulo:        "",
 			anolancamento: 2000,
 			want:          ErrInvalidEntity,
 		},
 		{
-			name:          "AnoLancamento inválido",
-			artista:       "coldplay@gmail.com",
+			name: "AnoLancamento inválido",
+			artista: artista{
+				email:         "vancejoy@gmail.com",
+				password:      "new_password",
+				birthday:      "2006-01-02",
+				nomeartistico: "Vance Joy",
+				biografia:     "Australian Singer",
+				anoformacao:   2006,
+			},
 			id:            1,
 			titulo:        "Yellow",
 			anolancamento: 200,
@@ -72,7 +101,7 @@ func TestAlbum_Validate(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			_, err := NewAlbum(tc.id, tc.anolancamento, tc.titulo, tc.artista)
+			_, err := NewAlbum(tc.artista.email, tc.artista.password, tc.artista.birthday, tc.artista.nomeartistico, tc.artista.biografia, tc.titulo, tc.artista.anoformacao, tc.anolancamento, tc.id)
 			assert.Equal(t, err, tc.want)
 		})
 	}

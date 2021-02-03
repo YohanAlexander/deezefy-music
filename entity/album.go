@@ -6,21 +6,25 @@ import (
 
 // Album entidade Album
 type Album struct {
-	Artista       string `validate:"required,email"`
-	ID            int    `validate:"required,gte=1"`
-	Titulo        string `validate:"required,gte=1"`
-	AnoLancamento int    `validate:"required,gte=1900"`
+	Artista       Artista `validate:"required"`
+	ID            int     `validate:"required,gte=1"`
+	Titulo        string  `validate:"required,gte=1"`
+	AnoLancamento int     `validate:"required,gte=1000"`
 }
 
 // NewAlbum cria um novo Album
-func NewAlbum(id, anolancamento int, titulo, artista string) (*Album, error) {
-	a := &Album{
-		ID:            id,
-		AnoLancamento: anolancamento,
-		Titulo:        titulo,
-		Artista:       artista,
+func NewAlbum(email, password, birthday, nomeartistico, biografia, titulo string, anoformacao, anolancamento, id int) (*Album, error) {
+	b, err := NewArtista(email, password, birthday, nomeartistico, biografia, anoformacao)
+	if err != nil {
+		return nil, err
 	}
-	err := a.Validate()
+	a := &Album{
+		Artista:       *b,
+		ID:            id,
+		Titulo:        titulo,
+		AnoLancamento: anolancamento,
+	}
+	err = a.Validate()
 	if err != nil {
 		return nil, err
 	}
