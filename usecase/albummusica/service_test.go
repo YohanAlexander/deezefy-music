@@ -5,7 +5,6 @@ import (
 
 	"github.com/yohanalexander/deezefy-music/entity"
 	der "github.com/yohanalexander/deezefy-music/entity/albummusica"
-	inmem "github.com/yohanalexander/deezefy-music/infrastructure/inmem/repository/albummusica"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -21,7 +20,7 @@ func newFixtureAlbumMusica() *der.AlbumMusica {
 func TestCreate(t *testing.T) {
 
 	t.Run("create", func(t *testing.T) {
-		repo := inmem.NewInmem()
+		repo := newInmem()
 		m := NewService(repo)
 		u := newFixtureAlbumMusica()
 		_, _, _, err := m.CreateAlbumMusica(u.Album, u.Musica, u.Artista)
@@ -32,7 +31,7 @@ func TestCreate(t *testing.T) {
 
 func TestSearchAndFind(t *testing.T) {
 
-	repo := inmem.NewInmem()
+	repo := newInmem()
 	m := NewService(repo)
 	u1 := newFixtureAlbumMusica()
 	u2 := newFixtureAlbumMusica()
@@ -79,7 +78,7 @@ func TestSearchAndFind(t *testing.T) {
 func TestUpdate(t *testing.T) {
 
 	t.Run("update", func(t *testing.T) {
-		repo := inmem.NewInmem()
+		repo := newInmem()
 		m := NewService(repo)
 		u := newFixtureAlbumMusica()
 		album, musica, artista, err := m.CreateAlbumMusica(u.Album, u.Musica, u.Artista)
@@ -94,7 +93,7 @@ func TestUpdate(t *testing.T) {
 
 func TestDelete(t *testing.T) {
 
-	repo := inmem.NewInmem()
+	repo := newInmem()
 	m := NewService(repo)
 	u1 := newFixtureAlbumMusica()
 	u2 := newFixtureAlbumMusica()

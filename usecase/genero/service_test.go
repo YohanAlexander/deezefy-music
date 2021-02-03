@@ -5,7 +5,6 @@ import (
 
 	"github.com/yohanalexander/deezefy-music/entity"
 	der "github.com/yohanalexander/deezefy-music/entity/genero"
-	inmem "github.com/yohanalexander/deezefy-music/infrastructure/inmem/repository/genero"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -20,7 +19,7 @@ func newFixtureGenero() *der.Genero {
 func TestCreate(t *testing.T) {
 
 	t.Run("create", func(t *testing.T) {
-		repo := inmem.NewInmem()
+		repo := newInmem()
 		m := NewService(repo)
 		u := newFixtureGenero()
 		_, err := m.CreateGenero(u.Nome, u.Estilo)
@@ -31,7 +30,7 @@ func TestCreate(t *testing.T) {
 
 func TestSearchAndFind(t *testing.T) {
 
-	repo := inmem.NewInmem()
+	repo := newInmem()
 	m := NewService(repo)
 	u1 := newFixtureGenero()
 	u2 := newFixtureGenero()
@@ -66,7 +65,7 @@ func TestSearchAndFind(t *testing.T) {
 func TestUpdate(t *testing.T) {
 
 	t.Run("update", func(t *testing.T) {
-		repo := inmem.NewInmem()
+		repo := newInmem()
 		m := NewService(repo)
 		u := newFixtureGenero()
 		email, err := m.CreateGenero(u.Nome, u.Estilo)
@@ -81,7 +80,7 @@ func TestUpdate(t *testing.T) {
 
 func TestDelete(t *testing.T) {
 
-	repo := inmem.NewInmem()
+	repo := newInmem()
 	m := NewService(repo)
 	u1 := newFixtureGenero()
 	u2 := newFixtureGenero()

@@ -5,7 +5,6 @@ import (
 
 	"github.com/yohanalexander/deezefy-music/entity"
 	der "github.com/yohanalexander/deezefy-music/entity/generosfavoritos"
-	inmem "github.com/yohanalexander/deezefy-music/infrastructure/inmem/repository/generosfavoritos"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -21,7 +20,7 @@ func newFixtureGenerosFavoritos() *der.GenerosFavoritos {
 func TestCreate(t *testing.T) {
 
 	t.Run("create", func(t *testing.T) {
-		repo := inmem.NewInmem()
+		repo := newInmem()
 		m := NewService(repo)
 		u := newFixtureGenerosFavoritos()
 		_, _, _, err := m.CreateGenerosFavoritos(u.Perfil, u.Genero, u.Ouvinte)
@@ -32,7 +31,7 @@ func TestCreate(t *testing.T) {
 
 func TestSearchAndFind(t *testing.T) {
 
-	repo := inmem.NewInmem()
+	repo := newInmem()
 	m := NewService(repo)
 	u1 := newFixtureGenerosFavoritos()
 	u2 := newFixtureGenerosFavoritos()
@@ -79,7 +78,7 @@ func TestSearchAndFind(t *testing.T) {
 func TestUpdate(t *testing.T) {
 
 	t.Run("update", func(t *testing.T) {
-		repo := inmem.NewInmem()
+		repo := newInmem()
 		m := NewService(repo)
 		u := newFixtureGenerosFavoritos()
 		perfil, genero, ouvinte, err := m.CreateGenerosFavoritos(u.Perfil, u.Genero, u.Ouvinte)
@@ -94,7 +93,7 @@ func TestUpdate(t *testing.T) {
 
 func TestDelete(t *testing.T) {
 
-	repo := inmem.NewInmem()
+	repo := newInmem()
 	m := NewService(repo)
 	u1 := newFixtureGenerosFavoritos()
 	u2 := newFixtureGenerosFavoritos()
