@@ -6,19 +6,23 @@ import (
 
 // Perfil entidade Perfil
 type Perfil struct {
-	Ouvinte               string `validate:"required,email"`
-	ID                    int    `validate:"required,gte=1"`
-	InformacoesRelevantes string `validate:"required,gte=1"`
+	Ouvinte               Ouvinte `validate:"required"`
+	ID                    int     `validate:"required,gte=1"`
+	InformacoesRelevantes string  `validate:"required,gte=1"`
 }
 
 // NewPerfil cria um novo Perfil
-func NewPerfil(ouvinte, informacoesrelevantes string, id int) (*Perfil, error) {
+func NewPerfil(email, password, birthday, primeironome, sobrenome, informacoesrelevantes string, id int) (*Perfil, error) {
+	o, err := NewOuvinte(email, password, birthday, primeironome, sobrenome)
+	if err != nil {
+		return nil, err
+	}
 	p := &Perfil{
 		ID:                    id,
-		Ouvinte:               ouvinte,
+		Ouvinte:               *o,
 		InformacoesRelevantes: informacoesrelevantes,
 	}
-	err := p.Validate()
+	err = p.Validate()
 	if err != nil {
 		return nil, err
 	}
