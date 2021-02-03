@@ -4,13 +4,12 @@ import (
 	"testing"
 
 	"github.com/yohanalexander/deezefy-music/entity"
-	der "github.com/yohanalexander/deezefy-music/entity/album"
 
 	"github.com/stretchr/testify/assert"
 )
 
-func newFixtureAlbum() *der.Album {
-	return &der.Album{
+func newFixtureAlbum() *entity.Album {
+	return &entity.Album{
 		ID:            815,
 		AnoLancamento: 1998,
 		Titulo:        "Cage The Elephant",

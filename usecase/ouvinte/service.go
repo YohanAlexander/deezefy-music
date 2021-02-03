@@ -4,7 +4,6 @@ import (
 	"strings"
 
 	"github.com/yohanalexander/deezefy-music/entity"
-	der "github.com/yohanalexander/deezefy-music/entity/ouvinte"
 )
 
 // Service  interface
@@ -21,7 +20,7 @@ func NewService(r Repository) *Service {
 
 // CreateOuvinte Create Ouvinte
 func (s *Service) CreateOuvinte(usuario, primeironome, sobrenome string) (string, error) {
-	e, err := der.NewOuvinte(usuario, primeironome, sobrenome)
+	e, err := entity.NewOuvinte(usuario, primeironome, sobrenome)
 	if err != nil {
 		return err.Error(), err
 	}
@@ -29,17 +28,17 @@ func (s *Service) CreateOuvinte(usuario, primeironome, sobrenome string) (string
 }
 
 // GetOuvinte Get Ouvinte
-func (s *Service) GetOuvinte(email string) (*der.Ouvinte, error) {
+func (s *Service) GetOuvinte(email string) (*entity.Ouvinte, error) {
 	return s.repo.Get(email)
 }
 
 // SearchOuvintes Search Ouvintes
-func (s *Service) SearchOuvintes(query string) ([]*der.Ouvinte, error) {
+func (s *Service) SearchOuvintes(query string) ([]*entity.Ouvinte, error) {
 	return s.repo.Search(strings.ToLower(query))
 }
 
 // ListOuvintes List Ouvintes
-func (s *Service) ListOuvintes() ([]*der.Ouvinte, error) {
+func (s *Service) ListOuvintes() ([]*entity.Ouvinte, error) {
 	return s.repo.List()
 }
 
@@ -56,7 +55,7 @@ func (s *Service) DeleteOuvinte(email string) error {
 }
 
 // UpdateOuvinte Update Ouvinte
-func (s *Service) UpdateOuvinte(e *der.Ouvinte) error {
+func (s *Service) UpdateOuvinte(e *entity.Ouvinte) error {
 	err := e.Validate()
 	if err != nil {
 		return entity.ErrInvalidEntity

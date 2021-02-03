@@ -1,14 +1,14 @@
 package evento
 
-import der "github.com/yohanalexander/deezefy-music/entity/evento"
+import "github.com/yohanalexander/deezefy-music/entity"
 
 // Evento interface
 type Evento interface {
-	Get(id int) (*der.Evento, error)
-	Search(query string) ([]*der.Evento, error)
-	List() ([]*der.Evento, error)
-	Create(e *der.Evento) (int, error)
-	Update(e *der.Evento) error
+	Get(id int) (*entity.Evento, error)
+	Search(query string) ([]*entity.Evento, error)
+	List() ([]*entity.Evento, error)
+	Create(e *entity.Evento) (int, error)
+	Update(e *entity.Evento) error
 	Delete(id int) error
 }
 
@@ -19,10 +19,10 @@ type Repository interface {
 
 // UseCase interface
 type UseCase interface {
-	GetEvento(id int) (*der.Evento, error)
-	SearchEventos(query string) ([]*der.Evento, error)
-	ListEventos() ([]*der.Evento, error)
+	GetEvento(id int) (*entity.Evento, error)
+	SearchEventos(query string) ([]*entity.Evento, error)
+	ListEventos() ([]*entity.Evento, error)
 	CreateEvento(usuario, nome string, id int) (int, error)
-	UpdateEvento(e *der.Evento) error
+	UpdateEvento(e *entity.Evento) error
 	DeleteEvento(id int) error
 }

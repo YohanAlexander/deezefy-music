@@ -4,7 +4,6 @@ import (
 	"strings"
 
 	"github.com/yohanalexander/deezefy-music/entity"
-	der "github.com/yohanalexander/deezefy-music/entity/genero"
 )
 
 // Service  interface
@@ -21,7 +20,7 @@ func NewService(r Repository) *Service {
 
 // CreateGenero Create Genero
 func (s *Service) CreateGenero(nome, estilo string) (string, error) {
-	e, err := der.NewGenero(nome, estilo)
+	e, err := entity.NewGenero(nome, estilo)
 	if err != nil {
 		return err.Error(), err
 	}
@@ -29,17 +28,17 @@ func (s *Service) CreateGenero(nome, estilo string) (string, error) {
 }
 
 // GetGenero Get Genero
-func (s *Service) GetGenero(email string) (*der.Genero, error) {
+func (s *Service) GetGenero(email string) (*entity.Genero, error) {
 	return s.repo.Get(email)
 }
 
 // SearchGeneros Search Generos
-func (s *Service) SearchGeneros(query string) ([]*der.Genero, error) {
+func (s *Service) SearchGeneros(query string) ([]*entity.Genero, error) {
 	return s.repo.Search(strings.ToLower(query))
 }
 
 // ListGeneros List Generos
-func (s *Service) ListGeneros() ([]*der.Genero, error) {
+func (s *Service) ListGeneros() ([]*entity.Genero, error) {
 	return s.repo.List()
 }
 
@@ -56,7 +55,7 @@ func (s *Service) DeleteGenero(email string) error {
 }
 
 // UpdateGenero Update Genero
-func (s *Service) UpdateGenero(e *der.Genero) error {
+func (s *Service) UpdateGenero(e *entity.Genero) error {
 	err := e.Validate()
 	if err != nil {
 		return entity.ErrInvalidEntity

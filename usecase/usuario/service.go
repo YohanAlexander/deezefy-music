@@ -4,7 +4,6 @@ import (
 	"strings"
 
 	"github.com/yohanalexander/deezefy-music/entity"
-	der "github.com/yohanalexander/deezefy-music/entity/usuario"
 )
 
 // Service  interface
@@ -21,7 +20,7 @@ func NewService(r Repository) *Service {
 
 // CreateUsuario Create Usuario
 func (s *Service) CreateUsuario(email, password, birthday string) (string, error) {
-	e, err := der.NewUsuario(email, password, birthday)
+	e, err := entity.NewUsuario(email, password, birthday)
 	if err != nil {
 		return err.Error(), err
 	}
@@ -29,17 +28,17 @@ func (s *Service) CreateUsuario(email, password, birthday string) (string, error
 }
 
 // GetUsuario Get Usuario
-func (s *Service) GetUsuario(email string) (*der.Usuario, error) {
+func (s *Service) GetUsuario(email string) (*entity.Usuario, error) {
 	return s.repo.Get(email)
 }
 
 // SearchUsuarios Search Usuarios
-func (s *Service) SearchUsuarios(query string) ([]*der.Usuario, error) {
+func (s *Service) SearchUsuarios(query string) ([]*entity.Usuario, error) {
 	return s.repo.Search(strings.ToLower(query))
 }
 
 // ListUsuarios List Usuarios
-func (s *Service) ListUsuarios() ([]*der.Usuario, error) {
+func (s *Service) ListUsuarios() ([]*entity.Usuario, error) {
 	return s.repo.List()
 }
 
@@ -56,7 +55,7 @@ func (s *Service) DeleteUsuario(email string) error {
 }
 
 // UpdateUsuario Update Usuario
-func (s *Service) UpdateUsuario(e *der.Usuario) error {
+func (s *Service) UpdateUsuario(e *entity.Usuario) error {
 	err := e.Validate()
 	if err != nil {
 		return entity.ErrInvalidEntity

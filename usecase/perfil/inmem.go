@@ -4,30 +4,29 @@ import (
 	"strings"
 
 	"github.com/yohanalexander/deezefy-music/entity"
-	der "github.com/yohanalexander/deezefy-music/entity/perfil"
 )
 
 // inmem in memory repo
 type inmem struct {
-	m map[int]*der.Perfil
+	m map[int]*entity.Perfil
 }
 
 // newInmem create new repository
 func newInmem() *inmem {
-	var m = map[int]*der.Perfil{}
+	var m = map[int]*entity.Perfil{}
 	return &inmem{
 		m: m,
 	}
 }
 
 // Create Perfil
-func (r *inmem) Create(e *der.Perfil) (int, error) {
+func (r *inmem) Create(e *entity.Perfil) (int, error) {
 	r.m[e.ID] = e
 	return e.ID, nil
 }
 
 // Get Perfil
-func (r *inmem) Get(id int) (*der.Perfil, error) {
+func (r *inmem) Get(id int) (*entity.Perfil, error) {
 	if r.m[id] == nil {
 		return nil, entity.ErrNotFound
 	}
@@ -35,7 +34,7 @@ func (r *inmem) Get(id int) (*der.Perfil, error) {
 }
 
 // Update Perfil
-func (r *inmem) Update(e *der.Perfil) error {
+func (r *inmem) Update(e *entity.Perfil) error {
 	_, err := r.Get(e.ID)
 	if err != nil {
 		return err
@@ -45,8 +44,8 @@ func (r *inmem) Update(e *der.Perfil) error {
 }
 
 // Search Perfils
-func (r *inmem) Search(query string) ([]*der.Perfil, error) {
-	var d []*der.Perfil
+func (r *inmem) Search(query string) ([]*entity.Perfil, error) {
+	var d []*entity.Perfil
 	for _, j := range r.m {
 		if strings.Contains(strings.ToLower(j.InformacoesRelevantes), query) {
 			d = append(d, j)
@@ -60,8 +59,8 @@ func (r *inmem) Search(query string) ([]*der.Perfil, error) {
 }
 
 // List Perfils
-func (r *inmem) List() ([]*der.Perfil, error) {
-	var d []*der.Perfil
+func (r *inmem) List() ([]*entity.Perfil, error) {
+	var d []*entity.Perfil
 	for _, j := range r.m {
 		d = append(d, j)
 	}

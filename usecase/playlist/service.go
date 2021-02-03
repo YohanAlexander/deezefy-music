@@ -4,7 +4,6 @@ import (
 	"strings"
 
 	"github.com/yohanalexander/deezefy-music/entity"
-	der "github.com/yohanalexander/deezefy-music/entity/playlist"
 )
 
 // Service  interface
@@ -21,7 +20,7 @@ func NewService(r Repository) *Service {
 
 // CreatePlaylist Create Playlist
 func (s *Service) CreatePlaylist(nome, status string) (string, error) {
-	e, err := der.NewPlaylist(nome, status)
+	e, err := entity.NewPlaylist(nome, status)
 	if err != nil {
 		return err.Error(), err
 	}
@@ -29,17 +28,17 @@ func (s *Service) CreatePlaylist(nome, status string) (string, error) {
 }
 
 // GetPlaylist Get Playlist
-func (s *Service) GetPlaylist(email string) (*der.Playlist, error) {
+func (s *Service) GetPlaylist(email string) (*entity.Playlist, error) {
 	return s.repo.Get(email)
 }
 
 // SearchPlaylists Search Playlists
-func (s *Service) SearchPlaylists(query string) ([]*der.Playlist, error) {
+func (s *Service) SearchPlaylists(query string) ([]*entity.Playlist, error) {
 	return s.repo.Search(strings.ToLower(query))
 }
 
 // ListPlaylists List Playlists
-func (s *Service) ListPlaylists() ([]*der.Playlist, error) {
+func (s *Service) ListPlaylists() ([]*entity.Playlist, error) {
 	return s.repo.List()
 }
 
@@ -56,7 +55,7 @@ func (s *Service) DeletePlaylist(email string) error {
 }
 
 // UpdatePlaylist Update Playlist
-func (s *Service) UpdatePlaylist(e *der.Playlist) error {
+func (s *Service) UpdatePlaylist(e *entity.Playlist) error {
 	err := e.Validate()
 	if err != nil {
 		return entity.ErrInvalidEntity

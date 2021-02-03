@@ -4,7 +4,6 @@ import (
 	"strings"
 
 	"github.com/yohanalexander/deezefy-music/entity"
-	der "github.com/yohanalexander/deezefy-music/entity/local"
 )
 
 // Service  interface
@@ -21,7 +20,7 @@ func NewService(r Repository) *Service {
 
 // CreateLocal Create Local
 func (s *Service) CreateLocal(cidade, pais string, id int) (int, error) {
-	e, err := der.NewLocal(cidade, pais, id)
+	e, err := entity.NewLocal(cidade, pais, id)
 	if err != nil {
 		return e.ID, err
 	}
@@ -29,17 +28,17 @@ func (s *Service) CreateLocal(cidade, pais string, id int) (int, error) {
 }
 
 // GetLocal Get Local
-func (s *Service) GetLocal(id int) (*der.Local, error) {
+func (s *Service) GetLocal(id int) (*entity.Local, error) {
 	return s.repo.Get(id)
 }
 
 // SearchLocals Search Locals
-func (s *Service) SearchLocals(query string) ([]*der.Local, error) {
+func (s *Service) SearchLocals(query string) ([]*entity.Local, error) {
 	return s.repo.Search(strings.ToLower(query))
 }
 
 // ListLocals List Locals
-func (s *Service) ListLocals() ([]*der.Local, error) {
+func (s *Service) ListLocals() ([]*entity.Local, error) {
 	return s.repo.List()
 }
 
@@ -56,7 +55,7 @@ func (s *Service) DeleteLocal(id int) error {
 }
 
 // UpdateLocal Update Local
-func (s *Service) UpdateLocal(e *der.Local) error {
+func (s *Service) UpdateLocal(e *entity.Local) error {
 	err := e.Validate()
 	if err != nil {
 		return entity.ErrInvalidEntity

@@ -4,13 +4,12 @@ import (
 	"testing"
 
 	"github.com/yohanalexander/deezefy-music/entity"
-	der "github.com/yohanalexander/deezefy-music/entity/artista"
 
 	"github.com/stretchr/testify/assert"
 )
 
-func newFixtureArtista() *der.Artista {
-	return &der.Artista{
+func newFixtureArtista() *entity.Artista {
+	return &entity.Artista{
 		Usuario:       "someone@deezefy.com",
 		NomeArtistico: "Imagine Dragons",
 		Biografia:     "Indie Rock Band",

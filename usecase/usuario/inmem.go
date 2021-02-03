@@ -4,30 +4,29 @@ import (
 	"strings"
 
 	"github.com/yohanalexander/deezefy-music/entity"
-	der "github.com/yohanalexander/deezefy-music/entity/usuario"
 )
 
 // inmem in memory repo
 type inmem struct {
-	m map[string]*der.Usuario
+	m map[string]*entity.Usuario
 }
 
 // newInmem create new repository
 func newInmem() *inmem {
-	var m = map[string]*der.Usuario{}
+	var m = map[string]*entity.Usuario{}
 	return &inmem{
 		m: m,
 	}
 }
 
 // Create Usuario
-func (r *inmem) Create(e *der.Usuario) (string, error) {
+func (r *inmem) Create(e *entity.Usuario) (string, error) {
 	r.m[e.Email] = e
 	return e.Email, nil
 }
 
 // Get Usuario
-func (r *inmem) Get(email string) (*der.Usuario, error) {
+func (r *inmem) Get(email string) (*entity.Usuario, error) {
 	if r.m[email] == nil {
 		return nil, entity.ErrNotFound
 	}
@@ -35,7 +34,7 @@ func (r *inmem) Get(email string) (*der.Usuario, error) {
 }
 
 // Update Usuario
-func (r *inmem) Update(e *der.Usuario) error {
+func (r *inmem) Update(e *entity.Usuario) error {
 	_, err := r.Get(e.Email)
 	if err != nil {
 		return err
@@ -45,8 +44,8 @@ func (r *inmem) Update(e *der.Usuario) error {
 }
 
 // Search Usuarios
-func (r *inmem) Search(query string) ([]*der.Usuario, error) {
-	var d []*der.Usuario
+func (r *inmem) Search(query string) ([]*entity.Usuario, error) {
+	var d []*entity.Usuario
 	for _, j := range r.m {
 		if strings.Contains(strings.ToLower(j.Email), query) {
 			d = append(d, j)
@@ -60,8 +59,8 @@ func (r *inmem) Search(query string) ([]*der.Usuario, error) {
 }
 
 // List Usuarios
-func (r *inmem) List() ([]*der.Usuario, error) {
-	var d []*der.Usuario
+func (r *inmem) List() ([]*entity.Usuario, error) {
+	var d []*entity.Usuario
 	for _, j := range r.m {
 		d = append(d, j)
 	}

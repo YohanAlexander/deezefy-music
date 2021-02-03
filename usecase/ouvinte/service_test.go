@@ -4,13 +4,12 @@ import (
 	"testing"
 
 	"github.com/yohanalexander/deezefy-music/entity"
-	der "github.com/yohanalexander/deezefy-music/entity/ouvinte"
 
 	"github.com/stretchr/testify/assert"
 )
 
-func newFixtureOuvinte() *der.Ouvinte {
-	return &der.Ouvinte{
+func newFixtureOuvinte() *entity.Ouvinte {
+	return &entity.Ouvinte{
 		Usuario:      "someone@deezefy.com",
 		PrimeiroNome: "Imagine",
 		Sobrenome:    "Dragons",

@@ -4,7 +4,6 @@ import (
 	"strings"
 
 	"github.com/yohanalexander/deezefy-music/entity"
-	der "github.com/yohanalexander/deezefy-music/entity/album"
 )
 
 // Service  interface
@@ -21,7 +20,7 @@ func NewService(r Repository) *Service {
 
 // CreateAlbum Create Album
 func (s *Service) CreateAlbum(id, anolancamento int, titulo, artista string) (int, error) {
-	e, err := der.NewAlbum(id, anolancamento, titulo, artista)
+	e, err := entity.NewAlbum(id, anolancamento, titulo, artista)
 	if err != nil {
 		return e.ID, err
 	}
@@ -29,17 +28,17 @@ func (s *Service) CreateAlbum(id, anolancamento int, titulo, artista string) (in
 }
 
 // GetAlbum Get Album
-func (s *Service) GetAlbum(id int) (*der.Album, error) {
+func (s *Service) GetAlbum(id int) (*entity.Album, error) {
 	return s.repo.Get(id)
 }
 
 // SearchAlbums Search Albums
-func (s *Service) SearchAlbums(query string) ([]*der.Album, error) {
+func (s *Service) SearchAlbums(query string) ([]*entity.Album, error) {
 	return s.repo.Search(strings.ToLower(query))
 }
 
 // ListAlbums List Albums
-func (s *Service) ListAlbums() ([]*der.Album, error) {
+func (s *Service) ListAlbums() ([]*entity.Album, error) {
 	return s.repo.List()
 }
 
@@ -56,7 +55,7 @@ func (s *Service) DeleteAlbum(id int) error {
 }
 
 // UpdateAlbum Update Album
-func (s *Service) UpdateAlbum(e *der.Album) error {
+func (s *Service) UpdateAlbum(e *entity.Album) error {
 	err := e.Validate()
 	if err != nil {
 		return entity.ErrInvalidEntity

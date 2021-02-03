@@ -4,30 +4,29 @@ import (
 	"strings"
 
 	"github.com/yohanalexander/deezefy-music/entity"
-	der "github.com/yohanalexander/deezefy-music/entity/evento"
 )
 
 // inmem in memory repo
 type inmem struct {
-	m map[int]*der.Evento
+	m map[int]*entity.Evento
 }
 
 // newInmem create new repository
 func newInmem() *inmem {
-	var m = map[int]*der.Evento{}
+	var m = map[int]*entity.Evento{}
 	return &inmem{
 		m: m,
 	}
 }
 
 // Create Evento
-func (r *inmem) Create(e *der.Evento) (int, error) {
+func (r *inmem) Create(e *entity.Evento) (int, error) {
 	r.m[e.ID] = e
 	return e.ID, nil
 }
 
 // Get Evento
-func (r *inmem) Get(id int) (*der.Evento, error) {
+func (r *inmem) Get(id int) (*entity.Evento, error) {
 	if r.m[id] == nil {
 		return nil, entity.ErrNotFound
 	}
@@ -35,7 +34,7 @@ func (r *inmem) Get(id int) (*der.Evento, error) {
 }
 
 // Update Evento
-func (r *inmem) Update(e *der.Evento) error {
+func (r *inmem) Update(e *entity.Evento) error {
 	_, err := r.Get(e.ID)
 	if err != nil {
 		return err
@@ -45,8 +44,8 @@ func (r *inmem) Update(e *der.Evento) error {
 }
 
 // Search Eventos
-func (r *inmem) Search(query string) ([]*der.Evento, error) {
-	var d []*der.Evento
+func (r *inmem) Search(query string) ([]*entity.Evento, error) {
+	var d []*entity.Evento
 	for _, j := range r.m {
 		if strings.Contains(strings.ToLower(j.Nome), query) {
 			d = append(d, j)
@@ -60,8 +59,8 @@ func (r *inmem) Search(query string) ([]*der.Evento, error) {
 }
 
 // List Eventos
-func (r *inmem) List() ([]*der.Evento, error) {
-	var d []*der.Evento
+func (r *inmem) List() ([]*entity.Evento, error) {
+	var d []*entity.Evento
 	for _, j := range r.m {
 		d = append(d, j)
 	}

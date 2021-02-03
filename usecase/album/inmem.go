@@ -4,30 +4,29 @@ import (
 	"strings"
 
 	"github.com/yohanalexander/deezefy-music/entity"
-	der "github.com/yohanalexander/deezefy-music/entity/album"
 )
 
 // inmem in memory repo
 type inmem struct {
-	m map[int]*der.Album
+	m map[int]*entity.Album
 }
 
 // newInmem create new repository
 func newInmem() *inmem {
-	var m = map[int]*der.Album{}
+	var m = map[int]*entity.Album{}
 	return &inmem{
 		m: m,
 	}
 }
 
 // Create Album
-func (r *inmem) Create(e *der.Album) (int, error) {
+func (r *inmem) Create(e *entity.Album) (int, error) {
 	r.m[e.ID] = e
 	return e.ID, nil
 }
 
 // Get Album
-func (r *inmem) Get(id int) (*der.Album, error) {
+func (r *inmem) Get(id int) (*entity.Album, error) {
 	if r.m[id] == nil {
 		return nil, entity.ErrNotFound
 	}
@@ -35,7 +34,7 @@ func (r *inmem) Get(id int) (*der.Album, error) {
 }
 
 // Update Album
-func (r *inmem) Update(e *der.Album) error {
+func (r *inmem) Update(e *entity.Album) error {
 	_, err := r.Get(e.ID)
 	if err != nil {
 		return err
@@ -45,8 +44,8 @@ func (r *inmem) Update(e *der.Album) error {
 }
 
 // Search Albums
-func (r *inmem) Search(query string) ([]*der.Album, error) {
-	var d []*der.Album
+func (r *inmem) Search(query string) ([]*entity.Album, error) {
+	var d []*entity.Album
 	for _, j := range r.m {
 		if strings.Contains(strings.ToLower(j.Titulo), query) {
 			d = append(d, j)
@@ -60,8 +59,8 @@ func (r *inmem) Search(query string) ([]*der.Album, error) {
 }
 
 // List Albums
-func (r *inmem) List() ([]*der.Album, error) {
-	var d []*der.Album
+func (r *inmem) List() ([]*entity.Album, error) {
+	var d []*entity.Album
 	for _, j := range r.m {
 		d = append(d, j)
 	}
