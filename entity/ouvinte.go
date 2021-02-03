@@ -6,12 +6,13 @@ import (
 
 // Ouvinte entidade Ouvinte
 type Ouvinte struct {
-	Usuario      Usuario   `validate:"required"`
-	PrimeiroNome string    `validate:"required,gte=1"`
-	Sobrenome    string    `validate:"required,gte=1"`
-	Telefones    []string  `validate:""`
-	Seguindo     []Artista `validate:""`
-	Curtidas     []Musica  `validate:""`
+	Usuario      Usuario    `validate:"required"`
+	PrimeiroNome string     `validate:"required,gte=1"`
+	Sobrenome    string     `validate:"required,gte=1"`
+	Telefones    []string   `validate:""`
+	Seguindo     []Artista  `validate:""`
+	Curtidas     []Musica   `validate:""`
+	Playlists    []Playlist `validate:""`
 }
 
 // NewOuvinte cria um novo Ouvinte
@@ -132,4 +133,35 @@ func (o *Ouvinte) GetMusica(musica Musica) (Musica, error) {
 		}
 	}
 	return musica, ErrNotFound
+}
+
+// AddPlaylist adiciona um Playlist
+func (o *Ouvinte) AddPlaylist(playlist Playlist) error {
+	_, err := o.GetPlaylist(playlist)
+	if err == nil {
+		return ErrPlaylistRegistered
+	}
+	o.Playlists = append(o.Playlists, playlist)
+	return nil
+}
+
+// RemovePlaylist remove um Playlist
+func (o *Ouvinte) RemovePlaylist(playlist Playlist) error {
+	for i, j := range o.Playlists {
+		if j.Nome == playlist.Nome {
+			o.Playlists = append(o.Playlists[:i], o.Playlists[i+1:]...)
+			return nil
+		}
+	}
+	return ErrNotFound
+}
+
+// GetPlaylist get a Playlist
+func (o *Ouvinte) GetPlaylist(playlist Playlist) (Playlist, error) {
+	for _, v := range o.Playlists {
+		if v.Nome == playlist.Nome {
+			return playlist, nil
+		}
+	}
+	return playlist, ErrNotFound
 }
