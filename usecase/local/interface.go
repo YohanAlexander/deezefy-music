@@ -2,11 +2,15 @@ package local
 
 import "github.com/yohanalexander/deezefy-music/entity"
 
-// Local interface
-type Local interface {
+// Read interface
+type Read interface {
 	Get(id int) (*entity.Local, error)
 	Search(query string) ([]*entity.Local, error)
 	List() ([]*entity.Local, error)
+}
+
+// Write interface
+type Write interface {
 	Create(e *entity.Local) (int, error)
 	Update(e *entity.Local) error
 	Delete(id int) error
@@ -14,7 +18,8 @@ type Local interface {
 
 // Repository interface
 type Repository interface {
-	Local
+	Read
+	Write
 }
 
 // UseCase interface
