@@ -6,80 +6,103 @@ package mock
 
 import (
 	gomock "github.com/golang/mock/gomock"
-	playlist "github.com/yohanalexander/deezefy-music/entity/playlist"
+	entity "github.com/yohanalexander/deezefy-music/entity"
 	reflect "reflect"
 )
 
-// MockPlaylist is a mock of Playlist interface
-type MockPlaylist struct {
+// MockRead is a mock of Read interface
+type MockRead struct {
 	ctrl     *gomock.Controller
-	recorder *MockPlaylistMockRecorder
+	recorder *MockReadMockRecorder
 }
 
-// MockPlaylistMockRecorder is the mock recorder for MockPlaylist
-type MockPlaylistMockRecorder struct {
-	mock *MockPlaylist
+// MockReadMockRecorder is the mock recorder for MockRead
+type MockReadMockRecorder struct {
+	mock *MockRead
 }
 
-// NewMockPlaylist creates a new mock instance
-func NewMockPlaylist(ctrl *gomock.Controller) *MockPlaylist {
-	mock := &MockPlaylist{ctrl: ctrl}
-	mock.recorder = &MockPlaylistMockRecorder{mock}
+// NewMockRead creates a new mock instance
+func NewMockRead(ctrl *gomock.Controller) *MockRead {
+	mock := &MockRead{ctrl: ctrl}
+	mock.recorder = &MockReadMockRecorder{mock}
 	return mock
 }
 
 // EXPECT returns an object that allows the caller to indicate expected use
-func (m *MockPlaylist) EXPECT() *MockPlaylistMockRecorder {
+func (m *MockRead) EXPECT() *MockReadMockRecorder {
 	return m.recorder
 }
 
 // Get mocks base method
-func (m *MockPlaylist) Get(nome string) (*playlist.Playlist, error) {
+func (m *MockRead) Get(nome string) (*entity.Playlist, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Get", nome)
-	ret0, _ := ret[0].(*playlist.Playlist)
+	ret0, _ := ret[0].(*entity.Playlist)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // Get indicates an expected call of Get
-func (mr *MockPlaylistMockRecorder) Get(nome interface{}) *gomock.Call {
+func (mr *MockReadMockRecorder) Get(nome interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Get", reflect.TypeOf((*MockPlaylist)(nil).Get), nome)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Get", reflect.TypeOf((*MockRead)(nil).Get), nome)
 }
 
 // Search mocks base method
-func (m *MockPlaylist) Search(query string) ([]*playlist.Playlist, error) {
+func (m *MockRead) Search(query string) ([]*entity.Playlist, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Search", query)
-	ret0, _ := ret[0].([]*playlist.Playlist)
+	ret0, _ := ret[0].([]*entity.Playlist)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // Search indicates an expected call of Search
-func (mr *MockPlaylistMockRecorder) Search(query interface{}) *gomock.Call {
+func (mr *MockReadMockRecorder) Search(query interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Search", reflect.TypeOf((*MockPlaylist)(nil).Search), query)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Search", reflect.TypeOf((*MockRead)(nil).Search), query)
 }
 
 // List mocks base method
-func (m *MockPlaylist) List() ([]*playlist.Playlist, error) {
+func (m *MockRead) List() ([]*entity.Playlist, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "List")
-	ret0, _ := ret[0].([]*playlist.Playlist)
+	ret0, _ := ret[0].([]*entity.Playlist)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // List indicates an expected call of List
-func (mr *MockPlaylistMockRecorder) List() *gomock.Call {
+func (mr *MockReadMockRecorder) List() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "List", reflect.TypeOf((*MockPlaylist)(nil).List))
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "List", reflect.TypeOf((*MockRead)(nil).List))
+}
+
+// MockWrite is a mock of Write interface
+type MockWrite struct {
+	ctrl     *gomock.Controller
+	recorder *MockWriteMockRecorder
+}
+
+// MockWriteMockRecorder is the mock recorder for MockWrite
+type MockWriteMockRecorder struct {
+	mock *MockWrite
+}
+
+// NewMockWrite creates a new mock instance
+func NewMockWrite(ctrl *gomock.Controller) *MockWrite {
+	mock := &MockWrite{ctrl: ctrl}
+	mock.recorder = &MockWriteMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use
+func (m *MockWrite) EXPECT() *MockWriteMockRecorder {
+	return m.recorder
 }
 
 // Create mocks base method
-func (m *MockPlaylist) Create(e *playlist.Playlist) (string, error) {
+func (m *MockWrite) Create(e *entity.Playlist) (string, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Create", e)
 	ret0, _ := ret[0].(string)
@@ -88,13 +111,13 @@ func (m *MockPlaylist) Create(e *playlist.Playlist) (string, error) {
 }
 
 // Create indicates an expected call of Create
-func (mr *MockPlaylistMockRecorder) Create(e interface{}) *gomock.Call {
+func (mr *MockWriteMockRecorder) Create(e interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockPlaylist)(nil).Create), e)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockWrite)(nil).Create), e)
 }
 
 // Update mocks base method
-func (m *MockPlaylist) Update(e *playlist.Playlist) error {
+func (m *MockWrite) Update(e *entity.Playlist) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Update", e)
 	ret0, _ := ret[0].(error)
@@ -102,13 +125,13 @@ func (m *MockPlaylist) Update(e *playlist.Playlist) error {
 }
 
 // Update indicates an expected call of Update
-func (mr *MockPlaylistMockRecorder) Update(e interface{}) *gomock.Call {
+func (mr *MockWriteMockRecorder) Update(e interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockPlaylist)(nil).Update), e)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockWrite)(nil).Update), e)
 }
 
 // Delete mocks base method
-func (m *MockPlaylist) Delete(nome string) error {
+func (m *MockWrite) Delete(nome string) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Delete", nome)
 	ret0, _ := ret[0].(error)
@@ -116,9 +139,9 @@ func (m *MockPlaylist) Delete(nome string) error {
 }
 
 // Delete indicates an expected call of Delete
-func (mr *MockPlaylistMockRecorder) Delete(nome interface{}) *gomock.Call {
+func (mr *MockWriteMockRecorder) Delete(nome interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockPlaylist)(nil).Delete), nome)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockWrite)(nil).Delete), nome)
 }
 
 // MockRepository is a mock of Repository interface
@@ -145,10 +168,10 @@ func (m *MockRepository) EXPECT() *MockRepositoryMockRecorder {
 }
 
 // Get mocks base method
-func (m *MockRepository) Get(nome string) (*playlist.Playlist, error) {
+func (m *MockRepository) Get(nome string) (*entity.Playlist, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Get", nome)
-	ret0, _ := ret[0].(*playlist.Playlist)
+	ret0, _ := ret[0].(*entity.Playlist)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -160,10 +183,10 @@ func (mr *MockRepositoryMockRecorder) Get(nome interface{}) *gomock.Call {
 }
 
 // Search mocks base method
-func (m *MockRepository) Search(query string) ([]*playlist.Playlist, error) {
+func (m *MockRepository) Search(query string) ([]*entity.Playlist, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Search", query)
-	ret0, _ := ret[0].([]*playlist.Playlist)
+	ret0, _ := ret[0].([]*entity.Playlist)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -175,10 +198,10 @@ func (mr *MockRepositoryMockRecorder) Search(query interface{}) *gomock.Call {
 }
 
 // List mocks base method
-func (m *MockRepository) List() ([]*playlist.Playlist, error) {
+func (m *MockRepository) List() ([]*entity.Playlist, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "List")
-	ret0, _ := ret[0].([]*playlist.Playlist)
+	ret0, _ := ret[0].([]*entity.Playlist)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -190,7 +213,7 @@ func (mr *MockRepositoryMockRecorder) List() *gomock.Call {
 }
 
 // Create mocks base method
-func (m *MockRepository) Create(e *playlist.Playlist) (string, error) {
+func (m *MockRepository) Create(e *entity.Playlist) (string, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Create", e)
 	ret0, _ := ret[0].(string)
@@ -205,7 +228,7 @@ func (mr *MockRepositoryMockRecorder) Create(e interface{}) *gomock.Call {
 }
 
 // Update mocks base method
-func (m *MockRepository) Update(e *playlist.Playlist) error {
+func (m *MockRepository) Update(e *entity.Playlist) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Update", e)
 	ret0, _ := ret[0].(error)
@@ -256,10 +279,10 @@ func (m *MockUseCase) EXPECT() *MockUseCaseMockRecorder {
 }
 
 // GetPlaylist mocks base method
-func (m *MockUseCase) GetPlaylist(nome string) (*playlist.Playlist, error) {
+func (m *MockUseCase) GetPlaylist(nome string) (*entity.Playlist, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetPlaylist", nome)
-	ret0, _ := ret[0].(*playlist.Playlist)
+	ret0, _ := ret[0].(*entity.Playlist)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -271,10 +294,10 @@ func (mr *MockUseCaseMockRecorder) GetPlaylist(nome interface{}) *gomock.Call {
 }
 
 // SearchPlaylists mocks base method
-func (m *MockUseCase) SearchPlaylists(query string) ([]*playlist.Playlist, error) {
+func (m *MockUseCase) SearchPlaylists(query string) ([]*entity.Playlist, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SearchPlaylists", query)
-	ret0, _ := ret[0].([]*playlist.Playlist)
+	ret0, _ := ret[0].([]*entity.Playlist)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -286,10 +309,10 @@ func (mr *MockUseCaseMockRecorder) SearchPlaylists(query interface{}) *gomock.Ca
 }
 
 // ListPlaylists mocks base method
-func (m *MockUseCase) ListPlaylists() ([]*playlist.Playlist, error) {
+func (m *MockUseCase) ListPlaylists() ([]*entity.Playlist, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListPlaylists")
-	ret0, _ := ret[0].([]*playlist.Playlist)
+	ret0, _ := ret[0].([]*entity.Playlist)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -301,22 +324,22 @@ func (mr *MockUseCaseMockRecorder) ListPlaylists() *gomock.Call {
 }
 
 // CreatePlaylist mocks base method
-func (m *MockUseCase) CreatePlaylist(nome, status string) (string, error) {
+func (m *MockUseCase) CreatePlaylist(nome, status, datacriacao string) (string, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CreatePlaylist", nome, status)
+	ret := m.ctrl.Call(m, "CreatePlaylist", nome, status, datacriacao)
 	ret0, _ := ret[0].(string)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // CreatePlaylist indicates an expected call of CreatePlaylist
-func (mr *MockUseCaseMockRecorder) CreatePlaylist(nome, status interface{}) *gomock.Call {
+func (mr *MockUseCaseMockRecorder) CreatePlaylist(nome, status, datacriacao interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreatePlaylist", reflect.TypeOf((*MockUseCase)(nil).CreatePlaylist), nome, status)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreatePlaylist", reflect.TypeOf((*MockUseCase)(nil).CreatePlaylist), nome, status, datacriacao)
 }
 
 // UpdatePlaylist mocks base method
-func (m *MockUseCase) UpdatePlaylist(e *playlist.Playlist) error {
+func (m *MockUseCase) UpdatePlaylist(e *entity.Playlist) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdatePlaylist", e)
 	ret0, _ := ret[0].(error)
