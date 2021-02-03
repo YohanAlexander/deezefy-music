@@ -120,7 +120,7 @@ func TestAddGeneroMusica(t *testing.T) {
 
 	t.Run("Musica criado com sucesso", func(t *testing.T) {
 		g, _ := NewGenero("Indie Rock", "rock")
-		m, _ := NewMusica(1, 420, "Creep")
+		m, _ := NewMusica("Creep", 420, 1)
 		err := g.AddMusica(*m)
 		assert.Nil(t, err)
 		assert.Equal(t, 1, len(g.Musicas))
@@ -128,10 +128,10 @@ func TestAddGeneroMusica(t *testing.T) {
 
 	t.Run("Musica já registrado", func(t *testing.T) {
 		g, _ := NewGenero("Indie Rock", "rock")
-		m, _ := NewMusica(1, 420, "Creep")
+		m, _ := NewMusica("Creep", 420, 1)
 		err := g.AddMusica(*m)
 		assert.Nil(t, err)
-		m, _ = NewMusica(1, 420, "Creep")
+		m, _ = NewMusica("Creep", 420, 1)
 		err = g.AddMusica(*m)
 		assert.Equal(t, ErrMusicaRegistered, err)
 	})
@@ -142,14 +142,14 @@ func TestRemoveGeneroMusica(t *testing.T) {
 
 	t.Run("Musica não cadastrado", func(t *testing.T) {
 		g, _ := NewGenero("Indie Rock", "rock")
-		m, _ := NewMusica(1, 420, "Creep")
+		m, _ := NewMusica("Creep", 420, 1)
 		err := g.RemoveMusica(*m)
 		assert.Equal(t, ErrNotFound, err)
 	})
 
 	t.Run("Musica removido com sucesso", func(t *testing.T) {
 		g, _ := NewGenero("Indie Rock", "rock")
-		m, _ := NewMusica(1, 420, "Creep")
+		m, _ := NewMusica("Creep", 420, 1)
 		_ = g.AddMusica(*m)
 		err := g.RemoveMusica(*m)
 		assert.Nil(t, err)
@@ -161,7 +161,7 @@ func TestGetGeneroMusica(t *testing.T) {
 
 	t.Run("Musica cadastrado encontrado", func(t *testing.T) {
 		g, _ := NewGenero("Indie Rock", "rock")
-		m, _ := NewMusica(1, 420, "Creep")
+		m, _ := NewMusica("Creep", 420, 1)
 		_ = g.AddMusica(*m)
 		Musica, err := g.GetMusica(*m)
 		assert.Nil(t, err)
@@ -170,7 +170,7 @@ func TestGetGeneroMusica(t *testing.T) {
 
 	t.Run("Musica não cadastrado", func(t *testing.T) {
 		g, _ := NewGenero("Indie Rock", "rock")
-		m, _ := NewMusica(1, 420, "Creep")
+		m, _ := NewMusica("Creep", 420, 1)
 		_, err := g.GetMusica(*m)
 		assert.Equal(t, ErrNotFound, err)
 	})

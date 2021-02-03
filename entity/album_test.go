@@ -173,7 +173,7 @@ func TestAddAlbumMusica(t *testing.T) {
 
 	t.Run("Musica criado com sucesso", func(t *testing.T) {
 		a, _ := NewAlbum("coldplay@gmail.com", "somepassword", "2018-02-10", "Coldplay", "British Band", "Viva la vida", 2000, 2006, 1)
-		m, _ := NewMusica(1, 420, "Creep")
+		m, _ := NewMusica("Creep", 420, 1)
 		err := a.AddMusica(*m)
 		assert.Nil(t, err)
 		assert.Equal(t, 1, len(a.Musicas))
@@ -181,10 +181,10 @@ func TestAddAlbumMusica(t *testing.T) {
 
 	t.Run("Musica já registrado", func(t *testing.T) {
 		a, _ := NewAlbum("coldplay@gmail.com", "somepassword", "2018-02-10", "Coldplay", "British Band", "Viva la vida", 2000, 2006, 1)
-		m, _ := NewMusica(1, 420, "Creep")
+		m, _ := NewMusica("Creep", 420, 1)
 		err := a.AddMusica(*m)
 		assert.Nil(t, err)
-		m, _ = NewMusica(1, 420, "Creep")
+		m, _ = NewMusica("Creep", 420, 1)
 		err = a.AddMusica(*m)
 		assert.Equal(t, ErrMusicaRegistered, err)
 	})
@@ -195,14 +195,14 @@ func TestRemoveAlbumMusica(t *testing.T) {
 
 	t.Run("Musica não cadastrado", func(t *testing.T) {
 		a, _ := NewAlbum("coldplay@gmail.com", "somepassword", "2018-02-10", "Coldplay", "British Band", "Viva la vida", 2000, 2006, 1)
-		m, _ := NewMusica(1, 420, "Creep")
+		m, _ := NewMusica("Creep", 420, 1)
 		err := a.RemoveMusica(*m)
 		assert.Equal(t, ErrNotFound, err)
 	})
 
 	t.Run("Musica removido com sucesso", func(t *testing.T) {
 		a, _ := NewAlbum("coldplay@gmail.com", "somepassword", "2018-02-10", "Coldplay", "British Band", "Viva la vida", 2000, 2006, 1)
-		m, _ := NewMusica(1, 420, "Creep")
+		m, _ := NewMusica("Creep", 420, 1)
 		_ = a.AddMusica(*m)
 		err := a.RemoveMusica(*m)
 		assert.Nil(t, err)
@@ -214,7 +214,7 @@ func TestGetAlbumMusica(t *testing.T) {
 
 	t.Run("Musica cadastrado encontrado", func(t *testing.T) {
 		a, _ := NewAlbum("coldplay@gmail.com", "somepassword", "2018-02-10", "Coldplay", "British Band", "Viva la vida", 2000, 2006, 1)
-		m, _ := NewMusica(1, 420, "Creep")
+		m, _ := NewMusica("Creep", 420, 1)
 		_ = a.AddMusica(*m)
 		musica, err := a.GetMusica(*m)
 		assert.Nil(t, err)
@@ -223,7 +223,7 @@ func TestGetAlbumMusica(t *testing.T) {
 
 	t.Run("Musica não cadastrado", func(t *testing.T) {
 		a, _ := NewAlbum("coldplay@gmail.com", "somepassword", "2018-02-10", "Coldplay", "British Band", "Viva la vida", 2000, 2006, 1)
-		m, _ := NewMusica(1, 420, "Creep")
+		m, _ := NewMusica("Creep", 420, 1)
 		_, err := a.GetMusica(*m)
 		assert.Equal(t, ErrNotFound, err)
 	})

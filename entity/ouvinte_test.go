@@ -196,7 +196,7 @@ func TestAddCurteMusica(t *testing.T) {
 
 	t.Run("Musica criado com sucesso", func(t *testing.T) {
 		o, _ := NewOuvinte("vancejoy@gmail.com", "somepassword", "2018-02-10", "Vance", "Joy")
-		m, _ := NewMusica(1, 420, "Creep")
+		m, _ := NewMusica("Creep", 420, 1)
 		err := o.AddMusica(*m)
 		assert.Nil(t, err)
 		assert.Equal(t, 1, len(o.Curtidas))
@@ -204,10 +204,10 @@ func TestAddCurteMusica(t *testing.T) {
 
 	t.Run("Musica já registrado", func(t *testing.T) {
 		o, _ := NewOuvinte("vancejoy@gmail.com", "somepassword", "2018-02-10", "Vance", "Joy")
-		m, _ := NewMusica(1, 420, "Creep")
+		m, _ := NewMusica("Creep", 420, 1)
 		err := o.AddMusica(*m)
 		assert.Nil(t, err)
-		m, _ = NewMusica(1, 420, "Creep")
+		m, _ = NewMusica("Creep", 420, 1)
 		err = o.AddMusica(*m)
 		assert.Equal(t, ErrMusicaRegistered, err)
 	})
@@ -218,14 +218,14 @@ func TestRemoveCurteMusica(t *testing.T) {
 
 	t.Run("Musica não cadastrado", func(t *testing.T) {
 		o, _ := NewOuvinte("vancejoy@gmail.com", "somepassword", "2018-02-10", "Vance", "Joy")
-		m, _ := NewMusica(1, 420, "Creep")
+		m, _ := NewMusica("Creep", 420, 1)
 		err := o.RemoveMusica(*m)
 		assert.Equal(t, ErrNotFound, err)
 	})
 
 	t.Run("Musica removido com sucesso", func(t *testing.T) {
 		o, _ := NewOuvinte("vancejoy@gmail.com", "somepassword", "2018-02-10", "Vance", "Joy")
-		m, _ := NewMusica(1, 420, "Creep")
+		m, _ := NewMusica("Creep", 420, 1)
 		_ = o.AddMusica(*m)
 		err := o.RemoveMusica(*m)
 		assert.Nil(t, err)
@@ -237,7 +237,7 @@ func TestGetCurteMusica(t *testing.T) {
 
 	t.Run("Musica cadastrado encontrado", func(t *testing.T) {
 		o, _ := NewOuvinte("vancejoy@gmail.com", "somepassword", "2018-02-10", "Vance", "Joy")
-		m, _ := NewMusica(1, 420, "Creep")
+		m, _ := NewMusica("Creep", 420, 1)
 		_ = o.AddMusica(*m)
 		musica, err := o.GetMusica(*m)
 		assert.Nil(t, err)
@@ -246,7 +246,7 @@ func TestGetCurteMusica(t *testing.T) {
 
 	t.Run("Musica não cadastrado", func(t *testing.T) {
 		o, _ := NewOuvinte("vancejoy@gmail.com", "somepassword", "2018-02-10", "Vance", "Joy")
-		m, _ := NewMusica(1, 420, "Creep")
+		m, _ := NewMusica("Creep", 420, 1)
 		_, err := o.GetMusica(*m)
 		assert.Equal(t, ErrNotFound, err)
 	})
