@@ -6,21 +6,25 @@ import (
 
 // Artista entidade Artista
 type Artista struct {
-	Usuario       string `validate:"required,email"`
-	NomeArtistico string `validate:"required,min=2"`
-	Biografia     string `validate:"gte=10"`
-	AnoFormacao   int    `validate:"gte=1900"`
+	Usuario       Usuario `validate:"required"`
+	NomeArtistico string  `validate:"required,min=1"`
+	Biografia     string  `validate:"gte=1"`
+	AnoFormacao   int     `validate:"gte=1000"`
 }
 
 // NewArtista cria um novo Artista
-func NewArtista(usuario, nomeartistico, biografia string, anoformacao int) (*Artista, error) {
+func NewArtista(email, password, birthday, nomeartistico, biografia string, anoformacao int) (*Artista, error) {
+	u, err := NewUsuario(email, password, birthday)
+	if err != nil {
+		return nil, err
+	}
 	a := &Artista{
-		Usuario:       usuario,
+		Usuario:       *u,
 		NomeArtistico: nomeartistico,
 		Biografia:     biografia,
 		AnoFormacao:   anoformacao,
 	}
-	err := a.Validate()
+	err = a.Validate()
 	if err != nil {
 		return nil, err
 	}
