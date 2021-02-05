@@ -10,6 +10,14 @@ type Evento struct {
 	Data    string         `json:"data"`
 }
 
+// AppendEvento adiciona presenter na lista
+func AppendEvento(evento entity.Evento, eventos []*Evento) []*Evento {
+	e := &Evento{}
+	e.GetEvento(evento)
+	eventos = append(eventos, e)
+	return eventos
+}
+
 // GetEvento seta os valores a partir da entidade
 func (e *Evento) GetEvento(evento entity.Evento) {
 	e.Usuario = evento.Usuario

@@ -11,6 +11,14 @@ type Genero struct {
 	Perfis   []entity.Perfil  `json:"perfis"`
 }
 
+// AppendGenero adiciona presenter na lista
+func AppendGenero(genero entity.Genero, generos []*Genero) []*Genero {
+	g := &Genero{}
+	g.GetGenero(genero)
+	generos = append(generos, g)
+	return generos
+}
+
 // GetGenero seta os valores a partir da entidade
 func (g *Genero) GetGenero(genero entity.Genero) {
 	g.Nome = genero.Nome

@@ -14,6 +14,14 @@ type Musica struct {
 	Generos   []entity.Genero   `json:"generos"`
 }
 
+// AppendMusica adiciona presenter na lista
+func AppendMusica(musica entity.Musica, musicas []*Musica) []*Musica {
+	m := &Musica{}
+	m.GetMusica(musica)
+	musicas = append(musicas, m)
+	return musicas
+}
+
 // GetMusica seta os valores a partir da entidade
 func (m *Musica) GetMusica(musica entity.Musica) {
 	m.ID = musica.ID

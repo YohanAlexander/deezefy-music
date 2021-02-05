@@ -20,6 +20,14 @@ type Artista struct {
 	Idade         int              `json:"idade"`
 }
 
+// AppendArtista adiciona presenter na lista
+func AppendArtista(artista entity.Artista, artistas []*Artista) []*Artista {
+	a := &Artista{}
+	a.GetArtista(artista)
+	artistas = append(artistas, a)
+	return artistas
+}
+
 // GetArtista seta os valores a partir da entidade
 func (a *Artista) GetArtista(artista entity.Artista) {
 	a.Usuario = artista.Usuario
