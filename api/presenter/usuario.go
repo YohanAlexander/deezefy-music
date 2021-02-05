@@ -2,16 +2,27 @@ package presenter
 
 import (
 	"time"
+
+	"github.com/yohanalexander/deezefy-music/entity"
 )
 
 // Usuario entidade usuario
 type Usuario struct {
-	Email       string     `json:"email"`
-	Password    string     `json:"-"`
-	Birthday    string     `json:"datanascimento"`
-	Organizador []Evento   `json:"eventos"`
-	Cria        []Playlist `json:"playlists"`
-	Idade       int        `json:"idade"`
+	Email       string            `json:"email"`
+	Password    string            `json:"-"`
+	Birthday    string            `json:"datanascimento"`
+	Organizador []entity.Evento   `json:"eventos"`
+	Cria        []entity.Playlist `json:"playlists"`
+	Idade       int               `json:"idade"`
+}
+
+// GetUsuario seta os valores a partir da entidade
+func (u *Usuario) GetUsuario(usuario entity.Usuario) {
+	u.Email = usuario.Email
+	u.Password = usuario.Password
+	u.Birthday = usuario.Birthday
+	u.Organizador = usuario.Organizador
+	u.Cria = usuario.Cria
 }
 
 // GetIdade calcula a idade do usuario
