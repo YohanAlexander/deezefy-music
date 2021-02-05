@@ -23,15 +23,16 @@ func (u *Usuario) GetUsuario(usuario entity.Usuario) {
 	u.Birthday = usuario.Birthday
 	u.Organizador = usuario.Organizador
 	u.Cria = usuario.Cria
+	u.Idade = u.GetIdade(time.Now())
 }
 
 // GetIdade calcula a idade do usuario
-func (u *Usuario) GetIdade(now time.Time) {
+func (u *Usuario) GetIdade(now time.Time) int {
 
 	birthDate, err := parseBirthday(u.Birthday)
 
 	if err != nil {
-		u.Idade = 0
+		return 1
 	}
 
 	age := now.Year() - birthDate.Year()
@@ -41,7 +42,7 @@ func (u *Usuario) GetIdade(now time.Time) {
 		age--
 	}
 
-	u.Idade = age
+	return age
 
 }
 
