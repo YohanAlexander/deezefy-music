@@ -29,15 +29,16 @@ func (o *Ouvinte) GetOuvinte(ouvinte entity.Ouvinte) {
 	o.Curtidas = ouvinte.Curtidas
 	o.Playlists = ouvinte.Playlists
 	o.Albums = ouvinte.Albums
+	o.Idade = o.GetIdade(time.Now())
 }
 
 // GetIdade calcula a idade do usuario
-func (o *Ouvinte) GetIdade(now time.Time) {
+func (o *Ouvinte) GetIdade(now time.Time) int {
 
 	birthDate, err := parseBirthday(o.Usuario.Birthday)
 
 	if err != nil {
-		o.Idade = 0
+		return 1
 	}
 
 	age := now.Year() - birthDate.Year()
@@ -47,6 +48,6 @@ func (o *Ouvinte) GetIdade(now time.Time) {
 		age--
 	}
 
-	o.Idade = age
+	return age
 
 }
