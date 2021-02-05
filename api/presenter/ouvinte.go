@@ -19,6 +19,14 @@ type Ouvinte struct {
 	Idade        int               `json:"idade"`
 }
 
+// AppendOuvinte adiciona presenter na lista
+func AppendOuvinte(ouvinte entity.Ouvinte, ouvintes []*Ouvinte) []*Ouvinte {
+	o := &Ouvinte{}
+	o.GetOuvinte(ouvinte)
+	ouvintes = append(ouvintes, o)
+	return ouvintes
+}
+
 // GetOuvinte seta os valores a partir da entidade
 func (o *Ouvinte) GetOuvinte(ouvinte entity.Ouvinte) {
 	o.Usuario = ouvinte.Usuario

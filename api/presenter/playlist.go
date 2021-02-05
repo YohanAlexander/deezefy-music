@@ -12,6 +12,14 @@ type Playlist struct {
 	NumeroOuvintes int              `json:"numeroouvintes"`
 }
 
+// AppendPlaylist adiciona presenter na lista
+func AppendPlaylist(playlist entity.Playlist, playlists []*Playlist) []*Playlist {
+	p := &Playlist{}
+	p.GetPlaylist(playlist)
+	playlists = append(playlists, p)
+	return playlists
+}
+
 // GetPlaylist seta os valores a partir da entidade
 func (p *Playlist) GetPlaylist(playlist entity.Playlist) {
 	p.Nome = playlist.Nome
