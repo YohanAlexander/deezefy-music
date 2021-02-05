@@ -1,6 +1,8 @@
 package presenter
 
-import "github.com/yohanalexander/deezefy-music/entity"
+import (
+	"github.com/yohanalexander/deezefy-music/entity"
+)
 
 // Album entidade Album
 type Album struct {
@@ -10,6 +12,14 @@ type Album struct {
 	AnoLancamento int              `json:"anolancamento"`
 	Ouvintes      []entity.Ouvinte `json:"ouvintes"`
 	Musicas       []entity.Musica  `json:"musicas"`
+}
+
+// AppendAlbum adiciona presenter na lista
+func AppendAlbum(album entity.Album, albums []*Album) []*Album {
+	a := &Album{}
+	a.GetAlbum(album)
+	albums = append(albums, a)
+	return albums
 }
 
 // GetAlbum seta os valores a partir da entidade
