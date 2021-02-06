@@ -1,4 +1,4 @@
-package perfilavoritarartista
+package perfilfavoritarartista
 
 import (
 	"testing"
