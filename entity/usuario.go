@@ -72,7 +72,7 @@ func (u *Usuario) AddEvento(evento Evento) error {
 // RemoveEvento remove um Evento
 func (u *Usuario) RemoveEvento(evento Evento) error {
 	for i, j := range u.Organizador {
-		if j.Usuario.Email == evento.Usuario.Email {
+		if j.ID == evento.ID {
 			u.Organizador = append(u.Organizador[:i], u.Organizador[i+1:]...)
 			return nil
 		}
@@ -83,7 +83,7 @@ func (u *Usuario) RemoveEvento(evento Evento) error {
 // GetEvento get a Evento
 func (u *Usuario) GetEvento(evento Evento) (Evento, error) {
 	for _, v := range u.Organizador {
-		if v.Usuario.Email == evento.Usuario.Email {
+		if v.ID == evento.ID {
 			return evento, nil
 		}
 	}
