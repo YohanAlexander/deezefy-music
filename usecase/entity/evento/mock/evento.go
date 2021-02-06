@@ -324,18 +324,18 @@ func (mr *MockUseCaseMockRecorder) ListEventos() *gomock.Call {
 }
 
 // CreateEvento mocks base method
-func (m *MockUseCase) CreateEvento(email, password, birthday, nome, data string, id int) (int, error) {
+func (m *MockUseCase) CreateEvento(email, password, birthday, nome, data, cidade, pais string, idlocal, idevento int) (int, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CreateEvento", email, password, birthday, nome, data, id)
+	ret := m.ctrl.Call(m, "CreateEvento", email, password, birthday, nome, data, cidade, pais, idlocal, idevento)
 	ret0, _ := ret[0].(int)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // CreateEvento indicates an expected call of CreateEvento
-func (mr *MockUseCaseMockRecorder) CreateEvento(email, password, birthday, nome, data, id interface{}) *gomock.Call {
+func (mr *MockUseCaseMockRecorder) CreateEvento(email, password, birthday, nome, data, cidade, pais, idlocal, idevento interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateEvento", reflect.TypeOf((*MockUseCase)(nil).CreateEvento), email, password, birthday, nome, data, id)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateEvento", reflect.TypeOf((*MockUseCase)(nil).CreateEvento), email, password, birthday, nome, data, cidade, pais, idlocal, idevento)
 }
 
 // UpdateEvento mocks base method

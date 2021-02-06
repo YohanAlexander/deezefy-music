@@ -87,7 +87,7 @@ func TestAddEvento(t *testing.T) {
 
 	t.Run("Evento criado com sucesso", func(t *testing.T) {
 		u, _ := NewUsuario("vancejoy@gmail.com", "somepassword", "2018-02-10")
-		e, _ := NewEvento("radiohead@spotify.com", "somepassword", "2018-02-10", "Lollapalooza", "2006-01-02", 1)
+		e, _ := NewEvento("radiohead@spotify.com", "somepassword", "2018-02-10", "Lollapalooza", "2006-01-02", "São Paulo", "Brazil", 1, 1)
 		err := u.AddEvento(*e)
 		assert.Nil(t, err)
 		assert.Equal(t, 1, len(u.Organizador))
@@ -95,10 +95,10 @@ func TestAddEvento(t *testing.T) {
 
 	t.Run("Evento já registrado", func(t *testing.T) {
 		u, _ := NewUsuario("vancejoy@gmail.com", "somepassword", "2018-02-10")
-		e, _ := NewEvento("radiohead@spotify.com", "somepassword", "2018-02-10", "Lollapalooza", "2006-01-02", 1)
+		e, _ := NewEvento("radiohead@spotify.com", "somepassword", "2018-02-10", "Lollapalooza", "2006-01-02", "São Paulo", "Brazil", 1, 1)
 		err := u.AddEvento(*e)
 		assert.Nil(t, err)
-		e, _ = NewEvento("radiohead@spotify.com", "somepassword", "2018-02-10", "Lollapalooza", "2006-01-02", 1)
+		e, _ = NewEvento("radiohead@spotify.com", "somepassword", "2018-02-10", "Lollapalooza", "2006-01-02", "São Paulo", "Brazil", 1, 1)
 		err = u.AddEvento(*e)
 		assert.Equal(t, ErrEventoRegistered, err)
 	})
@@ -109,14 +109,14 @@ func TestRemoveEvento(t *testing.T) {
 
 	t.Run("Evento não cadastrado", func(t *testing.T) {
 		u, _ := NewUsuario("vancejoy@gmail.com", "somepassword", "2018-02-10")
-		e, _ := NewEvento("radiohead@spotify.com", "somepassword", "2018-02-10", "Lollapalooza", "2006-01-02", 1)
+		e, _ := NewEvento("radiohead@spotify.com", "somepassword", "2018-02-10", "Lollapalooza", "2006-01-02", "São Paulo", "Brazil", 1, 1)
 		err := u.RemoveEvento(*e)
 		assert.Equal(t, ErrNotFound, err)
 	})
 
 	t.Run("Evento removido com sucesso", func(t *testing.T) {
 		a, _ := NewUsuario("vancejoy@gmail.com", "somepassword", "2018-02-10")
-		e, _ := NewEvento("radiohead@spotify.com", "somepassword", "2018-02-10", "Lollapalooza", "2006-01-02", 1)
+		e, _ := NewEvento("radiohead@spotify.com", "somepassword", "2018-02-10", "Lollapalooza", "2006-01-02", "São Paulo", "Brazil", 1, 1)
 		_ = a.AddEvento(*e)
 		err := a.RemoveEvento(*e)
 		assert.Nil(t, err)
@@ -128,7 +128,7 @@ func TestGetEvento(t *testing.T) {
 
 	t.Run("Evento cadastrado encontrado", func(t *testing.T) {
 		u, _ := NewUsuario("vancejoy@gmail.com", "somepassword", "2018-02-10")
-		e, _ := NewEvento("radiohead@spotify.com", "somepassword", "2018-02-10", "Lollapalooza", "2006-01-02", 1)
+		e, _ := NewEvento("radiohead@spotify.com", "somepassword", "2018-02-10", "Lollapalooza", "2006-01-02", "São Paulo", "Brazil", 1, 1)
 		_ = u.AddEvento(*e)
 		evento, err := u.GetEvento(*e)
 		assert.Nil(t, err)
@@ -137,7 +137,7 @@ func TestGetEvento(t *testing.T) {
 
 	t.Run("Evento não cadastrado", func(t *testing.T) {
 		u, _ := NewUsuario("vancejoy@gmail.com", "somepassword", "2018-02-10")
-		e, _ := NewEvento("radiohead@spotify.com", "somepassword", "2018-02-10", "Lollapalooza", "2006-01-02", 1)
+		e, _ := NewEvento("radiohead@spotify.com", "somepassword", "2018-02-10", "Lollapalooza", "2006-01-02", "São Paulo", "Brazil", 1, 1)
 		_, err := u.GetEvento(*e)
 		assert.Equal(t, ErrNotFound, err)
 	})

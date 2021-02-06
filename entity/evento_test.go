@@ -9,7 +9,7 @@ import (
 func TestNewEvento(t *testing.T) {
 
 	t.Run("Evento criado com sucesso", func(t *testing.T) {
-		e, err := NewEvento("radiohead@spotify.com", "somepassword", "2018-02-10", "Lollapalooza", "2006-01-02", 1)
+		e, err := NewEvento("radiohead@spotify.com", "somepassword", "2018-02-10", "Lollapalooza", "2006-01-02", "São Paulo", "Brazil", 1, 1)
 		assert.Nil(t, err)
 		assert.Equal(t, e.Nome, "Lollapalooza")
 	})
@@ -24,9 +24,16 @@ func TestEvento_Validate(t *testing.T) {
 		birthday string
 	}
 
+	type local struct {
+		cidade string
+		pais   string
+		id     int
+	}
+
 	type test struct {
 		name    string
 		usuario user
+		local   local
 		id      int
 		nome    string
 		data    string
@@ -41,6 +48,11 @@ func TestEvento_Validate(t *testing.T) {
 				password: "new_password",
 				birthday: "2006-01-02",
 			},
+			local: local{
+				cidade: "São Paulo",
+				pais:   "Brazil",
+				id:     1,
+			},
 			id:   1,
 			nome: "Lollapalooza",
 			data: "2006-01-02",
@@ -52,6 +64,11 @@ func TestEvento_Validate(t *testing.T) {
 				email:    "vancejoy@gmail.com",
 				password: "new_password",
 				birthday: "2006-01-02",
+			},
+			local: local{
+				cidade: "São Paulo",
+				pais:   "Brazil",
+				id:     1,
 			},
 			id:   1,
 			nome: "",
@@ -65,6 +82,11 @@ func TestEvento_Validate(t *testing.T) {
 				password: "new_password",
 				birthday: "2006-01-02",
 			},
+			local: local{
+				cidade: "São Paulo",
+				pais:   "Brazil",
+				id:     1,
+			},
 			id:   0,
 			nome: "Lollapalooza",
 			data: "2006-01-02",
@@ -77,6 +99,11 @@ func TestEvento_Validate(t *testing.T) {
 				password: "new_password",
 				birthday: "2006-01-02",
 			},
+			local: local{
+				cidade: "São Paulo",
+				pais:   "Brazil",
+				id:     1,
+			},
 			id:   1,
 			nome: "Lollapalooza",
 			data: "2006/01/02",
@@ -86,7 +113,7 @@ func TestEvento_Validate(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			_, err := NewEvento(tc.usuario.email, tc.usuario.password, tc.usuario.birthday, tc.nome, tc.data, tc.id)
+			_, err := NewEvento(tc.usuario.email, tc.usuario.password, tc.usuario.birthday, tc.nome, tc.data, tc.local.cidade, tc.local.pais, tc.local.id, tc.id)
 			assert.Equal(t, err, tc.want)
 		})
 	}
