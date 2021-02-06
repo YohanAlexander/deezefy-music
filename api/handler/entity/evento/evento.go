@@ -82,7 +82,7 @@ func createEvento(service evento.UseCase) http.Handler {
 			return
 		}
 
-		music, err := service.CreateEvento(input.Usuario.Email, input.Usuario.Password, input.Usuario.Birthday, input.Nome, input.Data, input.ID)
+		music, err := service.CreateEvento(input.Usuario.Email, input.Usuario.Password, input.Usuario.Birthday, input.Nome, input.Data, input.Local.Cidade, input.Local.Pais, input.Local.ID, input.ID)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			json.NewEncoder(w).Encode(presenter.Erro{
