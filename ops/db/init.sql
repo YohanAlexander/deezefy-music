@@ -31,14 +31,15 @@ CREATE TABLE IF NOT EXISTS deezefy.Usuario (
   email VARCHAR(45) NOT NULL,
   senha VARCHAR(45) NOT NULL,
   data_nascimento DATE NULL,
-  PRIMARY KEY (email)
+  PRIMARY KEY (email),
+  UNIQUE (email)
 );
 -- -----------------------------------------------------
 -- Table deezefy.Evento
 -- -----------------------------------------------------
 -- \! echo "Table deezefy.Evento";
 CREATE TABLE IF NOT EXISTS deezefy.Evento (
-  id INT NOT NULL,
+  id SERIAL NOT NULL,
   nome VARCHAR(45) NOT NULL,
   fk_usuario VARCHAR(45) NOT NULL,
   PRIMARY KEY (id, fk_usuario),
@@ -72,7 +73,7 @@ CREATE TABLE IF NOT EXISTS deezefy.Artista (
 -- -----------------------------------------------------
 -- \! echo "Table deezefy.Musica";
 CREATE TABLE IF NOT EXISTS deezefy.Musica (
-  id INT NOT NULL,
+  id SERIAL NOT NULL,
   nome VARCHAR(45) NOT NULL,
   duracao INT NOT NULL,
   PRIMARY KEY (id)
@@ -82,7 +83,7 @@ CREATE TABLE IF NOT EXISTS deezefy.Musica (
 -- -----------------------------------------------------
 -- \! echo "Table deezefy.Perfil";
 CREATE TABLE IF NOT EXISTS deezefy.Perfil (
-  id INT NOT NULL,
+  id SERIAL NOT NULL,
   informacoes_relevantes VARCHAR(45) NOT NULL,
   fk_ouvinte VARCHAR(45) NOT NULL,
   PRIMARY KEY (id, fk_ouvinte),
@@ -93,7 +94,7 @@ CREATE TABLE IF NOT EXISTS deezefy.Perfil (
 -- -----------------------------------------------------
 -- \! echo "Table deezefy.Album";
 CREATE TABLE IF NOT EXISTS deezefy.Album (
-  id INT NOT NULL,
+  id SERIAL NOT NULL,
   titulo VARCHAR(45) NOT NULL,
   ano_lancamento INT NULL,
   fk_artista VARCHAR(45) NULL,
@@ -114,7 +115,7 @@ CREATE TABLE IF NOT EXISTS deezefy.Playlist (
 -- -----------------------------------------------------
 -- \! echo "Table deezefy.Local";
 CREATE TABLE IF NOT EXISTS deezefy.Local (
-  id INT NOT NULL,
+  id SERIAL NOT NULL,
   cidade VARCHAR(45) NOT NULL,
   pais VARCHAR(45) NOT NULL,
   PRIMARY KEY (id)
