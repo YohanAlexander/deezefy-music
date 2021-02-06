@@ -1,4 +1,4 @@
-package perfilavoritarartista
+package perfilfavoritarartista
 
 import (
 	"github.com/yohanalexander/deezefy-music/entity"
