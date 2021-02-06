@@ -84,7 +84,7 @@ func Test_createEvento(t *testing.T) {
 	assert.Equal(t, "/v1/evento", path)
 
 	m.EXPECT().
-		CreateEvento(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).
+		CreateEvento(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).
 		Return(1, nil)
 	h := createEvento(m)
 	s := &entity.Evento{

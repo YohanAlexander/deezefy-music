@@ -27,7 +27,7 @@ type UseCase interface {
 	GetEvento(id int) (*entity.Evento, error)
 	SearchEventos(query string) ([]*entity.Evento, error)
 	ListEventos() ([]*entity.Evento, error)
-	CreateEvento(email, password, birthday, nome, data string, id int) (int, error)
+	CreateEvento(email, password, birthday, nome, data, cidade, pais string, idlocal, idevento int) (int, error)
 	UpdateEvento(e *entity.Evento) error
 	DeleteEvento(id int) error
 }
