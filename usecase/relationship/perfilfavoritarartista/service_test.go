@@ -24,7 +24,11 @@ func Test_Favoritar(t *testing.T) {
 			},
 		}
 		p := &entity.Perfil{
-			ID: 1,
+			Ouvinte: entity.Ouvinte{
+				Usuario: entity.Usuario{
+					Email: "ouvinte@email.com",
+				},
+			},
 		}
 		artistaMock.EXPECT().GetArtista(a.Usuario.Email).Return(nil, entity.ErrNotFound)
 		err := service.Favoritar(a, p)
@@ -37,10 +41,14 @@ func Test_Favoritar(t *testing.T) {
 			},
 		}
 		p := &entity.Perfil{
-			ID: 1,
+			Ouvinte: entity.Ouvinte{
+				Usuario: entity.Usuario{
+					Email: "ouvinte@email.com",
+				},
+			},
 		}
 		artistaMock.EXPECT().GetArtista(a.Usuario.Email).Return(a, nil)
-		perfilMock.EXPECT().GetPerfil(p.ID).Return(nil, entity.ErrNotFound)
+		perfilMock.EXPECT().GetPerfil(p.Ouvinte.Usuario.Email).Return(nil, entity.ErrNotFound)
 		err := service.Favoritar(a, p)
 		assert.Equal(t, entity.ErrNotFound, err)
 	})
@@ -51,11 +59,15 @@ func Test_Favoritar(t *testing.T) {
 			},
 		}
 		p := &entity.Perfil{
-			ID: 1,
+			Ouvinte: entity.Ouvinte{
+				Usuario: entity.Usuario{
+					Email: "ouvinte@email.com",
+				},
+			},
 		}
 		a.AddPerfil(*p)
 		artistaMock.EXPECT().GetArtista(a.Usuario.Email).Return(a, nil)
-		perfilMock.EXPECT().GetPerfil(p.ID).Return(p, nil)
+		perfilMock.EXPECT().GetPerfil(p.Ouvinte.Usuario.Email).Return(p, nil)
 		err := service.Favoritar(a, p)
 		assert.Equal(t, entity.ErrPerfilRegistered, err)
 	})
@@ -66,10 +78,14 @@ func Test_Favoritar(t *testing.T) {
 			},
 		}
 		p := &entity.Perfil{
-			ID: 1,
+			Ouvinte: entity.Ouvinte{
+				Usuario: entity.Usuario{
+					Email: "ouvinte@email.com",
+				},
+			},
 		}
 		artistaMock.EXPECT().GetArtista(a.Usuario.Email).Return(a, nil)
-		perfilMock.EXPECT().GetPerfil(p.ID).Return(p, nil)
+		perfilMock.EXPECT().GetPerfil(p.Ouvinte.Usuario.Email).Return(p, nil)
 		artistaMock.EXPECT().UpdateArtista(a).Return(nil)
 		perfilMock.EXPECT().UpdatePerfil(p).Return(nil)
 		err := service.Favoritar(a, p)
@@ -90,7 +106,11 @@ func Test_Desfavoritar(t *testing.T) {
 			},
 		}
 		p := &entity.Perfil{
-			ID: 1,
+			Ouvinte: entity.Ouvinte{
+				Usuario: entity.Usuario{
+					Email: "ouvinte@email.com",
+				},
+			},
 		}
 		artistaMock.EXPECT().GetArtista(a.Usuario.Email).Return(nil, entity.ErrNotFound)
 		err := service.Desfavoritar(a, p)
@@ -103,10 +123,14 @@ func Test_Desfavoritar(t *testing.T) {
 			},
 		}
 		p := &entity.Perfil{
-			ID: 1,
+			Ouvinte: entity.Ouvinte{
+				Usuario: entity.Usuario{
+					Email: "ouvinte@email.com",
+				},
+			},
 		}
 		artistaMock.EXPECT().GetArtista(a.Usuario.Email).Return(a, nil)
-		perfilMock.EXPECT().GetPerfil(p.ID).Return(nil, entity.ErrNotFound)
+		perfilMock.EXPECT().GetPerfil(p.Ouvinte.Usuario.Email).Return(nil, entity.ErrNotFound)
 		err := service.Desfavoritar(a, p)
 		assert.Equal(t, entity.ErrNotFound, err)
 	})
@@ -117,10 +141,14 @@ func Test_Desfavoritar(t *testing.T) {
 			},
 		}
 		p := &entity.Perfil{
-			ID: 1,
+			Ouvinte: entity.Ouvinte{
+				Usuario: entity.Usuario{
+					Email: "ouvinte@email.com",
+				},
+			},
 		}
 		artistaMock.EXPECT().GetArtista(a.Usuario.Email).Return(a, nil)
-		perfilMock.EXPECT().GetPerfil(p.ID).Return(p, nil)
+		perfilMock.EXPECT().GetPerfil(p.Ouvinte.Usuario.Email).Return(p, nil)
 		err := service.Desfavoritar(a, p)
 		assert.Equal(t, entity.ErrNotFound, err)
 	})
@@ -131,11 +159,15 @@ func Test_Desfavoritar(t *testing.T) {
 			},
 		}
 		p := &entity.Perfil{
-			ID: 1,
+			Ouvinte: entity.Ouvinte{
+				Usuario: entity.Usuario{
+					Email: "ouvinte@email.com",
+				},
+			},
 		}
 		a.AddPerfil(*p)
 		p.AddArtista(*a)
-		perfilMock.EXPECT().GetPerfil(p.ID).Return(p, nil)
+		perfilMock.EXPECT().GetPerfil(p.Ouvinte.Usuario.Email).Return(p, nil)
 		artistaMock.EXPECT().GetArtista(a.Usuario.Email).Return(a, nil)
 		artistaMock.EXPECT().UpdateArtista(a).Return(nil)
 		perfilMock.EXPECT().UpdatePerfil(p).Return(nil)

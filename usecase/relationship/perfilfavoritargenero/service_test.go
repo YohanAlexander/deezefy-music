@@ -22,7 +22,11 @@ func Test_Favoritar(t *testing.T) {
 			Nome: "Genero",
 		}
 		p := &entity.Perfil{
-			ID: 1,
+			Ouvinte: entity.Ouvinte{
+				Usuario: entity.Usuario{
+					Email: "ouvinte@email.com",
+				},
+			},
 		}
 		generoMock.EXPECT().GetGenero(g.Nome).Return(nil, entity.ErrNotFound)
 		err := service.Favoritar(g, p)
@@ -33,10 +37,14 @@ func Test_Favoritar(t *testing.T) {
 			Nome: "Genero",
 		}
 		p := &entity.Perfil{
-			ID: 1,
+			Ouvinte: entity.Ouvinte{
+				Usuario: entity.Usuario{
+					Email: "ouvinte@email.com",
+				},
+			},
 		}
 		generoMock.EXPECT().GetGenero(g.Nome).Return(g, nil)
-		perfilMock.EXPECT().GetPerfil(p.ID).Return(nil, entity.ErrNotFound)
+		perfilMock.EXPECT().GetPerfil(p.Ouvinte.Usuario.Email).Return(nil, entity.ErrNotFound)
 		err := service.Favoritar(g, p)
 		assert.Equal(t, entity.ErrNotFound, err)
 	})
@@ -45,11 +53,15 @@ func Test_Favoritar(t *testing.T) {
 			Nome: "Genero",
 		}
 		p := &entity.Perfil{
-			ID: 1,
+			Ouvinte: entity.Ouvinte{
+				Usuario: entity.Usuario{
+					Email: "ouvinte@email.com",
+				},
+			},
 		}
 		g.AddPerfil(*p)
 		generoMock.EXPECT().GetGenero(g.Nome).Return(g, nil)
-		perfilMock.EXPECT().GetPerfil(p.ID).Return(p, nil)
+		perfilMock.EXPECT().GetPerfil(p.Ouvinte.Usuario.Email).Return(p, nil)
 		err := service.Favoritar(g, p)
 		assert.Equal(t, entity.ErrPerfilRegistered, err)
 	})
@@ -58,10 +70,14 @@ func Test_Favoritar(t *testing.T) {
 			Nome: "Genero",
 		}
 		p := &entity.Perfil{
-			ID: 1,
+			Ouvinte: entity.Ouvinte{
+				Usuario: entity.Usuario{
+					Email: "ouvinte@email.com",
+				},
+			},
 		}
 		generoMock.EXPECT().GetGenero(g.Nome).Return(g, nil)
-		perfilMock.EXPECT().GetPerfil(p.ID).Return(p, nil)
+		perfilMock.EXPECT().GetPerfil(p.Ouvinte.Usuario.Email).Return(p, nil)
 		generoMock.EXPECT().UpdateGenero(g).Return(nil)
 		perfilMock.EXPECT().UpdatePerfil(p).Return(nil)
 		err := service.Favoritar(g, p)
@@ -80,7 +96,11 @@ func Test_Desfavoritar(t *testing.T) {
 			Nome: "Genero",
 		}
 		p := &entity.Perfil{
-			ID: 1,
+			Ouvinte: entity.Ouvinte{
+				Usuario: entity.Usuario{
+					Email: "ouvinte@email.com",
+				},
+			},
 		}
 		generoMock.EXPECT().GetGenero(g.Nome).Return(nil, entity.ErrNotFound)
 		err := service.Desfavoritar(g, p)
@@ -91,10 +111,14 @@ func Test_Desfavoritar(t *testing.T) {
 			Nome: "Genero",
 		}
 		p := &entity.Perfil{
-			ID: 1,
+			Ouvinte: entity.Ouvinte{
+				Usuario: entity.Usuario{
+					Email: "ouvinte@email.com",
+				},
+			},
 		}
 		generoMock.EXPECT().GetGenero(g.Nome).Return(g, nil)
-		perfilMock.EXPECT().GetPerfil(p.ID).Return(nil, entity.ErrNotFound)
+		perfilMock.EXPECT().GetPerfil(p.Ouvinte.Usuario.Email).Return(nil, entity.ErrNotFound)
 		err := service.Desfavoritar(g, p)
 		assert.Equal(t, entity.ErrNotFound, err)
 	})
@@ -103,10 +127,14 @@ func Test_Desfavoritar(t *testing.T) {
 			Nome: "Genero",
 		}
 		p := &entity.Perfil{
-			ID: 1,
+			Ouvinte: entity.Ouvinte{
+				Usuario: entity.Usuario{
+					Email: "ouvinte@email.com",
+				},
+			},
 		}
 		generoMock.EXPECT().GetGenero(g.Nome).Return(g, nil)
-		perfilMock.EXPECT().GetPerfil(p.ID).Return(p, nil)
+		perfilMock.EXPECT().GetPerfil(p.Ouvinte.Usuario.Email).Return(p, nil)
 		err := service.Desfavoritar(g, p)
 		assert.Equal(t, entity.ErrNotFound, err)
 	})
@@ -115,11 +143,15 @@ func Test_Desfavoritar(t *testing.T) {
 			Nome: "Genero",
 		}
 		p := &entity.Perfil{
-			ID: 1,
+			Ouvinte: entity.Ouvinte{
+				Usuario: entity.Usuario{
+					Email: "ouvinte@email.com",
+				},
+			},
 		}
 		g.AddPerfil(*p)
 		p.AddGenero(*g)
-		perfilMock.EXPECT().GetPerfil(p.ID).Return(p, nil)
+		perfilMock.EXPECT().GetPerfil(p.Ouvinte.Usuario.Email).Return(p, nil)
 		generoMock.EXPECT().GetGenero(g.Nome).Return(g, nil)
 		generoMock.EXPECT().UpdateGenero(g).Return(nil)
 		perfilMock.EXPECT().UpdatePerfil(p).Return(nil)
