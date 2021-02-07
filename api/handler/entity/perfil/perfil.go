@@ -3,6 +3,7 @@ package perfil
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 
 	"github.com/yohanalexander/deezefy-music/usecase/entity/perfil"
 
@@ -21,13 +22,13 @@ func listPerfils(service perfil.UseCase) http.Handler {
 
 		var data []*entity.Perfil
 		var err error
-		email := r.URL.Query().Get("email")
+		id := r.URL.Query().Get("id")
 
 		switch {
-		case email == "":
+		case id == "":
 			data, err = service.ListPerfils()
 		default:
-			data, err = service.SearchPerfils(email)
+			data, err = service.SearchPerfils(id)
 		}
 
 		if err != nil && err != entity.ErrNotFound {
@@ -122,9 +123,10 @@ func getPerfil(service perfil.UseCase) http.Handler {
 		w.Header().Set("Content-Type", "application/json")
 
 		vars := mux.Vars(r)
-		email := vars["email"]
+		idstr := vars["id"]
+		id, _ := strconv.Atoi(idstr)
 
-		data, err := service.GetPerfil(email)
+		data, err := service.GetPerfil(id)
 		if err != nil && err != entity.ErrNotFound {
 			w.WriteHeader(http.StatusInternalServerError)
 			json.NewEncoder(w).Encode(presenter.Erro{
@@ -164,9 +166,10 @@ func deletePerfil(service perfil.UseCase) http.Handler {
 		w.Header().Set("Content-Type", "application/json")
 
 		vars := mux.Vars(r)
-		email := vars["email"]
+		idstr := vars["id"]
+		id, _ := strconv.Atoi(idstr)
 
-		err := service.DeletePerfil(email)
+		err := service.DeletePerfil(id)
 
 		w.WriteHeader(http.StatusOK)
 		if err != nil {
@@ -190,11 +193,11 @@ func MakePerfilHandlers(r *mux.Router, n negroni.Negroni, service perfil.UseCase
 		negroni.Wrap(createPerfil(service)),
 	)).Methods("POST", "OPTIONS").Name("createPerfil")
 
-	r.Handle("/v1/perfil/{email}", n.With(
+	r.Handle("/v1/perfil/{id}", n.With(
 		negroni.Wrap(getPerfil(service)),
 	)).Methods("GET", "OPTIONS").Name("getPerfil")
 
-	r.Handle("/v1/perfil/{email}", n.With(
+	r.Handle("/v1/perfil/{id}", n.With(
 		negroni.Wrap(deletePerfil(service)),
 	)).Methods("DELETE", "OPTIONS").Name("deletePerfil")
 }

@@ -26,7 +26,7 @@ func (s *Service) Favoritar(g *entity.Genero, p *entity.Perfil) error {
 	if err != nil {
 		return err
 	}
-	p, err = s.perfilService.GetPerfil(p.Ouvinte.Usuario.Email)
+	p, err = s.perfilService.GetPerfil(p.ID)
 	if err != nil {
 		return err
 	}
@@ -57,7 +57,7 @@ func (s *Service) Desfavoritar(g *entity.Genero, p *entity.Perfil) error {
 	if err != nil {
 		return err
 	}
-	p, err = s.perfilService.GetPerfil(p.Ouvinte.Usuario.Email)
+	p, err = s.perfilService.GetPerfil(p.ID)
 	if err != nil {
 		return err
 	}

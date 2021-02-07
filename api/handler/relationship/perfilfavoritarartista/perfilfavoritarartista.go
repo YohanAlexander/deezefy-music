@@ -3,6 +3,7 @@ package perfilfavoritarartista
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 
 	"github.com/yohanalexander/deezefy-music/api/presenter"
 	"github.com/yohanalexander/deezefy-music/usecase/entity/artista"
@@ -19,10 +20,20 @@ func favoritar(perfilService perfil.UseCase, artistaService artista.UseCase, per
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
 		vars := mux.Vars(r)
-		perfil := vars["perfil_email"]
+		perfil := vars["perfil_id"]
 		artista := vars["artista_email"]
 
-		b, err := perfilService.GetPerfil(perfil)
+		id, err := strconv.Atoi(perfil)
+		if err != nil && err != entity.ErrNotFound {
+			w.WriteHeader(http.StatusInternalServerError)
+			json.NewEncoder(w).Encode(presenter.Erro{
+				Message:    presenter.ErrUnexpected.Error(),
+				StatusCode: http.StatusInternalServerError,
+			})
+			return
+		}
+
+		b, err := perfilService.GetPerfil(id)
 		if err != nil && err != entity.ErrNotFound {
 			w.WriteHeader(http.StatusInternalServerError)
 			json.NewEncoder(w).Encode(presenter.Erro{
@@ -75,10 +86,20 @@ func desfavoritar(perfilService perfil.UseCase, artistaService artista.UseCase, 
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
 		vars := mux.Vars(r)
-		perfil := vars["perfil_email"]
+		perfil := vars["perfil_id"]
 		artista := vars["artista_email"]
 
-		b, err := perfilService.GetPerfil(perfil)
+		id, err := strconv.Atoi(perfil)
+		if err != nil && err != entity.ErrNotFound {
+			w.WriteHeader(http.StatusInternalServerError)
+			json.NewEncoder(w).Encode(presenter.Erro{
+				Message:    presenter.ErrUnexpected.Error(),
+				StatusCode: http.StatusInternalServerError,
+			})
+			return
+		}
+
+		b, err := perfilService.GetPerfil(id)
 		if err != nil && err != entity.ErrNotFound {
 			w.WriteHeader(http.StatusInternalServerError)
 			json.NewEncoder(w).Encode(presenter.Erro{
@@ -129,11 +150,11 @@ func desfavoritar(perfilService perfil.UseCase, artistaService artista.UseCase, 
 
 // MakePerfilFavoritarArtistaHandlers make url handlers
 func MakePerfilFavoritarArtistaHandlers(r *mux.Router, n negroni.Negroni, perfilService perfil.UseCase, artistaService artista.UseCase, perfilfavoritarartistaService perfilfavoritarartista.UseCase) {
-	r.Handle("/v1/{perfil_email}/favoritar/{artista_email}", n.With(
+	r.Handle("/v1/{perfil_id}/favoritar/{artista_email}", n.With(
 		negroni.Wrap(favoritar(perfilService, artistaService, perfilfavoritarartistaService)),
 	)).Methods("GET", "OPTIONS").Name("favoritar")
 
-	r.Handle("/v1/{perfil_email}/desfavoritar/{artista_email}", n.With(
+	r.Handle("/v1/{perfil_id}/desfavoritar/{artista_email}", n.With(
 		negroni.Wrap(desfavoritar(perfilService, artistaService, perfilfavoritarartistaService)),
 	)).Methods("GET", "OPTIONS").Name("desfavoritar")
 }

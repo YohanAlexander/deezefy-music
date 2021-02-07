@@ -8,38 +8,38 @@ import (
 
 // inmem in memory repo
 type inmem struct {
-	m map[string]*entity.Perfil
+	m map[int]*entity.Perfil
 }
 
 // newInmem create new repository
 func newInmem() *inmem {
-	var m = map[string]*entity.Perfil{}
+	var m = map[int]*entity.Perfil{}
 	return &inmem{
 		m: m,
 	}
 }
 
 // Create Perfil
-func (r *inmem) Create(e *entity.Perfil) (string, error) {
-	r.m[e.Ouvinte.Usuario.Email] = e
-	return e.Ouvinte.Usuario.Email, nil
+func (r *inmem) Create(e *entity.Perfil) (int, error) {
+	r.m[e.ID] = e
+	return e.ID, nil
 }
 
 // Get Perfil
-func (r *inmem) Get(email string) (*entity.Perfil, error) {
-	if r.m[email] == nil {
+func (r *inmem) Get(id int) (*entity.Perfil, error) {
+	if r.m[id] == nil {
 		return nil, entity.ErrNotFound
 	}
-	return r.m[email], nil
+	return r.m[id], nil
 }
 
 // Update Perfil
 func (r *inmem) Update(e *entity.Perfil) error {
-	_, err := r.Get(e.Ouvinte.Usuario.Email)
+	_, err := r.Get(e.ID)
 	if err != nil {
 		return err
 	}
-	r.m[e.Ouvinte.Usuario.Email] = e
+	r.m[e.ID] = e
 	return nil
 }
 
@@ -47,7 +47,7 @@ func (r *inmem) Update(e *entity.Perfil) error {
 func (r *inmem) Search(query string) ([]*entity.Perfil, error) {
 	var d []*entity.Perfil
 	for _, j := range r.m {
-		if strings.Contains(strings.ToLower(j.Ouvinte.Usuario.Email), query) {
+		if strings.Contains(strings.ToLower(j.InformacoesRelevantes), query) {
 			d = append(d, j)
 		}
 	}
@@ -68,10 +68,10 @@ func (r *inmem) List() ([]*entity.Perfil, error) {
 }
 
 // Delete Perfil
-func (r *inmem) Delete(email string) error {
-	if r.m[email] == nil {
+func (r *inmem) Delete(id int) error {
+	if r.m[id] == nil {
 		return entity.ErrNotFound
 	}
-	r.m[email] = nil
+	r.m[id] = nil
 	return nil
 }
