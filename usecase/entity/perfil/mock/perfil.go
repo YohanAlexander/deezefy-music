@@ -34,18 +34,18 @@ func (m *MockRead) EXPECT() *MockReadMockRecorder {
 }
 
 // Get mocks base method
-func (m *MockRead) Get(id int) (*entity.Perfil, error) {
+func (m *MockRead) Get(email string) (*entity.Perfil, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Get", id)
+	ret := m.ctrl.Call(m, "Get", email)
 	ret0, _ := ret[0].(*entity.Perfil)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // Get indicates an expected call of Get
-func (mr *MockReadMockRecorder) Get(id interface{}) *gomock.Call {
+func (mr *MockReadMockRecorder) Get(email interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Get", reflect.TypeOf((*MockRead)(nil).Get), id)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Get", reflect.TypeOf((*MockRead)(nil).Get), email)
 }
 
 // Search mocks base method
@@ -102,10 +102,10 @@ func (m *MockWrite) EXPECT() *MockWriteMockRecorder {
 }
 
 // Create mocks base method
-func (m *MockWrite) Create(e *entity.Perfil) (int, error) {
+func (m *MockWrite) Create(e *entity.Perfil) (string, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Create", e)
-	ret0, _ := ret[0].(int)
+	ret0, _ := ret[0].(string)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -131,17 +131,17 @@ func (mr *MockWriteMockRecorder) Update(e interface{}) *gomock.Call {
 }
 
 // Delete mocks base method
-func (m *MockWrite) Delete(id int) error {
+func (m *MockWrite) Delete(email string) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Delete", id)
+	ret := m.ctrl.Call(m, "Delete", email)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // Delete indicates an expected call of Delete
-func (mr *MockWriteMockRecorder) Delete(id interface{}) *gomock.Call {
+func (mr *MockWriteMockRecorder) Delete(email interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockWrite)(nil).Delete), id)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockWrite)(nil).Delete), email)
 }
 
 // MockRepository is a mock of Repository interface
@@ -168,18 +168,18 @@ func (m *MockRepository) EXPECT() *MockRepositoryMockRecorder {
 }
 
 // Get mocks base method
-func (m *MockRepository) Get(id int) (*entity.Perfil, error) {
+func (m *MockRepository) Get(email string) (*entity.Perfil, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Get", id)
+	ret := m.ctrl.Call(m, "Get", email)
 	ret0, _ := ret[0].(*entity.Perfil)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // Get indicates an expected call of Get
-func (mr *MockRepositoryMockRecorder) Get(id interface{}) *gomock.Call {
+func (mr *MockRepositoryMockRecorder) Get(email interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Get", reflect.TypeOf((*MockRepository)(nil).Get), id)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Get", reflect.TypeOf((*MockRepository)(nil).Get), email)
 }
 
 // Search mocks base method
@@ -213,10 +213,10 @@ func (mr *MockRepositoryMockRecorder) List() *gomock.Call {
 }
 
 // Create mocks base method
-func (m *MockRepository) Create(e *entity.Perfil) (int, error) {
+func (m *MockRepository) Create(e *entity.Perfil) (string, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Create", e)
-	ret0, _ := ret[0].(int)
+	ret0, _ := ret[0].(string)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -242,17 +242,17 @@ func (mr *MockRepositoryMockRecorder) Update(e interface{}) *gomock.Call {
 }
 
 // Delete mocks base method
-func (m *MockRepository) Delete(id int) error {
+func (m *MockRepository) Delete(email string) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Delete", id)
+	ret := m.ctrl.Call(m, "Delete", email)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // Delete indicates an expected call of Delete
-func (mr *MockRepositoryMockRecorder) Delete(id interface{}) *gomock.Call {
+func (mr *MockRepositoryMockRecorder) Delete(email interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockRepository)(nil).Delete), id)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockRepository)(nil).Delete), email)
 }
 
 // MockUseCase is a mock of UseCase interface
@@ -279,18 +279,18 @@ func (m *MockUseCase) EXPECT() *MockUseCaseMockRecorder {
 }
 
 // GetPerfil mocks base method
-func (m *MockUseCase) GetPerfil(id int) (*entity.Perfil, error) {
+func (m *MockUseCase) GetPerfil(email string) (*entity.Perfil, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetPerfil", id)
+	ret := m.ctrl.Call(m, "GetPerfil", email)
 	ret0, _ := ret[0].(*entity.Perfil)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // GetPerfil indicates an expected call of GetPerfil
-func (mr *MockUseCaseMockRecorder) GetPerfil(id interface{}) *gomock.Call {
+func (mr *MockUseCaseMockRecorder) GetPerfil(email interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetPerfil", reflect.TypeOf((*MockUseCase)(nil).GetPerfil), id)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetPerfil", reflect.TypeOf((*MockUseCase)(nil).GetPerfil), email)
 }
 
 // SearchPerfils mocks base method
@@ -324,10 +324,10 @@ func (mr *MockUseCaseMockRecorder) ListPerfils() *gomock.Call {
 }
 
 // CreatePerfil mocks base method
-func (m *MockUseCase) CreatePerfil(email, password, birthday, primeironome, sobrenome, informacoesrelevantes string, id int) (int, error) {
+func (m *MockUseCase) CreatePerfil(email, password, birthday, primeironome, sobrenome, informacoesrelevantes string, id int) (string, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreatePerfil", email, password, birthday, primeironome, sobrenome, informacoesrelevantes, id)
-	ret0, _ := ret[0].(int)
+	ret0, _ := ret[0].(string)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -353,15 +353,15 @@ func (mr *MockUseCaseMockRecorder) UpdatePerfil(e interface{}) *gomock.Call {
 }
 
 // DeletePerfil mocks base method
-func (m *MockUseCase) DeletePerfil(id int) error {
+func (m *MockUseCase) DeletePerfil(email string) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "DeletePerfil", id)
+	ret := m.ctrl.Call(m, "DeletePerfil", email)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // DeletePerfil indicates an expected call of DeletePerfil
-func (mr *MockUseCaseMockRecorder) DeletePerfil(id interface{}) *gomock.Call {
+func (mr *MockUseCaseMockRecorder) DeletePerfil(email interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeletePerfil", reflect.TypeOf((*MockUseCase)(nil).DeletePerfil), id)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeletePerfil", reflect.TypeOf((*MockUseCase)(nil).DeletePerfil), email)
 }
