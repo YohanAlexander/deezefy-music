@@ -1,1 +1,1 @@
-web: deezefy-music
+web: bin/api
