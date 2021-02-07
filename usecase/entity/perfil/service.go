@@ -19,17 +19,17 @@ func NewService(r Repository) *Service {
 }
 
 // CreatePerfil Create Perfil
-func (s *Service) CreatePerfil(email, password, birthday, primeironome, sobrenome, informacoesrelevantes string, id int) (string, error) {
+func (s *Service) CreatePerfil(email, password, birthday, primeironome, sobrenome, informacoesrelevantes string, id int) (int, error) {
 	e, err := entity.NewPerfil(email, password, birthday, primeironome, sobrenome, informacoesrelevantes, id)
 	if err != nil {
-		return e.Ouvinte.Usuario.Email, err
+		return e.ID, err
 	}
 	return s.repo.Create(e)
 }
 
 // GetPerfil Get Perfil
-func (s *Service) GetPerfil(email string) (*entity.Perfil, error) {
-	return s.repo.Get(email)
+func (s *Service) GetPerfil(id int) (*entity.Perfil, error) {
+	return s.repo.Get(id)
 }
 
 // SearchPerfils Search Perfils
@@ -43,15 +43,15 @@ func (s *Service) ListPerfils() ([]*entity.Perfil, error) {
 }
 
 // DeletePerfil Delete Perfil
-func (s *Service) DeletePerfil(email string) error {
-	u, err := s.GetPerfil(email)
+func (s *Service) DeletePerfil(id int) error {
+	u, err := s.GetPerfil(id)
 	if u == nil {
 		return entity.ErrNotFound
 	}
 	if err != nil {
 		return err
 	}
-	return s.repo.Delete(email)
+	return s.repo.Delete(id)
 }
 
 // UpdatePerfil Update Perfil

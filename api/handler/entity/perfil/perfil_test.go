@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"strconv"
 	"strings"
 	"testing"
 
@@ -28,11 +29,7 @@ func Test_listPerfils(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, "/v1/perfil", path)
 	u := &entity.Perfil{
-		Ouvinte: entity.Ouvinte{
-			Usuario: entity.Usuario{
-				Email: "ouvinte@email.com",
-			},
-		},
+		ID: 1,
 	}
 	m.EXPECT().
 		ListPerfils().
@@ -51,9 +48,9 @@ func Test_listPerfils_NotFound(t *testing.T) {
 	ts := httptest.NewServer(listPerfils(m))
 	defer ts.Close()
 	m.EXPECT().
-		SearchPerfils("ouvinte@email.com").
+		SearchPerfils("123").
 		Return(nil, entity.ErrNotFound)
-	res, err := http.Get(ts.URL + "?email=ouvinte@email.com")
+	res, err := http.Get(ts.URL + "?id=123")
 	assert.Nil(t, err)
 	assert.Equal(t, http.StatusNotFound, res.StatusCode)
 }
@@ -63,18 +60,14 @@ func Test_listPerfils_Search(t *testing.T) {
 	defer controller.Finish()
 	m := mock.NewMockUseCase(controller)
 	u := &entity.Perfil{
-		Ouvinte: entity.Ouvinte{
-			Usuario: entity.Usuario{
-				Email: "ouvinte@email.com",
-			},
-		},
+		ID: 1,
 	}
 	m.EXPECT().
-		SearchPerfils("ouvinte@email.com").
+		SearchPerfils("1").
 		Return([]*entity.Perfil{u}, nil)
 	ts := httptest.NewServer(listPerfils(m))
 	defer ts.Close()
-	res, err := http.Get(ts.URL + "?email=ouvinte@email.com")
+	res, err := http.Get(ts.URL + "?id=1")
 	assert.Nil(t, err)
 	assert.Equal(t, http.StatusOK, res.StatusCode)
 }
@@ -92,30 +85,26 @@ func Test_createPerfil(t *testing.T) {
 
 	m.EXPECT().
 		CreatePerfil(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).
-		Return("ouvinte@email.com", nil)
+		Return(1, nil)
 	h := createPerfil(m)
 	s := &entity.Perfil{
-		Ouvinte: entity.Ouvinte{
-			Usuario: entity.Usuario{
-				Email: "ouvinte@email.com",
-			},
-		},
+		ID: 1,
 	}
 	m.EXPECT().
-		GetPerfil(s.Ouvinte.Usuario.Email).
+		GetPerfil(s.ID).
 		Return(s, nil)
 
 	ts := httptest.NewServer(h)
 	defer ts.Close()
 	payload := fmt.Sprintf(`{
-"email": "ouvinte@email.com"
+"id": 1
 }`)
 	resp, _ := http.Post(ts.URL+"/v1/perfil", "application/json", strings.NewReader(payload))
 	assert.Equal(t, http.StatusCreated, resp.StatusCode)
 
 	var u *presenter.Perfil
 	json.NewDecoder(resp.Body).Decode(&u)
-	assert.Equal(t, "ouvinte@email.com", fmt.Sprintf("%s", u.Ouvinte.Usuario.Email))
+	assert.Equal(t, "1", fmt.Sprintf("%d", u.ID))
 }
 
 func Test_getPerfil(t *testing.T) {
@@ -127,22 +116,18 @@ func Test_getPerfil(t *testing.T) {
 	MakePerfilHandlers(r, *n, m)
 	path, err := r.GetRoute("getPerfil").GetPathTemplate()
 	assert.Nil(t, err)
-	assert.Equal(t, "/v1/perfil/{email}", path)
+	assert.Equal(t, "/v1/perfil/{id}", path)
 	u := &entity.Perfil{
-		Ouvinte: entity.Ouvinte{
-			Usuario: entity.Usuario{
-				Email: "ouvinte@email.com",
-			},
-		},
+		ID: 1,
 	}
 	m.EXPECT().
-		GetPerfil(u.Ouvinte.Usuario.Email).
+		GetPerfil(u.ID).
 		Return(u, nil)
 	handler := getPerfil(m)
-	r.Handle("/v1/perfil/{email}", handler)
+	r.Handle("/v1/perfil/{id}", handler)
 	ts := httptest.NewServer(r)
 	defer ts.Close()
-	res, err := http.Get(ts.URL + "/v1/perfil/" + u.Ouvinte.Usuario.Email)
+	res, err := http.Get(ts.URL + "/v1/perfil/" + strconv.Itoa(u.ID))
 	assert.Nil(t, err)
 	assert.Equal(t, http.StatusOK, res.StatusCode)
 	var d *presenter.Perfil
@@ -160,18 +145,14 @@ func Test_deletePerfil(t *testing.T) {
 	MakePerfilHandlers(r, *n, m)
 	path, err := r.GetRoute("deletePerfil").GetPathTemplate()
 	assert.Nil(t, err)
-	assert.Equal(t, "/v1/perfil/{email}", path)
+	assert.Equal(t, "/v1/perfil/{id}", path)
 	u := &entity.Perfil{
-		Ouvinte: entity.Ouvinte{
-			Usuario: entity.Usuario{
-				Email: "ouvinte@email.com",
-			},
-		},
+		ID: 1,
 	}
-	m.EXPECT().DeletePerfil(u.Ouvinte.Usuario.Email).Return(nil)
+	m.EXPECT().DeletePerfil(u.ID).Return(nil)
 	handler := deletePerfil(m)
-	req, _ := http.NewRequest("DELETE", "/v1/perfil/"+u.Ouvinte.Usuario.Email, nil)
-	r.Handle("/v1/perfil/{email}", handler).Methods("DELETE", "OPTIONS")
+	req, _ := http.NewRequest("DELETE", "/v1/perfil/"+strconv.Itoa(u.ID), nil)
+	r.Handle("/v1/perfil/{id}", handler).Methods("DELETE", "OPTIONS")
 	rr := httptest.NewRecorder()
 	r.ServeHTTP(rr, req)
 	assert.Equal(t, http.StatusOK, rr.Code)
