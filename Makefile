@@ -16,7 +16,7 @@ dependencies:
 build: dependencies build-api build-cmd
 
 build-api:
-	go build -tags $(DEEZEFY_ENV) -o ./bin/api api/main.go
+	go build -tags $(DEEZEFY_ENV) -o ./bin/deezefy-music api/main.go
 
 ci: dependencies test
 
