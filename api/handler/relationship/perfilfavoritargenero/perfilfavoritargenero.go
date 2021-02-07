@@ -3,7 +3,6 @@ package perfilfavoritargenero
 import (
 	"encoding/json"
 	"net/http"
-	"strconv"
 
 	"github.com/yohanalexander/deezefy-music/api/presenter"
 	"github.com/yohanalexander/deezefy-music/usecase/entity/genero"
@@ -20,20 +19,10 @@ func favoritar(perfilService perfil.UseCase, generoService genero.UseCase, perfi
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
 		vars := mux.Vars(r)
-		perfil := vars["perfil_id"]
+		perfil := vars["perfil_email"]
 		genero := vars["genero_nome"]
 
-		id, err := strconv.Atoi(perfil)
-		if err != nil && err != entity.ErrNotFound {
-			w.WriteHeader(http.StatusInternalServerError)
-			json.NewEncoder(w).Encode(presenter.Erro{
-				Message:    presenter.ErrUnexpected.Error(),
-				StatusCode: http.StatusInternalServerError,
-			})
-			return
-		}
-
-		b, err := perfilService.GetPerfil(id)
+		b, err := perfilService.GetPerfil(perfil)
 		if err != nil && err != entity.ErrNotFound {
 			w.WriteHeader(http.StatusInternalServerError)
 			json.NewEncoder(w).Encode(presenter.Erro{
@@ -86,20 +75,10 @@ func desfavoritar(perfilService perfil.UseCase, generoService genero.UseCase, pe
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
 		vars := mux.Vars(r)
-		perfil := vars["perfil_id"]
+		perfil := vars["perfil_email"]
 		genero := vars["genero_nome"]
 
-		id, err := strconv.Atoi(perfil)
-		if err != nil && err != entity.ErrNotFound {
-			w.WriteHeader(http.StatusInternalServerError)
-			json.NewEncoder(w).Encode(presenter.Erro{
-				Message:    presenter.ErrUnexpected.Error(),
-				StatusCode: http.StatusInternalServerError,
-			})
-			return
-		}
-
-		b, err := perfilService.GetPerfil(id)
+		b, err := perfilService.GetPerfil(perfil)
 		if err != nil && err != entity.ErrNotFound {
 			w.WriteHeader(http.StatusInternalServerError)
 			json.NewEncoder(w).Encode(presenter.Erro{
@@ -150,11 +129,11 @@ func desfavoritar(perfilService perfil.UseCase, generoService genero.UseCase, pe
 
 // MakePerfilFavoritarGeneroHandlers make url handlers
 func MakePerfilFavoritarGeneroHandlers(r *mux.Router, n negroni.Negroni, perfilService perfil.UseCase, generoService genero.UseCase, perfilfavoritargeneroService perfilfavoritargenero.UseCase) {
-	r.Handle("/v1/{perfil_id}/favoritar/{genero_nome}", n.With(
+	r.Handle("/v1/{perfil_email}/favoritar/{genero_nome}", n.With(
 		negroni.Wrap(favoritar(perfilService, generoService, perfilfavoritargeneroService)),
 	)).Methods("GET", "OPTIONS").Name("favoritar")
 
-	r.Handle("/v1/{perfil_id}/desfavoritar/{genero_nome}", n.With(
+	r.Handle("/v1/{perfil_email}/desfavoritar/{genero_nome}", n.With(
 		negroni.Wrap(desfavoritar(perfilService, generoService, perfilfavoritargeneroService)),
 	)).Methods("GET", "OPTIONS").Name("desfavoritar")
 }
