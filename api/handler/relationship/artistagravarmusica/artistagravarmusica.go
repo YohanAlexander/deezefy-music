@@ -42,7 +42,7 @@ func gravar(artistaService artista.UseCase, musicaService musica.UseCase, artist
 		}
 
 		id, err := strconv.Atoi(musica)
-		if err != nil && err != entity.ErrNotFound {
+		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			json.NewEncoder(w).Encode(presenter.Erro{
 				Message:    presenter.ErrUnexpected.Error(),
@@ -72,10 +72,10 @@ func gravar(artistaService artista.UseCase, musicaService musica.UseCase, artist
 		err = artistagravarmusicaService.Gravar(b, u)
 		w.WriteHeader(http.StatusCreated)
 		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
+			w.WriteHeader(http.StatusBadRequest)
 			json.NewEncoder(w).Encode(presenter.Erro{
 				Message:    presenter.ErrJSON.Error(),
-				StatusCode: http.StatusInternalServerError,
+				StatusCode: http.StatusBadRequest,
 			})
 			return
 		}
@@ -108,7 +108,7 @@ func desgravar(artistaService artista.UseCase, musicaService musica.UseCase, art
 		}
 
 		id, err := strconv.Atoi(musica)
-		if err != nil && err != entity.ErrNotFound {
+		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			json.NewEncoder(w).Encode(presenter.Erro{
 				Message:    presenter.ErrUnexpected.Error(),
@@ -138,10 +138,10 @@ func desgravar(artistaService artista.UseCase, musicaService musica.UseCase, art
 		err = artistagravarmusicaService.Desgravar(b, u)
 		w.WriteHeader(http.StatusCreated)
 		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
+			w.WriteHeader(http.StatusBadRequest)
 			json.NewEncoder(w).Encode(presenter.Erro{
 				Message:    presenter.ErrJSON.Error(),
-				StatusCode: http.StatusInternalServerError,
+				StatusCode: http.StatusBadRequest,
 			})
 			return
 		}

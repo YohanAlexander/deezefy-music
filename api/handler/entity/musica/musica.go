@@ -56,10 +56,10 @@ func listMusicas(service musica.UseCase) http.Handler {
 
 		w.WriteHeader(http.StatusOK)
 		if err := json.NewEncoder(w).Encode(toJ); err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
+			w.WriteHeader(http.StatusBadRequest)
 			json.NewEncoder(w).Encode(presenter.Erro{
 				Message:    presenter.ErrJSON.Error(),
-				StatusCode: http.StatusInternalServerError,
+				StatusCode: http.StatusBadRequest,
 			})
 			return
 		}
@@ -74,20 +74,29 @@ func createMusica(service musica.UseCase) http.Handler {
 		input := &presenter.Musica{}
 		err := json.NewDecoder(r.Body).Decode(&input)
 		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
+			w.WriteHeader(http.StatusBadRequest)
 			json.NewEncoder(w).Encode(presenter.Erro{
 				Message:    presenter.ErrJSON.Error(),
-				StatusCode: http.StatusInternalServerError,
+				StatusCode: http.StatusBadRequest,
 			})
 			return
 		}
 
 		music, err := service.CreateMusica(input.Nome, input.Duracao, input.ID)
-		if err != nil {
+		if err != nil && err != entity.ErrInvalidEntity {
 			w.WriteHeader(http.StatusInternalServerError)
 			json.NewEncoder(w).Encode(presenter.Erro{
 				Message:    presenter.ErrUnexpected.Error(),
 				StatusCode: http.StatusInternalServerError,
+			})
+			return
+		}
+
+		if err == entity.ErrInvalidEntity {
+			w.WriteHeader(http.StatusBadRequest)
+			json.NewEncoder(w).Encode(presenter.Erro{
+				Message:    presenter.ErrInvalidEntity.Error(),
+				StatusCode: http.StatusBadRequest,
 			})
 			return
 		}
@@ -107,10 +116,10 @@ func createMusica(service musica.UseCase) http.Handler {
 
 		w.WriteHeader(http.StatusCreated)
 		if err := json.NewEncoder(w).Encode(toJ); err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
+			w.WriteHeader(http.StatusBadRequest)
 			json.NewEncoder(w).Encode(presenter.Erro{
 				Message:    presenter.ErrJSON.Error(),
-				StatusCode: http.StatusInternalServerError,
+				StatusCode: http.StatusBadRequest,
 			})
 			return
 		}
@@ -150,10 +159,10 @@ func getMusica(service musica.UseCase) http.Handler {
 
 		w.WriteHeader(http.StatusOK)
 		if err := json.NewEncoder(w).Encode(toJ); err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
+			w.WriteHeader(http.StatusBadRequest)
 			json.NewEncoder(w).Encode(presenter.Erro{
 				Message:    presenter.ErrJSON.Error(),
-				StatusCode: http.StatusInternalServerError,
+				StatusCode: http.StatusBadRequest,
 			})
 			return
 		}
@@ -183,7 +192,7 @@ func deleteMusica(service musica.UseCase) http.Handler {
 	})
 }
 
-//MakeMusicaHandlers make url handlers
+// MakeMusicaHandlers make url handlers
 func MakeMusicaHandlers(r *mux.Router, n negroni.Negroni, service musica.UseCase) {
 	r.Handle("/v1/musica", n.With(
 		negroni.Wrap(listMusicas(service)),

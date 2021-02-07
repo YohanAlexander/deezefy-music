@@ -24,7 +24,7 @@ func favoritar(perfilService perfil.UseCase, generoService genero.UseCase, perfi
 		genero := vars["genero_nome"]
 
 		id, err := strconv.Atoi(perfil)
-		if err != nil && err != entity.ErrNotFound {
+		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			json.NewEncoder(w).Encode(presenter.Erro{
 				Message:    presenter.ErrUnexpected.Error(),
@@ -72,10 +72,10 @@ func favoritar(perfilService perfil.UseCase, generoService genero.UseCase, perfi
 		err = perfilfavoritargeneroService.Favoritar(u, b)
 		w.WriteHeader(http.StatusCreated)
 		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
+			w.WriteHeader(http.StatusBadRequest)
 			json.NewEncoder(w).Encode(presenter.Erro{
 				Message:    presenter.ErrJSON.Error(),
-				StatusCode: http.StatusInternalServerError,
+				StatusCode: http.StatusBadRequest,
 			})
 			return
 		}
@@ -90,7 +90,7 @@ func desfavoritar(perfilService perfil.UseCase, generoService genero.UseCase, pe
 		genero := vars["genero_nome"]
 
 		id, err := strconv.Atoi(perfil)
-		if err != nil && err != entity.ErrNotFound {
+		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			json.NewEncoder(w).Encode(presenter.Erro{
 				Message:    presenter.ErrUnexpected.Error(),
@@ -138,10 +138,10 @@ func desfavoritar(perfilService perfil.UseCase, generoService genero.UseCase, pe
 		err = perfilfavoritargeneroService.Desfavoritar(u, b)
 		w.WriteHeader(http.StatusCreated)
 		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
+			w.WriteHeader(http.StatusBadRequest)
 			json.NewEncoder(w).Encode(presenter.Erro{
 				Message:    presenter.ErrJSON.Error(),
-				StatusCode: http.StatusInternalServerError,
+				StatusCode: http.StatusBadRequest,
 			})
 			return
 		}

@@ -56,10 +56,10 @@ func listLocals(service local.UseCase) http.Handler {
 
 		w.WriteHeader(http.StatusOK)
 		if err := json.NewEncoder(w).Encode(toJ); err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
+			w.WriteHeader(http.StatusBadRequest)
 			json.NewEncoder(w).Encode(presenter.Erro{
 				Message:    presenter.ErrJSON.Error(),
-				StatusCode: http.StatusInternalServerError,
+				StatusCode: http.StatusBadRequest,
 			})
 			return
 		}
@@ -74,20 +74,29 @@ func createLocal(service local.UseCase) http.Handler {
 		input := &presenter.Local{}
 		err := json.NewDecoder(r.Body).Decode(&input)
 		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
+			w.WriteHeader(http.StatusBadRequest)
 			json.NewEncoder(w).Encode(presenter.Erro{
 				Message:    presenter.ErrJSON.Error(),
-				StatusCode: http.StatusInternalServerError,
+				StatusCode: http.StatusBadRequest,
 			})
 			return
 		}
 
 		music, err := service.CreateLocal(input.Cidade, input.Pais, input.ID)
-		if err != nil {
+		if err != nil && err != entity.ErrInvalidEntity {
 			w.WriteHeader(http.StatusInternalServerError)
 			json.NewEncoder(w).Encode(presenter.Erro{
 				Message:    presenter.ErrUnexpected.Error(),
 				StatusCode: http.StatusInternalServerError,
+			})
+			return
+		}
+
+		if err == entity.ErrInvalidEntity {
+			w.WriteHeader(http.StatusBadRequest)
+			json.NewEncoder(w).Encode(presenter.Erro{
+				Message:    presenter.ErrInvalidEntity.Error(),
+				StatusCode: http.StatusBadRequest,
 			})
 			return
 		}
@@ -107,10 +116,10 @@ func createLocal(service local.UseCase) http.Handler {
 
 		w.WriteHeader(http.StatusCreated)
 		if err := json.NewEncoder(w).Encode(toJ); err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
+			w.WriteHeader(http.StatusBadRequest)
 			json.NewEncoder(w).Encode(presenter.Erro{
 				Message:    presenter.ErrJSON.Error(),
-				StatusCode: http.StatusInternalServerError,
+				StatusCode: http.StatusBadRequest,
 			})
 			return
 		}
@@ -150,10 +159,10 @@ func getLocal(service local.UseCase) http.Handler {
 
 		w.WriteHeader(http.StatusOK)
 		if err := json.NewEncoder(w).Encode(toJ); err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
+			w.WriteHeader(http.StatusBadRequest)
 			json.NewEncoder(w).Encode(presenter.Erro{
 				Message:    presenter.ErrJSON.Error(),
-				StatusCode: http.StatusInternalServerError,
+				StatusCode: http.StatusBadRequest,
 			})
 			return
 		}
@@ -183,7 +192,7 @@ func deleteLocal(service local.UseCase) http.Handler {
 	})
 }
 
-//MakeLocalHandlers make url handlers
+// MakeLocalHandlers make url handlers
 func MakeLocalHandlers(r *mux.Router, n negroni.Negroni, service local.UseCase) {
 	r.Handle("/v1/local", n.With(
 		negroni.Wrap(listLocals(service)),

@@ -56,10 +56,10 @@ func listPerfils(service perfil.UseCase) http.Handler {
 
 		w.WriteHeader(http.StatusOK)
 		if err := json.NewEncoder(w).Encode(toJ); err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
+			w.WriteHeader(http.StatusBadRequest)
 			json.NewEncoder(w).Encode(presenter.Erro{
 				Message:    presenter.ErrJSON.Error(),
-				StatusCode: http.StatusInternalServerError,
+				StatusCode: http.StatusBadRequest,
 			})
 			return
 		}
@@ -74,20 +74,29 @@ func createPerfil(service perfil.UseCase) http.Handler {
 		input := &presenter.Perfil{}
 		err := json.NewDecoder(r.Body).Decode(&input)
 		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
+			w.WriteHeader(http.StatusBadRequest)
 			json.NewEncoder(w).Encode(presenter.Erro{
 				Message:    presenter.ErrJSON.Error(),
-				StatusCode: http.StatusInternalServerError,
+				StatusCode: http.StatusBadRequest,
 			})
 			return
 		}
 
 		music, err := service.CreatePerfil(input.Ouvinte.Usuario.Email, input.Ouvinte.Usuario.Password, input.Ouvinte.Usuario.Birthday, input.Ouvinte.PrimeiroNome, input.Ouvinte.Sobrenome, input.InformacoesRelevantes, input.ID)
-		if err != nil {
+		if err != nil && err != entity.ErrInvalidEntity {
 			w.WriteHeader(http.StatusInternalServerError)
 			json.NewEncoder(w).Encode(presenter.Erro{
 				Message:    presenter.ErrUnexpected.Error(),
 				StatusCode: http.StatusInternalServerError,
+			})
+			return
+		}
+
+		if err == entity.ErrInvalidEntity {
+			w.WriteHeader(http.StatusBadRequest)
+			json.NewEncoder(w).Encode(presenter.Erro{
+				Message:    presenter.ErrInvalidEntity.Error(),
+				StatusCode: http.StatusBadRequest,
 			})
 			return
 		}
@@ -107,10 +116,10 @@ func createPerfil(service perfil.UseCase) http.Handler {
 
 		w.WriteHeader(http.StatusCreated)
 		if err := json.NewEncoder(w).Encode(toJ); err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
+			w.WriteHeader(http.StatusBadRequest)
 			json.NewEncoder(w).Encode(presenter.Erro{
 				Message:    presenter.ErrJSON.Error(),
-				StatusCode: http.StatusInternalServerError,
+				StatusCode: http.StatusBadRequest,
 			})
 			return
 		}
@@ -150,10 +159,10 @@ func getPerfil(service perfil.UseCase) http.Handler {
 
 		w.WriteHeader(http.StatusOK)
 		if err := json.NewEncoder(w).Encode(toJ); err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
+			w.WriteHeader(http.StatusBadRequest)
 			json.NewEncoder(w).Encode(presenter.Erro{
 				Message:    presenter.ErrJSON.Error(),
-				StatusCode: http.StatusInternalServerError,
+				StatusCode: http.StatusBadRequest,
 			})
 			return
 		}
@@ -183,7 +192,7 @@ func deletePerfil(service perfil.UseCase) http.Handler {
 	})
 }
 
-//MakePerfilHandlers make url handlers
+// MakePerfilHandlers make url handlers
 func MakePerfilHandlers(r *mux.Router, n negroni.Negroni, service perfil.UseCase) {
 	r.Handle("/v1/perfil", n.With(
 		negroni.Wrap(listPerfils(service)),

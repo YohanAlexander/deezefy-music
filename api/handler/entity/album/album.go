@@ -56,10 +56,10 @@ func listAlbums(service album.UseCase) http.Handler {
 
 		w.WriteHeader(http.StatusOK)
 		if err := json.NewEncoder(w).Encode(toJ); err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
+			w.WriteHeader(http.StatusBadRequest)
 			json.NewEncoder(w).Encode(presenter.Erro{
 				Message:    presenter.ErrJSON.Error(),
-				StatusCode: http.StatusInternalServerError,
+				StatusCode: http.StatusBadRequest,
 			})
 			return
 		}
@@ -74,20 +74,29 @@ func createAlbum(service album.UseCase) http.Handler {
 		input := &presenter.Album{}
 		err := json.NewDecoder(r.Body).Decode(&input)
 		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
+			w.WriteHeader(http.StatusBadRequest)
 			json.NewEncoder(w).Encode(presenter.Erro{
 				Message:    presenter.ErrJSON.Error(),
-				StatusCode: http.StatusInternalServerError,
+				StatusCode: http.StatusBadRequest,
 			})
 			return
 		}
 
 		music, err := service.CreateAlbum(input.Artista.Usuario.Email, input.Artista.Usuario.Password, input.Artista.Usuario.Birthday, input.Artista.NomeArtistico, input.Artista.Biografia, input.Titulo, input.Artista.AnoFormacao, input.AnoLancamento, input.ID)
-		if err != nil {
+		if err != nil && err != entity.ErrInvalidEntity {
 			w.WriteHeader(http.StatusInternalServerError)
 			json.NewEncoder(w).Encode(presenter.Erro{
 				Message:    presenter.ErrUnexpected.Error(),
 				StatusCode: http.StatusInternalServerError,
+			})
+			return
+		}
+
+		if err == entity.ErrInvalidEntity {
+			w.WriteHeader(http.StatusBadRequest)
+			json.NewEncoder(w).Encode(presenter.Erro{
+				Message:    presenter.ErrInvalidEntity.Error(),
+				StatusCode: http.StatusBadRequest,
 			})
 			return
 		}
@@ -107,10 +116,10 @@ func createAlbum(service album.UseCase) http.Handler {
 
 		w.WriteHeader(http.StatusCreated)
 		if err := json.NewEncoder(w).Encode(toJ); err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
+			w.WriteHeader(http.StatusBadRequest)
 			json.NewEncoder(w).Encode(presenter.Erro{
 				Message:    presenter.ErrJSON.Error(),
-				StatusCode: http.StatusInternalServerError,
+				StatusCode: http.StatusBadRequest,
 			})
 			return
 		}
@@ -150,10 +159,10 @@ func getAlbum(service album.UseCase) http.Handler {
 
 		w.WriteHeader(http.StatusOK)
 		if err := json.NewEncoder(w).Encode(toJ); err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
+			w.WriteHeader(http.StatusBadRequest)
 			json.NewEncoder(w).Encode(presenter.Erro{
 				Message:    presenter.ErrJSON.Error(),
-				StatusCode: http.StatusInternalServerError,
+				StatusCode: http.StatusBadRequest,
 			})
 			return
 		}
@@ -183,7 +192,7 @@ func deleteAlbum(service album.UseCase) http.Handler {
 	})
 }
 
-//MakeAlbumHandlers make url handlers
+// MakeAlbumHandlers make url handlers
 func MakeAlbumHandlers(r *mux.Router, n negroni.Negroni, service album.UseCase) {
 	r.Handle("/v1/album", n.With(
 		negroni.Wrap(listAlbums(service)),

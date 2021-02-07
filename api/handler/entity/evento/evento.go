@@ -56,10 +56,10 @@ func listEventos(service evento.UseCase) http.Handler {
 
 		w.WriteHeader(http.StatusOK)
 		if err := json.NewEncoder(w).Encode(toJ); err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
+			w.WriteHeader(http.StatusBadRequest)
 			json.NewEncoder(w).Encode(presenter.Erro{
 				Message:    presenter.ErrJSON.Error(),
-				StatusCode: http.StatusInternalServerError,
+				StatusCode: http.StatusBadRequest,
 			})
 			return
 		}
@@ -74,20 +74,29 @@ func createEvento(service evento.UseCase) http.Handler {
 		input := &presenter.Evento{}
 		err := json.NewDecoder(r.Body).Decode(&input)
 		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
+			w.WriteHeader(http.StatusBadRequest)
 			json.NewEncoder(w).Encode(presenter.Erro{
 				Message:    presenter.ErrJSON.Error(),
-				StatusCode: http.StatusInternalServerError,
+				StatusCode: http.StatusBadRequest,
 			})
 			return
 		}
 
 		music, err := service.CreateEvento(input.Usuario.Email, input.Usuario.Password, input.Usuario.Birthday, input.Nome, input.Data, input.Local.Cidade, input.Local.Pais, input.Local.ID, input.ID)
-		if err != nil {
+		if err != nil && err != entity.ErrInvalidEntity {
 			w.WriteHeader(http.StatusInternalServerError)
 			json.NewEncoder(w).Encode(presenter.Erro{
 				Message:    presenter.ErrUnexpected.Error(),
 				StatusCode: http.StatusInternalServerError,
+			})
+			return
+		}
+
+		if err == entity.ErrInvalidEntity {
+			w.WriteHeader(http.StatusBadRequest)
+			json.NewEncoder(w).Encode(presenter.Erro{
+				Message:    presenter.ErrInvalidEntity.Error(),
+				StatusCode: http.StatusBadRequest,
 			})
 			return
 		}
@@ -107,10 +116,10 @@ func createEvento(service evento.UseCase) http.Handler {
 
 		w.WriteHeader(http.StatusCreated)
 		if err := json.NewEncoder(w).Encode(toJ); err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
+			w.WriteHeader(http.StatusBadRequest)
 			json.NewEncoder(w).Encode(presenter.Erro{
 				Message:    presenter.ErrJSON.Error(),
-				StatusCode: http.StatusInternalServerError,
+				StatusCode: http.StatusBadRequest,
 			})
 			return
 		}
@@ -150,10 +159,10 @@ func getEvento(service evento.UseCase) http.Handler {
 
 		w.WriteHeader(http.StatusOK)
 		if err := json.NewEncoder(w).Encode(toJ); err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
+			w.WriteHeader(http.StatusBadRequest)
 			json.NewEncoder(w).Encode(presenter.Erro{
 				Message:    presenter.ErrJSON.Error(),
-				StatusCode: http.StatusInternalServerError,
+				StatusCode: http.StatusBadRequest,
 			})
 			return
 		}
@@ -183,7 +192,7 @@ func deleteEvento(service evento.UseCase) http.Handler {
 	})
 }
 
-//MakeEventoHandlers make url handlers
+// MakeEventoHandlers make url handlers
 func MakeEventoHandlers(r *mux.Router, n negroni.Negroni, service evento.UseCase) {
 	r.Handle("/v1/evento", n.With(
 		negroni.Wrap(listEventos(service)),

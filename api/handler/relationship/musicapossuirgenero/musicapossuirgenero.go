@@ -24,7 +24,7 @@ func possuir(musicaService musica.UseCase, generoService genero.UseCase, musicap
 		genero := vars["genero_nome"]
 
 		id, err := strconv.Atoi(musica)
-		if err != nil && err != entity.ErrNotFound {
+		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			json.NewEncoder(w).Encode(presenter.Erro{
 				Message:    presenter.ErrUnexpected.Error(),
@@ -72,10 +72,10 @@ func possuir(musicaService musica.UseCase, generoService genero.UseCase, musicap
 		err = musicapossuirgeneroService.Possuir(b, u)
 		w.WriteHeader(http.StatusCreated)
 		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
+			w.WriteHeader(http.StatusBadRequest)
 			json.NewEncoder(w).Encode(presenter.Erro{
 				Message:    presenter.ErrJSON.Error(),
-				StatusCode: http.StatusInternalServerError,
+				StatusCode: http.StatusBadRequest,
 			})
 			return
 		}
@@ -90,7 +90,7 @@ func despossuir(musicaService musica.UseCase, generoService genero.UseCase, musi
 		genero := vars["genero_nome"]
 
 		id, err := strconv.Atoi(musica)
-		if err != nil && err != entity.ErrNotFound {
+		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			json.NewEncoder(w).Encode(presenter.Erro{
 				Message:    presenter.ErrUnexpected.Error(),
@@ -138,10 +138,10 @@ func despossuir(musicaService musica.UseCase, generoService genero.UseCase, musi
 		err = musicapossuirgeneroService.Despossuir(b, u)
 		w.WriteHeader(http.StatusCreated)
 		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
+			w.WriteHeader(http.StatusBadRequest)
 			json.NewEncoder(w).Encode(presenter.Erro{
 				Message:    presenter.ErrJSON.Error(),
-				StatusCode: http.StatusInternalServerError,
+				StatusCode: http.StatusBadRequest,
 			})
 			return
 		}

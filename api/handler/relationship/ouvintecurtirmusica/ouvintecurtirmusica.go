@@ -42,7 +42,7 @@ func curtir(ouvinteService ouvinte.UseCase, musicaService musica.UseCase, ouvint
 		}
 
 		id, err := strconv.Atoi(musica)
-		if err != nil && err != entity.ErrNotFound {
+		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			json.NewEncoder(w).Encode(presenter.Erro{
 				Message:    presenter.ErrUnexpected.Error(),
@@ -72,10 +72,10 @@ func curtir(ouvinteService ouvinte.UseCase, musicaService musica.UseCase, ouvint
 		err = ouvintecurtirmusicaService.Curtir(b, u)
 		w.WriteHeader(http.StatusCreated)
 		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
+			w.WriteHeader(http.StatusBadRequest)
 			json.NewEncoder(w).Encode(presenter.Erro{
 				Message:    presenter.ErrJSON.Error(),
-				StatusCode: http.StatusInternalServerError,
+				StatusCode: http.StatusBadRequest,
 			})
 			return
 		}
@@ -108,7 +108,7 @@ func descurtir(ouvinteService ouvinte.UseCase, musicaService musica.UseCase, ouv
 		}
 
 		id, err := strconv.Atoi(musica)
-		if err != nil && err != entity.ErrNotFound {
+		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			json.NewEncoder(w).Encode(presenter.Erro{
 				Message:    presenter.ErrUnexpected.Error(),
@@ -138,10 +138,10 @@ func descurtir(ouvinteService ouvinte.UseCase, musicaService musica.UseCase, ouv
 		err = ouvintecurtirmusicaService.Descurtir(b, u)
 		w.WriteHeader(http.StatusCreated)
 		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
+			w.WriteHeader(http.StatusBadRequest)
 			json.NewEncoder(w).Encode(presenter.Erro{
 				Message:    presenter.ErrJSON.Error(),
-				StatusCode: http.StatusInternalServerError,
+				StatusCode: http.StatusBadRequest,
 			})
 			return
 		}

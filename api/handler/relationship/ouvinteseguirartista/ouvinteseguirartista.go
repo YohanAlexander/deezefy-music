@@ -61,10 +61,10 @@ func seguir(ouvinteService ouvinte.UseCase, artistaService artista.UseCase, ouvi
 		err = ouvinteseguirartistaService.Seguir(b, u)
 		w.WriteHeader(http.StatusCreated)
 		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
+			w.WriteHeader(http.StatusBadRequest)
 			json.NewEncoder(w).Encode(presenter.Erro{
 				Message:    presenter.ErrJSON.Error(),
-				StatusCode: http.StatusInternalServerError,
+				StatusCode: http.StatusBadRequest,
 			})
 			return
 		}
@@ -117,10 +117,10 @@ func desseguir(ouvinteService ouvinte.UseCase, artistaService artista.UseCase, o
 		err = ouvinteseguirartistaService.Desseguir(b, u)
 		w.WriteHeader(http.StatusCreated)
 		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
+			w.WriteHeader(http.StatusBadRequest)
 			json.NewEncoder(w).Encode(presenter.Erro{
 				Message:    presenter.ErrJSON.Error(),
-				StatusCode: http.StatusInternalServerError,
+				StatusCode: http.StatusBadRequest,
 			})
 			return
 		}

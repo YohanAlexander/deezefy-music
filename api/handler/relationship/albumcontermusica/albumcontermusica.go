@@ -24,7 +24,7 @@ func conter(albumService album.UseCase, musicaService musica.UseCase, albumconte
 		musica := vars["musica_id"]
 
 		id, err := strconv.Atoi(album)
-		if err != nil && err != entity.ErrNotFound {
+		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			json.NewEncoder(w).Encode(presenter.Erro{
 				Message:    presenter.ErrUnexpected.Error(),
@@ -52,7 +52,7 @@ func conter(albumService album.UseCase, musicaService musica.UseCase, albumconte
 		}
 
 		id, err = strconv.Atoi(musica)
-		if err != nil && err != entity.ErrNotFound {
+		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			json.NewEncoder(w).Encode(presenter.Erro{
 				Message:    presenter.ErrUnexpected.Error(),
@@ -82,10 +82,10 @@ func conter(albumService album.UseCase, musicaService musica.UseCase, albumconte
 		err = albumcontermusicaService.Conter(b, u)
 		w.WriteHeader(http.StatusCreated)
 		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
+			w.WriteHeader(http.StatusBadRequest)
 			json.NewEncoder(w).Encode(presenter.Erro{
 				Message:    presenter.ErrJSON.Error(),
-				StatusCode: http.StatusInternalServerError,
+				StatusCode: http.StatusBadRequest,
 			})
 			return
 		}
@@ -100,7 +100,7 @@ func desconter(albumService album.UseCase, musicaService musica.UseCase, albumco
 		musica := vars["musica_id"]
 
 		id, err := strconv.Atoi(album)
-		if err != nil && err != entity.ErrNotFound {
+		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			json.NewEncoder(w).Encode(presenter.Erro{
 				Message:    presenter.ErrUnexpected.Error(),
@@ -128,7 +128,7 @@ func desconter(albumService album.UseCase, musicaService musica.UseCase, albumco
 		}
 
 		id, err = strconv.Atoi(musica)
-		if err != nil && err != entity.ErrNotFound {
+		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			json.NewEncoder(w).Encode(presenter.Erro{
 				Message:    presenter.ErrUnexpected.Error(),
@@ -158,10 +158,10 @@ func desconter(albumService album.UseCase, musicaService musica.UseCase, albumco
 		err = albumcontermusicaService.Desconter(b, u)
 		w.WriteHeader(http.StatusCreated)
 		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
+			w.WriteHeader(http.StatusBadRequest)
 			json.NewEncoder(w).Encode(presenter.Erro{
 				Message:    presenter.ErrJSON.Error(),
-				StatusCode: http.StatusInternalServerError,
+				StatusCode: http.StatusBadRequest,
 			})
 			return
 		}
