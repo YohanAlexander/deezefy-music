@@ -3,7 +3,6 @@ package repository
 import (
 	"database/sql"
 	"fmt"
-	"time"
 
 	"github.com/yohanalexander/deezefy-music/entity"
 )
@@ -61,21 +60,6 @@ func getUsuario(email string, db *sql.DB) (*entity.Usuario, error) {
 	for rows.Next() {
 		err = rows.Scan(&u.Email, &u.Password, &u.Birthday)
 	}
-	// select related playlist
-	stmt, err = db.Prepare(`select nome, status, data_criacao from deezefy.Playlist
-	join deezefy.Cria on(Playlist.nome = Cria.fk_playlist) where fk_usuario = ?`)
-	if err != nil {
-		return nil, err
-	}
-	rows, err = stmt.Query(email)
-	if err != nil {
-		return nil, err
-	}
-	for rows.Next() {
-		j := &entity.Playlist{}
-		err = rows.Scan(&j.Nome, &j.Status, &j.DataCriacao)
-		u.Cria = append(u.Cria, *j)
-	}
 	return &u, nil
 }
 
@@ -84,18 +68,6 @@ func (r *UsuarioPSQL) Update(e *entity.Usuario) error {
 	_, err := r.db.Exec(`update deezefy.Usuario set email = ?, password = ?, data_nascimento = ? where email = ?`, e.Email, e.Password, e.Birthday, e.Email)
 	if err != nil {
 		return err
-	}
-	// update related playlist
-	_, err = r.db.Exec(`delete from deezefy.Cria where fk_usuario = ?`, e.Email)
-	if err != nil {
-		return err
-	}
-	for _, b := range e.Cria {
-		_, err := r.db.Exec(`insert into deezefy.Cria
-		(data_criacao, fk_playlist, fk_usuario) values(?,?,?)`, time.Now().Format("2006-01-02"), b.Nome, e.Email)
-		if err != nil {
-			return err
-		}
 	}
 	return nil
 }

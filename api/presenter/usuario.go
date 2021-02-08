@@ -11,7 +11,6 @@ type Usuario struct {
 	Email    string            `json:"email"`
 	Password string            `json:"-"`
 	Birthday string            `json:"datanascimento"`
-	Cria     []entity.Playlist `json:"playlists"`
 	Idade    int               `json:"idade"`
 }
 
@@ -28,7 +27,6 @@ func (u *Usuario) GetUsuario(usuario entity.Usuario) {
 	u.Email = usuario.Email
 	u.Password = usuario.Password
 	u.Birthday = usuario.Birthday
-	u.Cria = usuario.Cria
 	u.Idade = u.GetIdade(time.Now())
 }
 

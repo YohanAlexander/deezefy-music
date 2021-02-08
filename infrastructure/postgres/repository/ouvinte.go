@@ -3,6 +3,7 @@ package repository
 import (
 	"database/sql"
 	"fmt"
+	"time"
 
 	"github.com/yohanalexander/deezefy-music/entity"
 )
@@ -74,6 +75,21 @@ func getOuvinte(email string, db *sql.DB) (*entity.Ouvinte, error) {
 	}
 	for rows.Next() {
 		err = rows.Scan(&u.Usuario.Email, &u.Usuario.Password, &u.Usuario.Birthday, &u.PrimeiroNome, &u.Sobrenome)
+	}
+	// select related cria
+	stmt, err = db.Prepare(`select nome, status, data_criacao from deezefy.Playlist
+	join deezefy.Cria on(Playlist.nome = Cria.fk_playlist) where fk_usuario = ?`)
+	if err != nil {
+		return nil, err
+	}
+	rows, err = stmt.Query(email)
+	if err != nil {
+		return nil, err
+	}
+	for rows.Next() {
+		j := &entity.Playlist{}
+		err = rows.Scan(&j.Nome, &j.Status, &j.DataCriacao)
+		u.Cria = append(u.Cria, *j)
 	}
 	// select related telefone
 	stmt, err = db.Prepare(`select telefone from deezefy.Telefone
@@ -165,6 +181,18 @@ func (r *OuvintePSQL) Update(e *entity.Ouvinte) error {
 	where email = ?`, e.Usuario.Email, e.Usuario.Password, e.Usuario.Birthday, e.PrimeiroNome, e.Sobrenome, e.Usuario.Email)
 	if err != nil {
 		return err
+	}
+	// update related cria
+	_, err = r.db.Exec(`delete from deezefy.Cria where fk_usuario = ?`, e.Usuario.Email)
+	if err != nil {
+		return err
+	}
+	for _, b := range e.Cria {
+		_, err := r.db.Exec(`insert into deezefy.Cria
+		(data_criacao, fk_playlist, fk_usuario) values(?,?,?)`, time.Now().Format("2006-01-02"), b.Nome, e.Usuario.Email)
+		if err != nil {
+			return err
+		}
 	}
 	// update related artista
 	_, err = r.db.Exec(`delete from deezefy.Artista where fk_ouvinte = ?`, e.Usuario.Email)

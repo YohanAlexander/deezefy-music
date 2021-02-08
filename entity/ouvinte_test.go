@@ -77,6 +77,67 @@ func TestOuvinte_Validate(t *testing.T) {
 
 }
 
+func TestAddCriaPlaylist(t *testing.T) {
+
+	t.Run("Playlist criado com sucesso", func(t *testing.T) {
+		o, _ := NewOuvinte("vancejoy@gmail.com", "somepassword", "2018-02-10", "Vance", "Joy")
+		p, _ := NewPlaylist("Indie Rock", "ativo", "2006-01-02")
+		err := o.AddCriaPlaylist(*p)
+		assert.Nil(t, err)
+		assert.Equal(t, 1, len(o.Cria))
+	})
+
+	t.Run("Playlist já registrado", func(t *testing.T) {
+		o, _ := NewOuvinte("vancejoy@gmail.com", "somepassword", "2018-02-10", "Vance", "Joy")
+		p, _ := NewPlaylist("Indie Rock", "ativo", "2006-01-02")
+		err := o.AddCriaPlaylist(*p)
+		assert.Nil(t, err)
+		p, _ = NewPlaylist("Indie Rock", "ativo", "2006-01-02")
+		err = o.AddCriaPlaylist(*p)
+		assert.Equal(t, ErrPlaylistRegistered, err)
+	})
+
+}
+
+func TestRemoveCriaPlaylist(t *testing.T) {
+
+	t.Run("Playlist não cadastrado", func(t *testing.T) {
+		o, _ := NewOuvinte("vancejoy@gmail.com", "somepassword", "2018-02-10", "Vance", "Joy")
+		p, _ := NewPlaylist("Indie Rock", "ativo", "2006-01-02")
+		err := o.RemoveCriaPlaylist(*p)
+		assert.Equal(t, ErrNotFound, err)
+	})
+
+	t.Run("Playlist removido com sucesso", func(t *testing.T) {
+		o, _ := NewOuvinte("vancejoy@gmail.com", "somepassword", "2018-02-10", "Vance", "Joy")
+		p, _ := NewPlaylist("Indie Rock", "ativo", "2006-01-02")
+		_ = o.AddCriaPlaylist(*p)
+		err := o.RemoveCriaPlaylist(*p)
+		assert.Nil(t, err)
+	})
+
+}
+
+func TestGetCriaPlaylist(t *testing.T) {
+
+	t.Run("Playlist cadastrado encontrado", func(t *testing.T) {
+		o, _ := NewOuvinte("vancejoy@gmail.com", "somepassword", "2018-02-10", "Vance", "Joy")
+		p, _ := NewPlaylist("Indie Rock", "ativo", "2006-01-02")
+		_ = o.AddCriaPlaylist(*p)
+		playlist, err := o.GetCriaPlaylist(*p)
+		assert.Nil(t, err)
+		assert.Equal(t, playlist, *p)
+	})
+
+	t.Run("Playlist não cadastrado", func(t *testing.T) {
+		o, _ := NewOuvinte("vancejoy@gmail.com", "somepassword", "2018-02-10", "Vance", "Joy")
+		p, _ := NewPlaylist("Indie Rock", "ativo", "2006-01-02")
+		_, err := o.GetCriaPlaylist(*p)
+		assert.Equal(t, ErrNotFound, err)
+	})
+
+}
+
 func TestAddTelefone(t *testing.T) {
 
 	t.Run("Telefone criado com sucesso", func(t *testing.T) {

@@ -10,7 +10,6 @@ type Usuario struct {
 	Email    string     `validate:"required,email"`
 	Password string     `validate:"required,gte=8"`
 	Birthday string     `validate:"datetime=2006-01-02"`
-	Cria     []Playlist `validate:""`
 }
 
 // NewUsuario cria um novo usuario
@@ -56,35 +55,4 @@ func generatePassword(raw string) (string, error) {
 		return "", err
 	}
 	return string(hash), nil
-}
-
-// AddPlaylist adiciona um Playlist
-func (u *Usuario) AddPlaylist(playlist Playlist) error {
-	_, err := u.GetPlaylist(playlist)
-	if err == nil {
-		return ErrPlaylistRegistered
-	}
-	u.Cria = append(u.Cria, playlist)
-	return nil
-}
-
-// RemovePlaylist remove um Playlist
-func (u *Usuario) RemovePlaylist(playlist Playlist) error {
-	for i, j := range u.Cria {
-		if j.Nome == playlist.Nome {
-			u.Cria = append(u.Cria[:i], u.Cria[i+1:]...)
-			return nil
-		}
-	}
-	return ErrNotFound
-}
-
-// GetPlaylist get a Playlist
-func (u *Usuario) GetPlaylist(playlist Playlist) (Playlist, error) {
-	for _, v := range u.Cria {
-		if v.Nome == playlist.Nome {
-			return playlist, nil
-		}
-	}
-	return playlist, ErrNotFound
 }
