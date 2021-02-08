@@ -1,0 +1,41 @@
+version: "3"
+
+volumes:
+  deezefy-volume:
+    name: deezefy-volume
+
+networks:
+  deezefy-network:
+    name: deezefy-network
+
+services:
+  postgres:
+    image: postgres:12.0
+    restart: on-failure
+    container_name: deezefy_postgres
+    environment:
+      POSTGRES_DB: deezefy-music
+      POSTGRES_USER: deezefy-music
+      POSTGRES_PASSWORD: deezefy-music
+    ports:
+      - 5432:5432
+    volumes:
+      - deezefy-volume:/var/lib/postgresql/data
+    networks:
+      - deezefy-network
+
+  server:
+    build:
+      context: ..
+      dockerfile: build/Dockerfile
+      target: dev
+    image: yohanalexander/deezefy-music
+    container_name: deezefy_server
+    ports:
+      - 8080:8080
+    depends_on:
+      - postgres
+    volumes:
+      - ../:/app
+    networks:
+      - deezefy-network
