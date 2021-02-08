@@ -23,7 +23,7 @@ func NewMusicaPSQL(db *sql.DB) *MusicaPSQL {
 func (r *MusicaPSQL) Create(e *entity.Musica) (int, error) {
 	stmt, err := r.db.Prepare(`
 		insert into deezefy.Musica (id, nome, duracao)
-		values(?,?,?)`)
+		values($1,$2,$3)`)
 	if err != nil {
 		return e.ID, err
 	}
@@ -48,8 +48,9 @@ func (r *MusicaPSQL) Get(id int) (*entity.Musica, error) {
 }
 
 func getMusica(id int, db *sql.DB) (*entity.Musica, error) {
-	stmt, err := db.Prepare(`select id, nome, duracao from deezefy.Musica
-		where id = ?`)
+	stmt, err := db.Prepare(`
+		select id, nome, duracao from deezefy.Musica
+		where id = $1`)
 	if err != nil {
 		return nil, err
 	}
@@ -62,11 +63,12 @@ func getMusica(id int, db *sql.DB) (*entity.Musica, error) {
 		err = rows.Scan(&u.ID, &u.Nome, &u.Duracao)
 	}
 	// select related ouvinte
-	stmt, err = db.Prepare(`select email, senha, data_nascimento, primeiro_nome, sobrenome from deezefy.Musica
-	join deezefy.Curte on(Curte.fk_musica = Musica.id)
-	join deezefy.Ouvinte on(Ouvinte.fk_usuario = Curte.fk_ouvinte)
-	join deezefy.Usuario on(Usuario.email = Ouvinte.fk_usuario)
-	where Musica.id = ?`)
+	stmt, err = db.Prepare(`
+		select email, senha, data_nascimento, primeiro_nome, sobrenome from deezefy.Musica
+		join deezefy.Curte on(Curte.fk_musica = Musica.id)
+		join deezefy.Ouvinte on(Ouvinte.fk_usuario = Curte.fk_ouvinte)
+		join deezefy.Usuario on(Usuario.email = Ouvinte.fk_usuario)
+		where Musica.id = $1`)
 	if err != nil {
 		return nil, err
 	}
@@ -80,11 +82,12 @@ func getMusica(id int, db *sql.DB) (*entity.Musica, error) {
 		u.Curtiu = append(u.Curtiu, *j)
 	}
 	// select related artista
-	stmt, err = db.Prepare(`select email, senha, data_nascimento, nome_artistico, biografia, ano_formacao from deezefy.Musica
-	join deezefy.Grava on(Grava.fk_musica = Musica.id)
-	join deezefy.Artista on(Artista.fk_usuario = Grava.fk_artista)
-	join deezefy.Usuario on(Usuario.email = Artista.fk_usuario)
-	where Musica.id = ?`)
+	stmt, err = db.Prepare(`
+		select email, senha, data_nascimento, nome_artistico, biografia, ano_formacao from deezefy.Musica
+		join deezefy.Grava on(Grava.fk_musica = Musica.id)
+		join deezefy.Artista on(Artista.fk_usuario = Grava.fk_artista)
+		join deezefy.Usuario on(Usuario.email = Artista.fk_usuario)
+		where Musica.id = $1`)
 	if err != nil {
 		return nil, err
 	}
@@ -98,8 +101,10 @@ func getMusica(id int, db *sql.DB) (*entity.Musica, error) {
 		u.Gravou = append(u.Gravou, *j)
 	}
 	// select related playlist
-	stmt, err = db.Prepare(`select nome, status, data_criacao from deezefy.Playlist
-	join deezefy.Musica_em_Playlist on(Playlist.nome = Musica_em_Playlist.fk_playlist) where Musica.id = ?`)
+	stmt, err = db.Prepare(`
+		select nome, status, data_criacao from deezefy.Playlist
+		join deezefy.Musica_em_Playlist on(Playlist.nome = Musica_em_Playlist.fk_playlist)
+		where Musica.id = $1`)
 	if err != nil {
 		return nil, err
 	}
@@ -113,9 +118,10 @@ func getMusica(id int, db *sql.DB) (*entity.Musica, error) {
 		u.Playlists = append(u.Playlists, *j)
 	}
 	// select related album
-	stmt, err = db.Prepare(`select id, titulo, ano_lancamento from deezefy.Album
-	join deezefy.Album_Contem_Musica on(Album_Contem_Musica.fk_musica = Musica.id)
-	where Musica.id = ?`)
+	stmt, err = db.Prepare(`
+		select id, titulo, ano_lancamento from deezefy.Album
+		join deezefy.Album_Contem_Musica on(Album_Contem_Musica.fk_musica = Musica.id)
+		where Musica.id = $1`)
 	if err != nil {
 		return nil, err
 	}
@@ -129,9 +135,10 @@ func getMusica(id int, db *sql.DB) (*entity.Musica, error) {
 		u.Albums = append(u.Albums, *j)
 	}
 	// select related genero
-	stmt, err = db.Prepare(`select nome, estilo from deezefy.Musica
-	join deezefy.Musica_Possui_Genero on(Musica_Possui_Genero.fk_musica = Musica.id)
-	where Musica.id = ?`)
+	stmt, err = db.Prepare(`
+		select nome, estilo from deezefy.Musica
+		join deezefy.Musica_Possui_Genero on(Musica_Possui_Genero.fk_musica = Musica.id)
+		where Musica.id = $1`)
 	if err != nil {
 		return nil, err
 	}
@@ -149,67 +156,83 @@ func getMusica(id int, db *sql.DB) (*entity.Musica, error) {
 
 // Update an Musica
 func (r *MusicaPSQL) Update(e *entity.Musica) error {
-	_, err := r.db.Exec(`update deezefy.Musica set id = ?, nome = ?, duracao = ?
-	where id = ?`, e.ID, e.Nome, e.Duracao)
+	_, err := r.db.Exec(`
+		update deezefy.Musica set id = $1, nome = $2, duracao = $3
+		where id = $4`, e.ID, e.Nome, e.Duracao, e.ID)
 	if err != nil {
 		return err
 	}
 	// update related ouvinte
-	_, err = r.db.Exec(`delete from deezefy.Curte where fk_musica = ?`, e.ID)
+	_, err = r.db.Exec(`
+		delete from deezefy.Curte
+		where fk_musica = $1`, e.ID)
 	if err != nil {
 		return err
 	}
 	for _, b := range e.Curtiu {
-		_, err := r.db.Exec(`insert into deezefy.Curte
-		(fk_ouvinte, fk_musica) values(?,?)`, b.Usuario.Email, e.ID)
+		_, err := r.db.Exec(`
+		insert into deezefy.Curte (fk_ouvinte, fk_musica)
+		values($1,$2)`, b.Usuario.Email, e.ID)
 		if err != nil {
 			return err
 		}
 	}
 	// update related artista
-	_, err = r.db.Exec(`delete from deezefy.Grava where fk_musica = ?`, e.ID)
+	_, err = r.db.Exec(`
+		delete from deezefy.Grava
+		where fk_musica = $1`, e.ID)
 	if err != nil {
 		return err
 	}
 	for _, b := range e.Gravou {
-		_, err := r.db.Exec(`insert into deezefy.Grava
-		(fk_artista, fk_musica) values(?,?)`, b.Usuario.Email, e.ID)
+		_, err := r.db.Exec(`
+		insert into deezefy.Grava (fk_artista, fk_musica)
+		values($1,$2)`, b.Usuario.Email, e.ID)
 		if err != nil {
 			return err
 		}
 	}
 	// update related playlist
-	_, err = r.db.Exec(`delete from deezefy.Musica_em_Playlist where fk_musica = ?`, e.ID)
+	_, err = r.db.Exec(`
+		delete from deezefy.Musica_em_Playlist
+		where fk_musica = $1`, e.ID)
 	if err != nil {
 		return err
 	}
 	for _, b := range e.Playlists {
-		_, err := r.db.Exec(`insert into deezefy.Musica_em_Playlist
-		(fk_playlist, fk_musica) values(?,?)`, b.Nome, e.ID)
+		_, err := r.db.Exec(`
+		insert into deezefy.Musica_em_Playlist (fk_playlist, fk_musica)
+		values($1,$2)`, b.Nome, e.ID)
 		if err != nil {
 			return err
 		}
 	}
 	// update related album
-	_, err = r.db.Exec(`delete from deezefy.Album_Contem_Musica where fk_musica = ?`, e.ID)
+	_, err = r.db.Exec(`
+		delete from deezefy.Album_Contem_Musica
+		where fk_musica = $1`, e.ID)
 	if err != nil {
 		return err
 	}
 	for _, b := range e.Albums {
-		_, err := r.db.Exec(`insert into deezefy.Album_Contem_Musica
-		(fk_album, fk_artista, fk_musica) values(?,?,?)`, b.ID, b.Artista.Usuario.Email, e.ID)
+		_, err := r.db.Exec(`
+		insert into deezefy.Album_Contem_Musica (fk_album, fk_artista, fk_musica)
+		values($1,$2,$3)`, b.ID, b.Artista.Usuario.Email, e.ID)
 		if err != nil {
 			return err
 		}
 	}
 	// update related genero
-	_, err = r.db.Exec(`delete from deezefy.Musica_Possui_Genero where fk_musica = ?`, e.ID)
+	_, err = r.db.Exec(`
+		delete from deezefy.Musica_Possui_Genero
+		where fk_musica = $1`, e.ID)
 	if err != nil {
 		return err
 	}
 	for _, b := range e.Generos {
-		_, err := r.db.Exec(`insert into deezefy.Musica_Possui_Genero
-		(fk_genero, fk_musica) values(?,?)`, b.Nome, e.ID)
+		_, err := r.db.Exec(`
+		insert into deezefy.Musica_Possui_Genero (fk_genero, fk_musica)
+		values($1,$2)`, b.Nome, e.ID)
 		if err != nil {
 			return err
 		}
@@ -219,7 +242,9 @@ func (r *MusicaPSQL) Update(e *entity.Musica) error {
 
 // Search Musica
 func (r *MusicaPSQL) Search(query string) ([]*entity.Musica, error) {
-	stmt, err := r.db.Prepare(`select nome from deezefy.Musica where nome like ?`)
+	stmt, err := r.db.Prepare(`
+		select id from deezefy.Musica
+		where nome like $1`)
 	if err != nil {
 		return nil, err
 	}
@@ -253,7 +278,8 @@ func (r *MusicaPSQL) Search(query string) ([]*entity.Musica, error) {
 
 // List Musicas
 func (r *MusicaPSQL) List() ([]*entity.Musica, error) {
-	stmt, err := r.db.Prepare(`select id from deezefy.Musica`)
+	stmt, err := r.db.Prepare(`
+		select id from deezefy.Musica`)
 	if err != nil {
 		return nil, err
 	}
@@ -287,7 +313,9 @@ func (r *MusicaPSQL) List() ([]*entity.Musica, error) {
 
 // Delete an Musica
 func (r *MusicaPSQL) Delete(id int) error {
-	_, err := r.db.Exec(`delete from deezefy.Musica where id = ?`, id)
+	_, err := r.db.Exec(`
+		delete from deezefy.Musica
+		where id = $1`, id)
 	if err != nil {
 		return err
 	}
