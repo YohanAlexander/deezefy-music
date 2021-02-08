@@ -24,7 +24,7 @@ func NewArtistaPSQL(db *sql.DB) *ArtistaPSQL {
 func (r *ArtistaPSQL) Create(e *entity.Artista) (string, error) {
 	stmt, err := r.db.Prepare(`
 		insert into deezefy.Usuario (email, senha, data_nascimento)
-		values(?,?,?)`)
+		values($1,$2,$3)`)
 	if err != nil {
 		return e.Usuario.Email, err
 	}
@@ -38,7 +38,7 @@ func (r *ArtistaPSQL) Create(e *entity.Artista) (string, error) {
 	}
 	stmt, err = r.db.Prepare(`
 		insert into deezefy.Artista (nome_artistico, biografia, ano_formacao, fk_usuario)
-		values(?,?,?,?)`)
+		values($1,$2,$3,$4)`)
 	if err != nil {
 		return e.Usuario.Email, err
 	}
@@ -64,9 +64,10 @@ func (r *ArtistaPSQL) Get(email string) (*entity.Artista, error) {
 }
 
 func getArtista(email string, db *sql.DB) (*entity.Artista, error) {
-	stmt, err := db.Prepare(`select email, senha, data_nascimento, nome_artistico, biografia, ano_formacao from deezefy.Artista
+	stmt, err := db.Prepare(`
+		select email, senha, data_nascimento, nome_artistico, biografia, ano_formacao from deezefy.Artista
 		join deezefy.Usuario on(Artista.fk_usuario = Usuario.email)
-		where email = ?`)
+		where email = $1`)
 	if err != nil {
 		return nil, err
 	}
@@ -79,8 +80,10 @@ func getArtista(email string, db *sql.DB) (*entity.Artista, error) {
 		err = rows.Scan(&u.Usuario.Email, &u.Usuario.Password, &u.Usuario.Birthday, &u.NomeArtistico, &u.Biografia, &u.AnoFormacao)
 	}
 	// select related evento
-	stmt, err = db.Prepare(`select id, nome, data from deezefy.Evento
-	join deezefy.Ocorre on(Evento.id = Ocorre.fk_evento) where Evento.fk_usuario = ?`)
+	stmt, err = db.Prepare(`
+		select id, nome, data from deezefy.Evento
+		join deezefy.Ocorre on(Evento.id = Ocorre.fk_evento)
+		where Evento.fk_usuario = $1`)
 	if err != nil {
 		return nil, err
 	}
@@ -94,10 +97,11 @@ func getArtista(email string, db *sql.DB) (*entity.Artista, error) {
 		u.Organizador = append(u.Organizador, *j)
 	}
 	// select related ouvinte
-	stmt, err = db.Prepare(`select email, senha, data_nascimento, primeiro_nome, sobrenome from deezefy.Ouvinte
-	join deezefy.Usuario on(Usuario.email = Ouvinte.fk_usuario)
-	join deezefy.Segue on(Ouvinte.fk_usuario = Segue.fk_ouvinte)
-	where fk_artista = ?`)
+	stmt, err = db.Prepare(`
+		select email, senha, data_nascimento, primeiro_nome, sobrenome from deezefy.Ouvinte
+		join deezefy.Usuario on(Usuario.email = Ouvinte.fk_usuario)
+		join deezefy.Segue on(Ouvinte.fk_usuario = Segue.fk_ouvinte)
+		where fk_artista = $1`)
 	if err != nil {
 		return nil, err
 	}
@@ -111,9 +115,10 @@ func getArtista(email string, db *sql.DB) (*entity.Artista, error) {
 		u.Seguidores = append(u.Seguidores, *j)
 	}
 	// select related musica
-	stmt, err = db.Prepare(`select id, nome, duracao from deezefy.Musica
-	join deezefy.Grava on(Grava.fk_musica = Musica.id)
-	where fk_artista = ?`)
+	stmt, err = db.Prepare(`
+		select id, nome, duracao from deezefy.Musica
+		join deezefy.Grava on(Grava.fk_musica = Musica.id)
+		where fk_artista = $1`)
 	if err != nil {
 		return nil, err
 	}
@@ -127,11 +132,12 @@ func getArtista(email string, db *sql.DB) (*entity.Artista, error) {
 		u.Grava = append(u.Grava, *j)
 	}
 	// select related perfil
-	stmt, err = db.Prepare(`select email, senha, data_nascimento, primeiro_nome, sobrenome, id, informacoes_relevantes from deezefy.Perfil
-	join deezefy.Ouvinte on(Ouvinte.fk_usuario = Perfil.fk_ouvinte)
-	join deezefy.Usuario on(Usuario.email = Ouvinte.fk_usuario)
-	join deezefy.Artistas_Favoritos on(Artistas_Favoritos.fk_perfil = Perfil.id)
-	where fk_artista = ?`)
+	stmt, err = db.Prepare(`
+		select email, senha, data_nascimento, primeiro_nome, sobrenome, id, informacoes_relevantes from deezefy.Perfil
+		join deezefy.Ouvinte on(Ouvinte.fk_usuario = Perfil.fk_ouvinte)
+		join deezefy.Usuario on(Usuario.email = Ouvinte.fk_usuario)
+		join deezefy.Artistas_Favoritos on(Artistas_Favoritos.fk_perfil = Perfil.id)
+		where fk_artista = $1`)
 	if err != nil {
 		return nil, err
 	}
@@ -145,9 +151,10 @@ func getArtista(email string, db *sql.DB) (*entity.Artista, error) {
 		u.Perfis = append(u.Perfis, *j)
 	}
 	// select related genero
-	stmt, err = db.Prepare(`select nome, estilo from deezefy.Genero
-	join deezefy.Artista_Possui_Genero on(Artista_Possui_Genero.fk_genero = Genero.nome)
-	where fk_artista = ?`)
+	stmt, err = db.Prepare(`
+		select nome, estilo from deezefy.Genero
+		join deezefy.Artista_Possui_Genero on(Artista_Possui_Genero.fk_genero = Genero.nome)
+		where fk_artista = $1`)
 	if err != nil {
 		return nil, err
 	}
@@ -161,9 +168,10 @@ func getArtista(email string, db *sql.DB) (*entity.Artista, error) {
 		u.Generos = append(u.Generos, *j)
 	}
 	// select related album
-	stmt, err = db.Prepare(`select id, titulo, ano_lancamento from deezefy.Album
-	join deezefy.Artista_Possui_Genero on(Artista_Possui_Genero.fk_genero = Genero.nome)
-	where fk_artista = ?`)
+	stmt, err = db.Prepare(`
+		select id, titulo, ano_lancamento from deezefy.Album
+		join deezefy.Artista_Possui_Genero on(Artista_Possui_Genero.fk_genero = Genero.nome)
+		where fk_artista = $1`)
 	if err != nil {
 		return nil, err
 	}
@@ -181,68 +189,84 @@ func getArtista(email string, db *sql.DB) (*entity.Artista, error) {
 
 // Update an artista
 func (r *ArtistaPSQL) Update(e *entity.Artista) error {
-	_, err := r.db.Exec(`update deezefy.Artista set email = ?, password = ?, data_nascimento = ?, nome_artistico = ?, biografia = ?, ano_formacao = ?
-	from deezefy.Artista join deezefy.Usuario on(Artista.fk_usuario = Usuario.email)
-	where email = ?`, e.Usuario.Email, e.Usuario.Password, e.Usuario.Birthday, e.NomeArtistico, e.Biografia, e.AnoFormacao, e.Usuario.Email)
+	_, err := r.db.Exec(`
+		update deezefy.Artista set email = $1, password = $2, data_nascimento = $3, nome_artistico = $4, biografia = $5, ano_formacao = $6 from deezefy.Artista
+		join deezefy.Usuario on(Artista.fk_usuario = Usuario.email)
+		where email = $7`, e.Usuario.Email, e.Usuario.Password, e.Usuario.Birthday, e.NomeArtistico, e.Biografia, e.AnoFormacao, e.Usuario.Email)
 	if err != nil {
 		return err
 	}
 	// update related evento
-	_, err = r.db.Exec(`delete from deezefy.Ocorre where fk_usuario = ?`, e.Usuario.Email)
+	_, err = r.db.Exec(`
+		delete from deezefy.Ocorre
+		where fk_usuario = $1`, e.Usuario.Email)
 	if err != nil {
 		return err
 	}
 	for _, b := range e.Organizador {
-		_, err := r.db.Exec(`insert into deezefy.Ocorre
-		(data, fk_usuario, fk_local, fk_evento, fk_artista) values(?,?,?,?,?)`, time.Now().Format("2006-01-02"), b.Usuario.Email, b.Local.ID, b.ID, b.Usuario.Email)
+		_, err := r.db.Exec(`
+		insert into deezefy.Ocorre (data, fk_usuario, fk_local, fk_evento, fk_artista)
+		values($1,$2,$3,$4,$5)`, time.Now().Format("2006-01-02"), b.Usuario.Email, b.Local.ID, b.ID, b.Usuario.Email)
 		if err != nil {
 			return err
 		}
 	}
 	// update related ouvinte
-	_, err = r.db.Exec(`delete from deezefy.Segue where fk_artista = ?`, e.Usuario.Email)
+	_, err = r.db.Exec(`
+		delete from deezefy.Segue
+		where fk_artista = $1`, e.Usuario.Email)
 	if err != nil {
 		return err
 	}
 	for _, b := range e.Seguidores {
-		_, err := r.db.Exec(`insert into deezefy.Segue
-		(fk_ouvinte, fk_artista) values(?,?)`, b.Usuario.Email, e.Usuario.Email)
+		_, err := r.db.Exec(`
+		insert into deezefy.Segue (fk_ouvinte, fk_artista)
+		values($1,$2)`, b.Usuario.Email, e.Usuario.Email)
 		if err != nil {
 			return err
 		}
 	}
 	// update related musica
-	_, err = r.db.Exec(`delete from deezefy.Grava where fk_artista = ?`, e.Usuario.Email)
+	_, err = r.db.Exec(`
+		delete from deezefy.Grava
+		where fk_artista = $1`, e.Usuario.Email)
 	if err != nil {
 		return err
 	}
 	for _, b := range e.Grava {
-		_, err := r.db.Exec(`insert into deezefy.Grava
-		(fk_musica, fk_artista) values(?,?)`, b.ID, e.Usuario.Email)
+		_, err := r.db.Exec(`
+		insert into deezefy.Grava (fk_musica, fk_artista)
+		values($1,$2)`, b.ID, e.Usuario.Email)
 		if err != nil {
 			return err
 		}
 	}
 	// update related perfil
-	_, err = r.db.Exec(`delete from deezefy.Artistas_Favoritos where fk_artista = ?`, e.Usuario.Email)
+	_, err = r.db.Exec(`
+		delete from deezefy.Artistas_Favoritos
+		where fk_artista = $1`, e.Usuario.Email)
 	if err != nil {
 		return err
 	}
 	for _, b := range e.Perfis {
-		_, err := r.db.Exec(`insert into deezefy.Artistas_Favoritos
-		(fk_perfil, fk_ouvinte, fk_artista) values(?,?,?)`, b.ID, b.Ouvinte.Usuario.Email, e.Usuario.Email)
+		_, err := r.db.Exec(`
+		insert into deezefy.Artistas_Favoritos (fk_perfil, fk_ouvinte, fk_artista)
+		values($1,$2,$3)`, b.ID, b.Ouvinte.Usuario.Email, e.Usuario.Email)
 		if err != nil {
 			return err
 		}
 	}
 	// update related genero
-	_, err = r.db.Exec(`delete from deezefy.Artista_Possui_Genero where fk_artista = ?`, e.Usuario.Email)
+	_, err = r.db.Exec(`
+		delete from deezefy.Artista_Possui_Genero
+		where fk_artista = $1`, e.Usuario.Email)
 	if err != nil {
 		return err
 	}
 	for _, b := range e.Generos {
-		_, err := r.db.Exec(`insert into deezefy.Artista_Possui_Genero
-		(fk_genero, fk_artista) values(?,?)`, b.Nome, e.Usuario.Email)
+		_, err := r.db.Exec(`
+		insert into deezefy.Artista_Possui_Genero (fk_genero, fk_artista)
+		values($1,$2)`, b.Nome, e.Usuario.Email)
 		if err != nil {
 			return err
 		}
@@ -252,8 +276,10 @@ func (r *ArtistaPSQL) Update(e *entity.Artista) error {
 
 // Search artista
 func (r *ArtistaPSQL) Search(query string) ([]*entity.Artista, error) {
-	stmt, err := r.db.Prepare(`select email from deezefy.Artista
-	join deezefy.Usuario on(Artista.fk_usuario = Usuario.email) where email like ?`)
+	stmt, err := r.db.Prepare(`
+		select email from deezefy.Artista
+		join deezefy.Usuario on(Artista.fk_usuario = Usuario.email)
+		where nome_artistico like $1`)
 	if err != nil {
 		return nil, err
 	}
@@ -287,8 +313,9 @@ func (r *ArtistaPSQL) Search(query string) ([]*entity.Artista, error) {
 
 // List artistas
 func (r *ArtistaPSQL) List() ([]*entity.Artista, error) {
-	stmt, err := r.db.Prepare(`select email from deezefy.Artista
-	join deezefy.Usuario on(Artista.fk_usuario = Usuario.email)`)
+	stmt, err := r.db.Prepare(`
+		select email from deezefy.Artista
+		join deezefy.Usuario on(Artista.fk_usuario = Usuario.email)`)
 	if err != nil {
 		return nil, err
 	}
@@ -322,7 +349,9 @@ func (r *ArtistaPSQL) List() ([]*entity.Artista, error) {
 
 // Delete an artista
 func (r *ArtistaPSQL) Delete(email string) error {
-	_, err := r.db.Exec(`delete from deezefy.Artista where fk_usuario = ?`, email)
+	_, err := r.db.Exec(`
+		delete from deezefy.Artista
+		where fk_usuario = $1`, email)
 	if err != nil {
 		return err
 	}

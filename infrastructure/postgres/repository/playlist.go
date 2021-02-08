@@ -24,7 +24,7 @@ func NewPlaylistPSQL(db *sql.DB) *PlaylistPSQL {
 func (r *PlaylistPSQL) Create(e *entity.Playlist) (string, error) {
 	stmt, err := r.db.Prepare(`
 		insert into deezefy.Playlist (nome, status)
-		values(?,?)`)
+		values($1,$2)`)
 	if err != nil {
 		return e.Nome, err
 	}
@@ -37,7 +37,7 @@ func (r *PlaylistPSQL) Create(e *entity.Playlist) (string, error) {
 	}
 	stmt, err = r.db.Prepare(`
 		insert into deezefy.Cria (data_criacao, fk_playlist, fk_usuario)
-		values(?,?,?)`)
+		values($1,$2,$3)`)
 	if err != nil {
 		return e.Nome, err
 	}
@@ -62,8 +62,9 @@ func (r *PlaylistPSQL) Get(nome string) (*entity.Playlist, error) {
 }
 
 func getPlaylist(nome string, db *sql.DB) (*entity.Playlist, error) {
-	stmt, err := db.Prepare(`select nome, status, data_criacao from deezefy.Playlist
-		where nome = ?`)
+	stmt, err := db.Prepare(`
+		select nome, status, data_criacao from deezefy.Playlist
+		where nome = $1`)
 	if err != nil {
 		return nil, err
 	}
@@ -76,11 +77,12 @@ func getPlaylist(nome string, db *sql.DB) (*entity.Playlist, error) {
 		err = rows.Scan(&u.Nome, &u.Status, &u.DataCriacao)
 	}
 	// select related ouvinte
-	stmt, err = db.Prepare(`select email, senha, data_nascimento, primeiro_nome, sobrenome from deezefy.Playlist
-	join deezefy.Ouvinte_Salva_Playlist on(Ouvinte_Salva_Playlist.fk_playlist = Playlist.nome)
-	join deezefy.Ouvinte on(Ouvinte.fk_usuario = Ouvinte_Salva_Playlist.fk_ouvinte)
-	join deezefy.Usuario on(Usuario.email = Ouvinte.fk_usuario)
-	where Playlist.nome = ?`)
+	stmt, err = db.Prepare(`
+		select email, senha, data_nascimento, primeiro_nome, sobrenome from deezefy.Playlist
+		join deezefy.Ouvinte_Salva_Playlist on(Ouvinte_Salva_Playlist.fk_playlist = Playlist.nome)
+		join deezefy.Ouvinte on(Ouvinte.fk_usuario = Ouvinte_Salva_Playlist.fk_ouvinte)
+		join deezefy.Usuario on(Usuario.email = Ouvinte.fk_usuario)
+		where Playlist.nome = $1`)
 	if err != nil {
 		return nil, err
 	}
@@ -94,9 +96,10 @@ func getPlaylist(nome string, db *sql.DB) (*entity.Playlist, error) {
 		u.Salvou = append(u.Salvou, *j)
 	}
 	// select related musica
-	stmt, err = db.Prepare(`select id, nome, duracao from deezefy.Musica
-	join deezefy.Musica_em_Playlist on(Musica_em_Playlist.fk_musica = Musica.id)
-	where Playlist.nome = ?`)
+	stmt, err = db.Prepare(`
+		select id, nome, duracao from deezefy.Musica
+		join deezefy.Musica_em_Playlist on(Musica_em_Playlist.fk_musica = Musica.id)
+		where Playlist.nome = $1`)
 	if err != nil {
 		return nil, err
 	}
@@ -114,31 +117,38 @@ func getPlaylist(nome string, db *sql.DB) (*entity.Playlist, error) {
 
 // Update an Playlist
 func (r *PlaylistPSQL) Update(e *entity.Playlist) error {
-	_, err := r.db.Exec(`update deezefy.Playlist set nome = ?, status = ?
-	where id = ?`, e.Nome, e.Status)
+	_, err := r.db.Exec(`
+		update deezefy.Playlist set nome = $1, status = $2
+		where id = $3`, e.Nome, e.Status, e.Nome)
 	if err != nil {
 		return err
 	}
 	// update related ouvinte
-	_, err = r.db.Exec(`delete from deezefy.Ouvinte_Salva_Playlist where fk_playlist = ?`, e.Nome)
+	_, err = r.db.Exec(`
+		delete from deezefy.Ouvinte_Salva_Playlist
+		where fk_playlist = $1`, e.Nome)
 	if err != nil {
 		return err
 	}
 	for _, b := range e.Salvou {
-		_, err := r.db.Exec(`insert into deezefy.Ouvinte_Salva_Playlist
-		(fk_ouvinte, fk_playlist) values(?,?)`, b.Usuario.Email, e.Nome)
+		_, err := r.db.Exec(`
+		insert into deezefy.Ouvinte_Salva_Playlist (fk_ouvinte, fk_playlist)
+		values($1,$2)`, b.Usuario.Email, e.Nome)
 		if err != nil {
 			return err
 		}
 	}
 	// update related musica
-	_, err = r.db.Exec(`delete from deezefy.Musica_em_Playlist where fk_playlist = ?`, e.Nome)
+	_, err = r.db.Exec(`
+		delete from deezefy.Musica_em_Playlist
+		where fk_playlist = $1`, e.Nome)
 	if err != nil {
 		return err
 	}
 	for _, b := range e.Musicas {
-		_, err := r.db.Exec(`insert into deezefy.Musica_em_Playlist
-		(fk_musica, fk_playlist) values(?,?)`, b.ID, e.Nome)
+		_, err := r.db.Exec(`
+		insert into deezefy.Musica_em_Playlist (fk_musica, fk_playlist)
+		values($1,$2)`, b.ID, e.Nome)
 		if err != nil {
 			return err
 		}
@@ -148,7 +158,9 @@ func (r *PlaylistPSQL) Update(e *entity.Playlist) error {
 
 // Search Playlist
 func (r *PlaylistPSQL) Search(query string) ([]*entity.Playlist, error) {
-	stmt, err := r.db.Prepare(`select nome from deezefy.Playlist where nome like ?`)
+	stmt, err := r.db.Prepare(`
+		select nome from deezefy.Playlist
+		where nome like $1`)
 	if err != nil {
 		return nil, err
 	}
@@ -182,7 +194,8 @@ func (r *PlaylistPSQL) Search(query string) ([]*entity.Playlist, error) {
 
 // List Playlists
 func (r *PlaylistPSQL) List() ([]*entity.Playlist, error) {
-	stmt, err := r.db.Prepare(`select nome from deezefy.Playlist`)
+	stmt, err := r.db.Prepare(`
+		select nome from deezefy.Playlist`)
 	if err != nil {
 		return nil, err
 	}
@@ -216,7 +229,9 @@ func (r *PlaylistPSQL) List() ([]*entity.Playlist, error) {
 
 // Delete an Playlist
 func (r *PlaylistPSQL) Delete(nome string) error {
-	_, err := r.db.Exec(`delete from deezefy.Playlist where nome = ?`, nome)
+	_, err := r.db.Exec(`
+		delete from deezefy.Playlist
+		where nome = $1`, nome)
 	if err != nil {
 		return err
 	}

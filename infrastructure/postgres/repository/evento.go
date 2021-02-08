@@ -24,7 +24,7 @@ func NewEventoPSQL(db *sql.DB) *EventoPSQL {
 func (r *EventoPSQL) Create(e *entity.Evento) (int, error) {
 	stmt, err := r.db.Prepare(`
 		insert into deezefy.Evento (id, nome, fk_usuario)
-		values(?,?,?)`)
+		values($1,$2,$3)`)
 	if err != nil {
 		return e.ID, err
 	}
@@ -38,7 +38,7 @@ func (r *EventoPSQL) Create(e *entity.Evento) (int, error) {
 	}
 	stmt, err = r.db.Prepare(`
 		insert into deezefy.Ocorre (data, fk_artista, fk_local, fk_evento, fk_usuario)
-		values(?,?,?,?,?)`)
+		values($1,$2,$3,$4,$5)`)
 	if err != nil {
 		return e.ID, err
 	}
@@ -65,11 +65,12 @@ func (r *EventoPSQL) Get(id int) (*entity.Evento, error) {
 }
 
 func getEvento(id int, db *sql.DB) (*entity.Evento, error) {
-	stmt, err := db.Prepare(`select email, senha, data_nascimento, id, cidade, pais, id, nome, data from deezefy.Evento
-	join deezefy.Ocorre on(Ocorre.fk_evento = Evento.id)
-	join deezefy.Local on(Local.id = Ocorre.fk_local)
-	join deezefy.Usuario on(Usuario.email = Ocorre.fk_usuario)
-	where Evento.id = ?`)
+	stmt, err := db.Prepare(`
+		select email, senha, data_nascimento, id, cidade, pais, id, nome, data from deezefy.Evento
+		join deezefy.Ocorre on(Ocorre.fk_evento = Evento.id)
+		join deezefy.Local on(Local.id = Ocorre.fk_local)
+		join deezefy.Usuario on(Usuario.email = Ocorre.fk_usuario)
+		where Evento.id = $1`)
 	if err != nil {
 		return nil, err
 	}
@@ -86,8 +87,9 @@ func getEvento(id int, db *sql.DB) (*entity.Evento, error) {
 
 // Update an Evento
 func (r *EventoPSQL) Update(e *entity.Evento) error {
-	_, err := r.db.Exec(`update deezefy.Evento set id = ?, nome = ?
-	where id = ?`, e.ID, e.Nome)
+	_, err := r.db.Exec(`
+		update deezefy.Evento set id = $1, nome = $2
+		where id = $3`, e.ID, e.Nome, e.ID)
 	if err != nil {
 		return err
 	}
@@ -96,7 +98,9 @@ func (r *EventoPSQL) Update(e *entity.Evento) error {
 
 // Search Evento
 func (r *EventoPSQL) Search(query string) ([]*entity.Evento, error) {
-	stmt, err := r.db.Prepare(`select nome from deezefy.Evento where nome like ?`)
+	stmt, err := r.db.Prepare(`
+		select id from deezefy.Evento
+		where nome like $1`)
 	if err != nil {
 		return nil, err
 	}
@@ -130,7 +134,8 @@ func (r *EventoPSQL) Search(query string) ([]*entity.Evento, error) {
 
 // List Eventos
 func (r *EventoPSQL) List() ([]*entity.Evento, error) {
-	stmt, err := r.db.Prepare(`select id from deezefy.Evento`)
+	stmt, err := r.db.Prepare(`
+		select id from deezefy.Evento`)
 	if err != nil {
 		return nil, err
 	}
@@ -164,7 +169,9 @@ func (r *EventoPSQL) List() ([]*entity.Evento, error) {
 
 // Delete an Evento
 func (r *EventoPSQL) Delete(id int) error {
-	_, err := r.db.Exec(`delete from deezefy.Evento where id = ?`, id)
+	_, err := r.db.Exec(`
+		delete from deezefy.Evento
+		where id = $1`, id)
 	if err != nil {
 		return err
 	}

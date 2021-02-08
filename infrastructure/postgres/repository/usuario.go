@@ -23,7 +23,7 @@ func NewUsuarioPSQL(db *sql.DB) *UsuarioPSQL {
 func (r *UsuarioPSQL) Create(e *entity.Usuario) (string, error) {
 	stmt, err := r.db.Prepare(`
 		insert into deezefy.Usuario (email, senha, data_nascimento)
-		values(?,?,?)`)
+		values($1,$2,$3)`)
 	if err != nil {
 		return e.Email, err
 	}
@@ -48,7 +48,9 @@ func (r *UsuarioPSQL) Get(email string) (*entity.Usuario, error) {
 }
 
 func getUsuario(email string, db *sql.DB) (*entity.Usuario, error) {
-	stmt, err := db.Prepare(`select email, senha, data_nascimento from deezefy.Usuario where email = ?`)
+	stmt, err := db.Prepare(`
+		select email, senha, data_nascimento from deezefy.Usuario
+		where email = $1`)
 	if err != nil {
 		return nil, err
 	}
@@ -65,7 +67,9 @@ func getUsuario(email string, db *sql.DB) (*entity.Usuario, error) {
 
 // Update an usuario
 func (r *UsuarioPSQL) Update(e *entity.Usuario) error {
-	_, err := r.db.Exec(`update deezefy.Usuario set email = ?, password = ?, data_nascimento = ? where email = ?`, e.Email, e.Password, e.Birthday, e.Email)
+	_, err := r.db.Exec(`
+		update deezefy.Usuario set email = $1, password = $2, data_nascimento = $3
+		where email = $4`, e.Email, e.Password, e.Birthday, e.Email)
 	if err != nil {
 		return err
 	}
@@ -74,7 +78,9 @@ func (r *UsuarioPSQL) Update(e *entity.Usuario) error {
 
 // Search usuario
 func (r *UsuarioPSQL) Search(query string) ([]*entity.Usuario, error) {
-	stmt, err := r.db.Prepare(`select email from deezefy.Usuario where email like ?`)
+	stmt, err := r.db.Prepare(`
+		select email from deezefy.Usuario
+		where email like $1`)
 	if err != nil {
 		return nil, err
 	}
@@ -108,7 +114,8 @@ func (r *UsuarioPSQL) Search(query string) ([]*entity.Usuario, error) {
 
 // List usuarios
 func (r *UsuarioPSQL) List() ([]*entity.Usuario, error) {
-	stmt, err := r.db.Prepare(`select email from deezefy.Usuario`)
+	stmt, err := r.db.Prepare(`
+		select email from deezefy.Usuario`)
 	if err != nil {
 		return nil, err
 	}
@@ -142,7 +149,9 @@ func (r *UsuarioPSQL) List() ([]*entity.Usuario, error) {
 
 // Delete an usuario
 func (r *UsuarioPSQL) Delete(email string) error {
-	_, err := r.db.Exec(`delete from deezefy.Usuario where email = ?`, email)
+	_, err := r.db.Exec(`
+		delete from deezefy.Usuario
+		where email = $1`, email)
 	if err != nil {
 		return err
 	}

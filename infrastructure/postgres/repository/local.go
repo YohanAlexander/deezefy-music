@@ -23,7 +23,7 @@ func NewLocalPSQL(db *sql.DB) *LocalPSQL {
 func (r *LocalPSQL) Create(e *entity.Local) (int, error) {
 	stmt, err := r.db.Prepare(`
 		insert into deezefy.Local (id, cidade, pais)
-		values(?,?,?)`)
+		values($1,$2,$3)`)
 	if err != nil {
 		return e.ID, err
 	}
@@ -48,8 +48,9 @@ func (r *LocalPSQL) Get(id int) (*entity.Local, error) {
 }
 
 func getLocal(id int, db *sql.DB) (*entity.Local, error) {
-	stmt, err := db.Prepare(`select id, cidade, pais from deezefy.Local
-		where id = ?`)
+	stmt, err := db.Prepare(`
+		select id, cidade, pais from deezefy.Local
+		where id = $1`)
 	if err != nil {
 		return nil, err
 	}
@@ -66,8 +67,9 @@ func getLocal(id int, db *sql.DB) (*entity.Local, error) {
 
 // Update an Local
 func (r *LocalPSQL) Update(e *entity.Local) error {
-	_, err := r.db.Exec(`update deezefy.Local set id = ?, cidade = ?, pais = ?
-	where id = ?`, e.ID, e.Cidade, e.Pais)
+	_, err := r.db.Exec(`
+		update deezefy.Local set id = $1, cidade = $2, pais = $3
+		where id = $4`, e.ID, e.Cidade, e.Pais, e.ID)
 	if err != nil {
 		return err
 	}
@@ -76,7 +78,9 @@ func (r *LocalPSQL) Update(e *entity.Local) error {
 
 // Search Local
 func (r *LocalPSQL) Search(query string) ([]*entity.Local, error) {
-	stmt, err := r.db.Prepare(`select cidade from deezefy.Local where cidade like ?`)
+	stmt, err := r.db.Prepare(`
+		select id from deezefy.Local
+		where cidade like $1`)
 	if err != nil {
 		return nil, err
 	}
@@ -110,7 +114,8 @@ func (r *LocalPSQL) Search(query string) ([]*entity.Local, error) {
 
 // List Locals
 func (r *LocalPSQL) List() ([]*entity.Local, error) {
-	stmt, err := r.db.Prepare(`select id from deezefy.Local`)
+	stmt, err := r.db.Prepare(`
+		select id from deezefy.Local`)
 	if err != nil {
 		return nil, err
 	}
@@ -144,7 +149,9 @@ func (r *LocalPSQL) List() ([]*entity.Local, error) {
 
 // Delete an Local
 func (r *LocalPSQL) Delete(id int) error {
-	_, err := r.db.Exec(`delete from deezefy.Local where id = ?`, id)
+	_, err := r.db.Exec(`
+		delete from deezefy.Local
+		where id = $1`, id)
 	if err != nil {
 		return err
 	}
