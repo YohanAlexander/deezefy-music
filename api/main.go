@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/yohanalexander/deezefy-music/infrastructure/postgres/repository"
+	"github.com/yohanalexander/deezefy-music/pkg/exit"
 
 	"github.com/yohanalexander/deezefy-music/usecase/entity/album"
 	"github.com/yohanalexander/deezefy-music/usecase/entity/artista"
@@ -191,8 +192,21 @@ func main() {
 		Handler:      context.ClearHandler(http.DefaultServeMux),
 		ErrorLog:     logger,
 	}
-	err = srv.ListenAndServe()
-	if err != nil {
-		log.Fatal(err.Error())
-	}
+
+	go func() {
+		log.Println("Iniciando servidor na porta:", config.API_PORT)
+		if err := srv.ListenAndServe(); err != nil {
+			log.Fatal(err.Error())
+		}
+	}()
+
+	exit.Init(func() {
+		if err := srv.Close(); err != nil {
+			log.Println(err.Error())
+		}
+		if err := db.Close(); err != nil {
+			log.Println(err.Error())
+		}
+	})
+
 }
