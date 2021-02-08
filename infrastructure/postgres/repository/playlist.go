@@ -3,6 +3,7 @@ package repository
 import (
 	"database/sql"
 	"fmt"
+	"time"
 
 	"github.com/yohanalexander/deezefy-music/entity"
 )
@@ -30,6 +31,20 @@ func (r *PlaylistPSQL) Create(e *entity.Playlist) (string, error) {
 	_, err = stmt.Exec(
 		e.Nome,
 		e.Status,
+	)
+	if err != nil {
+		return e.Nome, err
+	}
+	stmt, err = r.db.Prepare(`
+		insert into deezefy.Cria (data_criacao, fk_playlist, fk_usuario)
+		values(?,?,?)`)
+	if err != nil {
+		return e.Nome, err
+	}
+	_, err = stmt.Exec(
+		time.Now().Format("2006-01-02"),
+		e.Nome,
+		e.Usuario.Email,
 	)
 	if err != nil {
 		return e.Nome, err

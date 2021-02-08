@@ -27,7 +27,7 @@ type UseCase interface {
 	GetPlaylist(nome string) (*entity.Playlist, error)
 	SearchPlaylists(query string) ([]*entity.Playlist, error)
 	ListPlaylists() ([]*entity.Playlist, error)
-	CreatePlaylist(nome, status, datacriacao string) (string, error)
+	CreatePlaylist(email, password, birthday, nome, status, datacriacao string) (string, error)
 	UpdatePlaylist(e *entity.Playlist) error
 	DeletePlaylist(nome string) error
 }
