@@ -12,6 +12,7 @@ type Ouvinte struct {
 	PrimeiroNome string            `json:"primeironome"`
 	Sobrenome    string            `json:"sobrenome"`
 	Telefones    []string          `json:"telefones"`
+	Cria         []entity.Playlist `json:"criadas"`
 	Seguindo     []entity.Artista  `json:"seguindo"`
 	Curtidas     []entity.Musica   `json:"curtidas"`
 	Playlists    []entity.Playlist `json:"playlists"`
@@ -33,6 +34,7 @@ func (o *Ouvinte) GetOuvinte(ouvinte entity.Ouvinte) {
 	o.PrimeiroNome = ouvinte.PrimeiroNome
 	o.Sobrenome = ouvinte.Sobrenome
 	o.Telefones = ouvinte.Telefones
+	o.Cria = ouvinte.Cria
 	o.Seguindo = ouvinte.Seguindo
 	o.Curtidas = ouvinte.Curtidas
 	o.Playlists = ouvinte.Playlists

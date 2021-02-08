@@ -10,6 +10,7 @@ type Ouvinte struct {
 	PrimeiroNome string     `validate:"required,gte=1"`
 	Sobrenome    string     `validate:"required,gte=1"`
 	Telefones    []string   `validate:""`
+	Cria         []Playlist `validate:""`
 	Seguindo     []Artista  `validate:""`
 	Curtidas     []Musica   `validate:""`
 	Playlists    []Playlist `validate:""`
@@ -41,6 +42,37 @@ func (o *Ouvinte) Validate() error {
 		return ErrInvalidEntity
 	}
 	return nil
+}
+
+// AddCriaPlaylist adiciona um Playlist
+func (o *Ouvinte) AddCriaPlaylist(playlist Playlist) error {
+	_, err := o.GetCriaPlaylist(playlist)
+	if err == nil {
+		return ErrPlaylistRegistered
+	}
+	o.Cria = append(o.Cria, playlist)
+	return nil
+}
+
+// RemoveCriaPlaylist remove um Playlist
+func (o *Ouvinte) RemoveCriaPlaylist(playlist Playlist) error {
+	for i, j := range o.Cria {
+		if j.Nome == playlist.Nome {
+			o.Cria = append(o.Cria[:i], o.Cria[i+1:]...)
+			return nil
+		}
+	}
+	return ErrNotFound
+}
+
+// GetCriaPlaylist get a Playlist
+func (o *Ouvinte) GetCriaPlaylist(playlist Playlist) (Playlist, error) {
+	for _, v := range o.Cria {
+		if v.Nome == playlist.Nome {
+			return playlist, nil
+		}
+	}
+	return playlist, ErrNotFound
 }
 
 // AddTelefone adiciona um Telefone
