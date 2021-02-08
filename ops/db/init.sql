@@ -29,7 +29,7 @@ CREATE TYPE deezefy.estilo AS ENUM(
 -- \! echo "Table deezefy.Usuario";
 CREATE TABLE IF NOT EXISTS deezefy.Usuario (
   email VARCHAR(45) NOT NULL,
-  senha VARCHAR(45) NOT NULL,
+  senha VARCHAR(100) NOT NULL,
   data_nascimento DATE NULL,
   PRIMARY KEY (email),
   UNIQUE (email)

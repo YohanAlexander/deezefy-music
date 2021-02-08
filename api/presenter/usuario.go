@@ -8,10 +8,10 @@ import (
 
 // Usuario entidade usuario
 type Usuario struct {
-	Email    string            `json:"email"`
-	Password string            `json:"-"`
-	Birthday string            `json:"datanascimento"`
-	Idade    int               `json:"idade"`
+	Email    string `json:"email"`
+	Password string `json:"senha"`
+	Birthday string `json:"datanascimento"`
+	Idade    int    `json:"idade"`
 }
 
 // AppendUsuario adiciona presenter na lista
@@ -53,7 +53,7 @@ func (u *Usuario) GetIdade(now time.Time) int {
 // parseBirthday cast da string birthday para time.Time
 func parseBirthday(birthday string) (time.Time, error) {
 
-	layout := "2006-01-02"
+	layout := "2006-01-02T00:00:00Z"
 
 	date, err := time.Parse(layout, birthday)
 
