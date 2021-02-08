@@ -61,21 +61,6 @@ func getUsuario(email string, db *sql.DB) (*entity.Usuario, error) {
 	for rows.Next() {
 		err = rows.Scan(&u.Email, &u.Password, &u.Birthday)
 	}
-	// select related evento
-	stmt, err = db.Prepare(`select id, nome, data from deezefy.Evento
-	join deezefy.Ocorre on(Evento.id = Ocorre.fk_evento) where Evento.fk_usuario = ?`)
-	if err != nil {
-		return nil, err
-	}
-	rows, err = stmt.Query(email)
-	if err != nil {
-		return nil, err
-	}
-	for rows.Next() {
-		j := &entity.Evento{}
-		err = rows.Scan(&j.ID, &j.Nome, &j.Data)
-		u.Organizador = append(u.Organizador, *j)
-	}
 	// select related playlist
 	stmt, err = db.Prepare(`select nome, status, data_criacao from deezefy.Playlist
 	join deezefy.Cria on(Playlist.nome = Cria.fk_playlist) where fk_usuario = ?`)
@@ -99,18 +84,6 @@ func (r *UsuarioPSQL) Update(e *entity.Usuario) error {
 	_, err := r.db.Exec(`update deezefy.Usuario set email = ?, password = ?, data_nascimento = ? where email = ?`, e.Email, e.Password, e.Birthday, e.Email)
 	if err != nil {
 		return err
-	}
-	// update related evento
-	_, err = r.db.Exec(`delete from deezefy.Ocorre where fk_usuario = ?`, e.Email)
-	if err != nil {
-		return err
-	}
-	for _, b := range e.Organizador {
-		_, err := r.db.Exec(`insert into deezefy.Ocorre
-		(data, fk_usuario, fk_local, fk_evento, fk_artista) values(?,?,?,?,?)`, time.Now().Format("2006-01-02"), b.Usuario.Email, b.Local.ID, b.ID, b.Usuario.Email)
-		if err != nil {
-			return err
-		}
 	}
 	// update related playlist
 	_, err = r.db.Exec(`delete from deezefy.Cria where fk_usuario = ?`, e.Email)

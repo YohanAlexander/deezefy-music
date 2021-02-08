@@ -10,6 +10,7 @@ type Artista struct {
 	NomeArtistico string    `validate:"required,gte=1"`
 	Biografia     string    `validate:"gte=1"`
 	AnoFormacao   int       `validate:"gte=1000"`
+	Organizador   []Evento  `validate:""`
 	Seguidores    []Ouvinte `validate:""`
 	Grava         []Musica  `validate:""`
 	Perfis        []Perfil  `validate:""`
@@ -43,6 +44,37 @@ func (a *Artista) Validate() error {
 		return ErrInvalidEntity
 	}
 	return nil
+}
+
+// AddEvento adiciona um Evento
+func (a *Artista) AddEvento(evento Evento) error {
+	_, err := a.GetEvento(evento)
+	if err == nil {
+		return ErrEventoRegistered
+	}
+	a.Organizador = append(a.Organizador, evento)
+	return nil
+}
+
+// RemoveEvento remove um Evento
+func (a *Artista) RemoveEvento(evento Evento) error {
+	for i, j := range a.Organizador {
+		if j.ID == evento.ID {
+			a.Organizador = append(a.Organizador[:i], a.Organizador[i+1:]...)
+			return nil
+		}
+	}
+	return ErrNotFound
+}
+
+// GetEvento get a Evento
+func (a *Artista) GetEvento(evento Evento) (Evento, error) {
+	for _, v := range a.Organizador {
+		if v.ID == evento.ID {
+			return evento, nil
+		}
+	}
+	return evento, ErrNotFound
 }
 
 // AddOuvinte adiciona um Ouvinte

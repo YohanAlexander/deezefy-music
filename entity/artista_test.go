@@ -93,6 +93,67 @@ func TestArtista_Validate(t *testing.T) {
 
 }
 
+func TestAddEvento(t *testing.T) {
+
+	t.Run("Evento criado com sucesso", func(t *testing.T) {
+		a, _ := NewArtista("vancejoy@gmail.com", "somepassword", "2018-02-10", "Vance Joy", "Australian Singer", 2006)
+		e, _ := NewEvento("radiohead@spotify.com", "somepassword", "2018-02-10", "Lollapalooza", "2006-01-02", "São Paulo", "Brazil", 1, 1)
+		err := a.AddEvento(*e)
+		assert.Nil(t, err)
+		assert.Equal(t, 1, len(a.Organizador))
+	})
+
+	t.Run("Evento já registrado", func(t *testing.T) {
+		a, _ := NewArtista("vancejoy@gmail.com", "somepassword", "2018-02-10", "Vance Joy", "Australian Singer", 2006)
+		e, _ := NewEvento("radiohead@spotify.com", "somepassword", "2018-02-10", "Lollapalooza", "2006-01-02", "São Paulo", "Brazil", 1, 1)
+		err := a.AddEvento(*e)
+		assert.Nil(t, err)
+		e, _ = NewEvento("radiohead@spotify.com", "somepassword", "2018-02-10", "Lollapalooza", "2006-01-02", "São Paulo", "Brazil", 1, 1)
+		err = a.AddEvento(*e)
+		assert.Equal(t, ErrEventoRegistered, err)
+	})
+
+}
+
+func TestRemoveEvento(t *testing.T) {
+
+	t.Run("Evento não cadastrado", func(t *testing.T) {
+		a, _ := NewArtista("vancejoy@gmail.com", "somepassword", "2018-02-10", "Vance Joy", "Australian Singer", 2006)
+		e, _ := NewEvento("radiohead@spotify.com", "somepassword", "2018-02-10", "Lollapalooza", "2006-01-02", "São Paulo", "Brazil", 1, 1)
+		err := a.RemoveEvento(*e)
+		assert.Equal(t, ErrNotFound, err)
+	})
+
+	t.Run("Evento removido com sucesso", func(t *testing.T) {
+		a, _ := NewArtista("vancejoy@gmail.com", "somepassword", "2018-02-10", "Vance Joy", "Australian Singer", 2006)
+		e, _ := NewEvento("radiohead@spotify.com", "somepassword", "2018-02-10", "Lollapalooza", "2006-01-02", "São Paulo", "Brazil", 1, 1)
+		_ = a.AddEvento(*e)
+		err := a.RemoveEvento(*e)
+		assert.Nil(t, err)
+	})
+
+}
+
+func TestGetEvento(t *testing.T) {
+
+	t.Run("Evento cadastrado encontrado", func(t *testing.T) {
+		a, _ := NewArtista("vancejoy@gmail.com", "somepassword", "2018-02-10", "Vance Joy", "Australian Singer", 2006)
+		e, _ := NewEvento("radiohead@spotify.com", "somepassword", "2018-02-10", "Lollapalooza", "2006-01-02", "São Paulo", "Brazil", 1, 1)
+		_ = a.AddEvento(*e)
+		evento, err := a.GetEvento(*e)
+		assert.Nil(t, err)
+		assert.Equal(t, evento, *e)
+	})
+
+	t.Run("Evento não cadastrado", func(t *testing.T) {
+		a, _ := NewArtista("vancejoy@gmail.com", "somepassword", "2018-02-10", "Vance Joy", "Australian Singer", 2006)
+		e, _ := NewEvento("radiohead@spotify.com", "somepassword", "2018-02-10", "Lollapalooza", "2006-01-02", "São Paulo", "Brazil", 1, 1)
+		_, err := a.GetEvento(*e)
+		assert.Equal(t, ErrNotFound, err)
+	})
+
+}
+
 func TestAddOuvinte(t *testing.T) {
 
 	t.Run("Ouvinte criado com sucesso", func(t *testing.T) {
