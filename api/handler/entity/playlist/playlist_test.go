@@ -83,7 +83,7 @@ func Test_createPlaylist(t *testing.T) {
 	assert.Equal(t, "/v1/playlist", path)
 
 	m.EXPECT().
-		CreatePlaylist(gomock.Any(), gomock.Any(), gomock.Any()).
+		CreatePlaylist(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).
 		Return("Playlist", nil)
 	h := createPlaylist(m)
 	s := &entity.Playlist{

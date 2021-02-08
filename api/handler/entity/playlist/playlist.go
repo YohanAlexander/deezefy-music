@@ -81,7 +81,7 @@ func createPlaylist(service playlist.UseCase) http.Handler {
 			return
 		}
 
-		music, err := service.CreatePlaylist(input.Nome, input.Status, input.DataCriacao)
+		music, err := service.CreatePlaylist(input.Usuario.Email, input.Usuario.Password, input.Usuario.Birthday, input.Nome, input.Status, input.DataCriacao)
 		if err != nil && err != entity.ErrInvalidEntity {
 			w.WriteHeader(http.StatusInternalServerError)
 			json.NewEncoder(w).Encode(presenter.Erro{

@@ -6,6 +6,7 @@ import (
 
 // Playlist entidade Playlist
 type Playlist struct {
+	Usuario     Usuario   `validate:"required"`
 	Nome        string    `validate:"required,gte=1"`
 	Status      string    `validate:"required,oneof=ativo inativo"`
 	DataCriacao string    `validate:"required,datetime=2006-01-02"`
@@ -14,13 +15,18 @@ type Playlist struct {
 }
 
 // NewPlaylist cria um novo Playlist
-func NewPlaylist(nome, status, datacriacao string) (*Playlist, error) {
+func NewPlaylist(email, password, birthday, nome, status, datacriacao string) (*Playlist, error) {
+	u, err := NewUsuario(email, password, birthday)
+	if err != nil {
+		return nil, err
+	}
 	p := &Playlist{
+		Usuario:     *u,
 		Nome:        nome,
 		Status:      status,
 		DataCriacao: datacriacao,
 	}
-	err := p.Validate()
+	err = p.Validate()
 	if err != nil {
 		return nil, err
 	}

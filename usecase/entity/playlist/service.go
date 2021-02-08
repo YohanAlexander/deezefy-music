@@ -19,8 +19,8 @@ func NewService(r Repository) *Service {
 }
 
 // CreatePlaylist Create Playlist
-func (s *Service) CreatePlaylist(nome, status, datacriacao string) (string, error) {
-	e, err := entity.NewPlaylist(nome, status, datacriacao)
+func (s *Service) CreatePlaylist(email, password, birthday, nome, status, datacriacao string) (string, error) {
+	e, err := entity.NewPlaylist(email, password, birthday, nome, status, datacriacao)
 	if err != nil {
 		return err.Error(), err
 	}

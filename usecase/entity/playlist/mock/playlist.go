@@ -324,18 +324,18 @@ func (mr *MockUseCaseMockRecorder) ListPlaylists() *gomock.Call {
 }
 
 // CreatePlaylist mocks base method
-func (m *MockUseCase) CreatePlaylist(nome, status, datacriacao string) (string, error) {
+func (m *MockUseCase) CreatePlaylist(email, password, birthday, nome, status, datacriacao string) (string, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CreatePlaylist", nome, status, datacriacao)
+	ret := m.ctrl.Call(m, "CreatePlaylist", email, password, birthday, nome, status, datacriacao)
 	ret0, _ := ret[0].(string)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // CreatePlaylist indicates an expected call of CreatePlaylist
-func (mr *MockUseCaseMockRecorder) CreatePlaylist(nome, status, datacriacao interface{}) *gomock.Call {
+func (mr *MockUseCaseMockRecorder) CreatePlaylist(email, password, birthday, nome, status, datacriacao interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreatePlaylist", reflect.TypeOf((*MockUseCase)(nil).CreatePlaylist), nome, status, datacriacao)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreatePlaylist", reflect.TypeOf((*MockUseCase)(nil).CreatePlaylist), email, password, birthday, nome, status, datacriacao)
 }
 
 // UpdatePlaylist mocks base method

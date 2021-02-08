@@ -4,6 +4,7 @@ import "github.com/yohanalexander/deezefy-music/entity"
 
 // Playlist entidade Playlist
 type Playlist struct {
+	Usuario        entity.Usuario   `json:"usuario"`
 	Nome           string           `json:"nome"`
 	Status         string           `json:"status"`
 	DataCriacao    string           `json:"datacriacao"`
@@ -22,6 +23,7 @@ func AppendPlaylist(playlist entity.Playlist, playlists []*Playlist) []*Playlist
 
 // GetPlaylist seta os valores a partir da entidade
 func (p *Playlist) GetPlaylist(playlist entity.Playlist) {
+	p.Usuario = playlist.Usuario
 	p.Nome = playlist.Nome
 	p.Status = playlist.Status
 	p.DataCriacao = playlist.DataCriacao
