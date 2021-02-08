@@ -12,6 +12,7 @@ type Artista struct {
 	NomeArtistico string           `json:"nomeartistico"`
 	Biografia     string           `json:"biografia"`
 	AnoFormacao   int              `json:"anoformacao"`
+	Organizador   []entity.Evento  `json:"eventos"`
 	Seguidores    []entity.Ouvinte `json:"seguidores"`
 	Musicas       []entity.Musica  `json:"musicas"`
 	Perfis        []entity.Perfil  `json:"perfis"`
@@ -34,6 +35,7 @@ func (a *Artista) GetArtista(artista entity.Artista) {
 	a.NomeArtistico = artista.NomeArtistico
 	a.Biografia = artista.Biografia
 	a.AnoFormacao = artista.AnoFormacao
+	a.Organizador = artista.Organizador
 	a.Seguidores = artista.Seguidores
 	a.Musicas = artista.Grava
 	a.Perfis = artista.Perfis

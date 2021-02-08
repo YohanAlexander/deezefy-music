@@ -3,6 +3,7 @@ package repository
 import (
 	"database/sql"
 	"fmt"
+	"time"
 
 	"github.com/yohanalexander/deezefy-music/entity"
 )
@@ -22,14 +23,31 @@ func NewEventoPSQL(db *sql.DB) *EventoPSQL {
 // Create an Evento
 func (r *EventoPSQL) Create(e *entity.Evento) (int, error) {
 	stmt, err := r.db.Prepare(`
-		insert into deezefy.Evento (id, nome)
-		values(?,?)`)
+		insert into deezefy.Evento (id, nome, fk_usuario)
+		values(?,?,?)`)
 	if err != nil {
 		return e.ID, err
 	}
 	_, err = stmt.Exec(
 		e.ID,
 		e.Nome,
+		e.Usuario.Email,
+	)
+	if err != nil {
+		return e.ID, err
+	}
+	stmt, err = r.db.Prepare(`
+		insert into deezefy.Ocorre (data, fk_artista, fk_local, fk_evento, fk_usuario)
+		values(?,?,?,?,?)`)
+	if err != nil {
+		return e.ID, err
+	}
+	_, err = stmt.Exec(
+		time.Now().Format("2006-01-02"),
+		e.Usuario.Email,
+		e.Local.ID,
+		e.ID,
+		e.Usuario.Email,
 	)
 	if err != nil {
 		return e.ID, err

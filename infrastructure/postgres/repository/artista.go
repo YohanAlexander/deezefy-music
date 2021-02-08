@@ -3,6 +3,7 @@ package repository
 import (
 	"database/sql"
 	"fmt"
+	"time"
 
 	"github.com/yohanalexander/deezefy-music/entity"
 )
@@ -76,6 +77,21 @@ func getArtista(email string, db *sql.DB) (*entity.Artista, error) {
 	}
 	for rows.Next() {
 		err = rows.Scan(&u.Usuario.Email, &u.Usuario.Password, &u.Usuario.Birthday, &u.NomeArtistico, &u.Biografia, &u.AnoFormacao)
+	}
+	// select related evento
+	stmt, err = db.Prepare(`select id, nome, data from deezefy.Evento
+	join deezefy.Ocorre on(Evento.id = Ocorre.fk_evento) where Evento.fk_usuario = ?`)
+	if err != nil {
+		return nil, err
+	}
+	rows, err = stmt.Query(email)
+	if err != nil {
+		return nil, err
+	}
+	for rows.Next() {
+		j := &entity.Evento{}
+		err = rows.Scan(&j.ID, &j.Nome, &j.Data)
+		u.Organizador = append(u.Organizador, *j)
 	}
 	// select related ouvinte
 	stmt, err = db.Prepare(`select email, senha, data_nascimento, primeiro_nome, sobrenome from deezefy.Ouvinte
@@ -170,6 +186,18 @@ func (r *ArtistaPSQL) Update(e *entity.Artista) error {
 	where email = ?`, e.Usuario.Email, e.Usuario.Password, e.Usuario.Birthday, e.NomeArtistico, e.Biografia, e.AnoFormacao, e.Usuario.Email)
 	if err != nil {
 		return err
+	}
+	// update related evento
+	_, err = r.db.Exec(`delete from deezefy.Ocorre where fk_usuario = ?`, e.Usuario.Email)
+	if err != nil {
+		return err
+	}
+	for _, b := range e.Organizador {
+		_, err := r.db.Exec(`insert into deezefy.Ocorre
+		(data, fk_usuario, fk_local, fk_evento, fk_artista) values(?,?,?,?,?)`, time.Now().Format("2006-01-02"), b.Usuario.Email, b.Local.ID, b.ID, b.Usuario.Email)
+		if err != nil {
+			return err
+		}
 	}
 	// update related ouvinte
 	_, err = r.db.Exec(`delete from deezefy.Segue where fk_artista = ?`, e.Usuario.Email)
