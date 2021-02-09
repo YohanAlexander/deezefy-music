@@ -19,3 +19,6 @@ var ErrUnexpected = errors.New("Unexpected Error")
 
 // ErrInvalidEntity domain error
 var ErrInvalidEntity = errors.New("InvalidEntity Error")
+
+// ErrUnauthorized login error
+var ErrUnauthorized = errors.New("Unauthorized Error")

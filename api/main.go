@@ -44,6 +44,7 @@ import (
 	hperfil "github.com/yohanalexander/deezefy-music/api/handler/entity/perfil"
 	hplaylist "github.com/yohanalexander/deezefy-music/api/handler/entity/playlist"
 	husuario "github.com/yohanalexander/deezefy-music/api/handler/entity/usuario"
+	hlogin "github.com/yohanalexander/deezefy-music/api/handler/login"
 
 	halbumcontermusica "github.com/yohanalexander/deezefy-music/api/handler/relationship/albumcontermusica"
 	hartistagravarmusica "github.com/yohanalexander/deezefy-music/api/handler/relationship/artistagravarmusica"
@@ -87,6 +88,8 @@ func main() {
 	usuarioRepo := repository.NewUsuarioPSQL(db)
 	usuarioService := usuario.NewService(usuarioRepo)
 	husuario.MakeUsuarioHandlers(r, *n, usuarioService)
+	// login
+	hlogin.MakeLoginHandlers(r, *n, usuarioService)
 
 	// artista
 	artistaRepo := repository.NewArtistaPSQL(db)
