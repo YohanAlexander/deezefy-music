@@ -82,8 +82,9 @@ func getGenero(nome string, db *sql.DB) (*entity.Genero, error) {
 	}
 	// select related musica
 	stmt, err = db.Prepare(`
-		select id, nome, duracao from deezefy.Musica
-		join deezefy.Musica_Possui_Genero on(Musica_Possui_Genero.fk_musica = Musica.id)
+		select id, Musica.nome, duracao from deezefy.Musica
+		join deezefy.Musica_Possui_Generos on(Musica_Possui_Generos.fk_musica = Musica.id)
+		join deezefy.Genero on(Musica_Possui_Generos.fk_genero = Genero.nome)
 		where Genero.nome = $1`)
 	if err != nil {
 		return nil, err
@@ -99,8 +100,11 @@ func getGenero(nome string, db *sql.DB) (*entity.Genero, error) {
 	}
 	// select related perfil
 	stmt, err = db.Prepare(`
-		select email, senha, data_nascimento, primeiro_nome, sobrenome, id, informacoes_relevantes from deezefy.Genero
-		join deezefy.Generos_Favoritos on(Generos_Favoritos.fk_genero = Genero.nome)
+		select email, senha, data_nascimento, primeiro_nome, sobrenome, id, informacoes_relevantes from deezefy.Perfil
+		join deezefy.Generos_Favoritos on(Generos_Favoritos.fk_perfil = Perfil.id)
+		join deezefy.Genero on(Genero.nome = Generos_Favoritos.fk_genero)
+		join deezefy.Ouvinte on(Perfil.fk_ouvinte = Ouvinte.fk_usuario)
+		join deezefy.Usuario on(Usuario.email = Perfil.fk_ouvinte)
 		where Genero.nome = $1`)
 	if err != nil {
 		return nil, err

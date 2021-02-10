@@ -66,7 +66,7 @@ func (r *EventoPSQL) Get(id int) (*entity.Evento, error) {
 
 func getEvento(id int, db *sql.DB) (*entity.Evento, error) {
 	stmt, err := db.Prepare(`
-		select email, senha, data_nascimento, id, cidade, pais, id, nome, data from deezefy.Evento
+		select email, senha, data_nascimento, Local.id, cidade, pais, Evento.id, nome, data from deezefy.Evento
 		join deezefy.Ocorre on(Ocorre.fk_evento = Evento.id)
 		join deezefy.Local on(Local.id = Ocorre.fk_local)
 		join deezefy.Usuario on(Usuario.email = Ocorre.fk_usuario)

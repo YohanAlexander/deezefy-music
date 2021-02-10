@@ -114,8 +114,8 @@ func getOuvinte(email string, db *sql.DB) (*entity.Ouvinte, error) {
 	// select related artista
 	stmt, err = db.Prepare(`
 		select email, senha, data_nascimento, nome_artistico, biografia, ano_formacao from deezefy.Artista
+		join deezefy.Segue on(Segue.fk_artista = Artista.fk_usuario)
 		join deezefy.Usuario on(Usuario.email = Artista.fk_usuario)
-		join deezefy.Segue on(Ouvinte.fk_usuario = Segue.fk_artista)
 		where fk_ouvinte = $1`)
 	if err != nil {
 		return nil, err
@@ -150,6 +150,7 @@ func getOuvinte(email string, db *sql.DB) (*entity.Ouvinte, error) {
 	stmt, err = db.Prepare(`
 		select nome, status, data_criacao from deezefy.Playlist
 		join deezefy.Ouvinte_Salva_Playlist on(Playlist.nome = Ouvinte_Salva_Playlist.fk_playlist)
+		join deezefy.Cria on(Playlist.nome = Cria.fk_playlist)
 		where fk_ouvinte = $1`)
 	if err != nil {
 		return nil, err

@@ -102,8 +102,10 @@ func getMusica(id int, db *sql.DB) (*entity.Musica, error) {
 	}
 	// select related playlist
 	stmt, err = db.Prepare(`
-		select nome, status, data_criacao from deezefy.Playlist
+		select Playlist.nome, status, data_criacao from deezefy.Playlist
 		join deezefy.Musica_em_Playlist on(Playlist.nome = Musica_em_Playlist.fk_playlist)
+		join deezefy.Musica on(Musica.id = Musica_em_Playlist.fk_musica)
+		join deezefy.Cria on(Playlist.nome = Cria.fk_playlist)
 		where Musica.id = $1`)
 	if err != nil {
 		return nil, err
@@ -119,8 +121,9 @@ func getMusica(id int, db *sql.DB) (*entity.Musica, error) {
 	}
 	// select related album
 	stmt, err = db.Prepare(`
-		select id, titulo, ano_lancamento from deezefy.Album
-		join deezefy.Album_Contem_Musica on(Album_Contem_Musica.fk_musica = Musica.id)
+		select Album.id, titulo, ano_lancamento from deezefy.Album
+		join deezefy.Album_Contem_Musica on(Album_Contem_Musica.fk_album = Album.id)
+		join deezefy.Musica on(Musica.id = Album_Contem_Musica.fk_musica)
 		where Musica.id = $1`)
 	if err != nil {
 		return nil, err
@@ -136,8 +139,9 @@ func getMusica(id int, db *sql.DB) (*entity.Musica, error) {
 	}
 	// select related genero
 	stmt, err = db.Prepare(`
-		select nome, estilo from deezefy.Musica
-		join deezefy.Musica_Possui_Genero on(Musica_Possui_Genero.fk_musica = Musica.id)
+		select Genero.nome, estilo from deezefy.Genero
+		join deezefy.Musica_Possui_Generos on(Musica_Possui_Generos.fk_genero = Genero.nome)
+		join deezefy.Musica on(Musica.id = Musica_Possui_Generos.fk_musica)
 		where Musica.id = $1`)
 	if err != nil {
 		return nil, err

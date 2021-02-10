@@ -63,7 +63,9 @@ func (r *PlaylistPSQL) Get(nome string) (*entity.Playlist, error) {
 
 func getPlaylist(nome string, db *sql.DB) (*entity.Playlist, error) {
 	stmt, err := db.Prepare(`
-		select nome, status, data_criacao from deezefy.Playlist
+		select email, senha, data_nascimento, nome, status, data_criacao from deezefy.Playlist
+		join deezefy.Cria on(Cria.fk_playlist = Playlist.nome)
+		join deezefy.Usuario on(Cria.fk_usuario = Usuario.email)
 		where nome = $1`)
 	if err != nil {
 		return nil, err
@@ -74,7 +76,7 @@ func getPlaylist(nome string, db *sql.DB) (*entity.Playlist, error) {
 		return nil, err
 	}
 	for rows.Next() {
-		err = rows.Scan(&u.Nome, &u.Status, &u.DataCriacao)
+		err = rows.Scan(&u.Usuario.Email, &u.Usuario.Password, &u.Usuario.Birthday, &u.Nome, &u.Status, &u.DataCriacao)
 	}
 	// select related ouvinte
 	stmt, err = db.Prepare(`
@@ -97,8 +99,9 @@ func getPlaylist(nome string, db *sql.DB) (*entity.Playlist, error) {
 	}
 	// select related musica
 	stmt, err = db.Prepare(`
-		select id, nome, duracao from deezefy.Musica
+		select id, Musica.nome, duracao from deezefy.Musica
 		join deezefy.Musica_em_Playlist on(Musica_em_Playlist.fk_musica = Musica.id)
+		join deezefy.Playlist on(Musica_em_Playlist.fk_playlist = Playlist.nome)
 		where Playlist.nome = $1`)
 	if err != nil {
 		return nil, err

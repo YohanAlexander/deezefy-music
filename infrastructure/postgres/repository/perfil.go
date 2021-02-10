@@ -48,7 +48,9 @@ func (r *PerfilPSQL) Get(id int) (*entity.Perfil, error) {
 
 func getPerfil(id int, db *sql.DB) (*entity.Perfil, error) {
 	stmt, err := db.Prepare(`
-		select id, informacoes_relevantes from deezefy.Perfil
+		select email, senha, data_nascimento, primeiro_nome, sobrenome, id, informacoes_relevantes from deezefy.Perfil
+		join deezefy.Ouvinte on(Ouvinte.fk_usuario = Perfil.fk_ouvinte)
+		join deezefy.Usuario on(Usuario.email = Ouvinte.fk_usuario)
 		where id = $1`)
 	if err != nil {
 		return nil, err
@@ -59,7 +61,7 @@ func getPerfil(id int, db *sql.DB) (*entity.Perfil, error) {
 		return nil, err
 	}
 	for rows.Next() {
-		err = rows.Scan(&u.ID, &u.InformacoesRelevantes)
+		err = rows.Scan(&u.Ouvinte.Usuario.Email, &u.Ouvinte.Usuario.Password, &u.Ouvinte.Usuario.Birthday, &u.Ouvinte.PrimeiroNome, &u.Ouvinte.Sobrenome, &u.ID, &u.InformacoesRelevantes)
 	}
 	// select related artista
 	stmt, err = db.Prepare(`
@@ -82,8 +84,9 @@ func getPerfil(id int, db *sql.DB) (*entity.Perfil, error) {
 	}
 	// select related genero
 	stmt, err = db.Prepare(`
-		select nome, estilo from deezefy.Perfil
-		join deezefy.Generos_Favoritos on(Generos_Favoritos.fk_perfil = Perfil.id)
+		select nome, estilo from deezefy.Genero
+		join deezefy.Generos_Favoritos on(Generos_Favoritos.fk_genero = Genero.nome)
+		join deezefy.Perfil on(Generos_Favoritos.fk_perfil = Perfil.id)
 		where Perfil.id = $1`)
 	if err != nil {
 		return nil, err

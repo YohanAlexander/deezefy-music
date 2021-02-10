@@ -50,7 +50,7 @@ func (r *AlbumPSQL) Get(id int) (*entity.Album, error) {
 func getAlbum(id int, db *sql.DB) (*entity.Album, error) {
 	stmt, err := db.Prepare(`
 		select email, senha, data_nascimento, nome_artistico, biografia, ano_formacao, id, titulo, ano_lancamento from deezefy.Album
-		join deezefy.Artista on(Artista.fk_usuario = Album_fk_artista)
+		join deezefy.Artista on(Artista.fk_usuario = Album.fk_artista)
 		join deezefy.Usuario on(Usuario.email = Artista.fk_usuario)
 		where id = $1`)
 	if err != nil {
@@ -70,7 +70,7 @@ func getAlbum(id int, db *sql.DB) (*entity.Album, error) {
 		join deezefy.Ouvinte_Salva_Album on(Ouvinte_Salva_Album.fk_album = Album.id)
 		join deezefy.Ouvinte on(Ouvinte.fk_usuario = Ouvinte_Salva_Album.fk_ouvinte)
 		join deezefy.Usuario on(Usuario.email = Ouvinte.fk_usuario)
-		where Album.id = $1`)
+		where id = $1`)
 	if err != nil {
 		return nil, err
 	}
@@ -87,7 +87,7 @@ func getAlbum(id int, db *sql.DB) (*entity.Album, error) {
 	stmt, err = db.Prepare(`
 		select id, nome, duracao from deezefy.Musica
 		join deezefy.Album_Contem_Musica on(Album_Contem_Musica.fk_musica = Musica.id)
-		where Album.id = $1`)
+		where id = $1`)
 	if err != nil {
 		return nil, err
 	}

@@ -81,9 +81,11 @@ func getArtista(email string, db *sql.DB) (*entity.Artista, error) {
 	}
 	// select related evento
 	stmt, err = db.Prepare(`
-		select id, nome, data from deezefy.Evento
+		select Evento.id, nome, data, Local.id, cidade, pais from deezefy.Evento
 		join deezefy.Ocorre on(Evento.id = Ocorre.fk_evento)
-		where Evento.fk_usuario = $1`)
+		join deezefy.Usuario on(Usuario.email = Ocorre.fk_usuario)
+		join deezefy.Local on(Local.id = Ocorre.fk_local)
+		where email = $1`)
 	if err != nil {
 		return nil, err
 	}
@@ -93,14 +95,14 @@ func getArtista(email string, db *sql.DB) (*entity.Artista, error) {
 	}
 	for rows.Next() {
 		j := &entity.Evento{}
-		err = rows.Scan(&j.ID, &j.Nome, &j.Data)
+		err = rows.Scan(&j.ID, &j.Nome, &j.Data, &j.Local.ID, &j.Local.Cidade, &j.Local.Pais)
 		u.Organizador = append(u.Organizador, *j)
 	}
 	// select related ouvinte
 	stmt, err = db.Prepare(`
 		select email, senha, data_nascimento, primeiro_nome, sobrenome from deezefy.Ouvinte
-		join deezefy.Usuario on(Usuario.email = Ouvinte.fk_usuario)
 		join deezefy.Segue on(Ouvinte.fk_usuario = Segue.fk_ouvinte)
+		join deezefy.Usuario on(Usuario.email = Segue.fk_ouvinte)
 		where fk_artista = $1`)
 	if err != nil {
 		return nil, err
@@ -170,7 +172,7 @@ func getArtista(email string, db *sql.DB) (*entity.Artista, error) {
 	// select related album
 	stmt, err = db.Prepare(`
 		select id, titulo, ano_lancamento from deezefy.Album
-		join deezefy.Artista_Possui_Genero on(Artista_Possui_Genero.fk_genero = Genero.nome)
+		join deezefy.Artista on(Artista.fk_usuario = Album.fk_artista)
 		where fk_artista = $1`)
 	if err != nil {
 		return nil, err
