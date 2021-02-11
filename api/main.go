@@ -88,8 +88,6 @@ func main() {
 	usuarioRepo := repository.NewUsuarioPSQL(db)
 	usuarioService := usuario.NewService(usuarioRepo)
 	husuario.MakeUsuarioHandlers(r, *n, usuarioService)
-	// login
-	hlogin.MakeLoginHandlers(r, *n, usuarioService)
 
 	// artista
 	artistaRepo := repository.NewArtistaPSQL(db)
@@ -100,6 +98,9 @@ func main() {
 	ouvinteRepo := repository.NewOuvintePSQL(db)
 	ouvinteService := ouvinte.NewService(ouvinteRepo)
 	houvinte.MakeOuvinteHandlers(r, *n, ouvinteService)
+
+	// login
+	hlogin.MakeLoginHandlers(r, *n, usuarioService, ouvinteService, artistaService)
 
 	// musica
 	musicaRepo := repository.NewMusicaPSQL(db)

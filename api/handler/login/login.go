@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/yohanalexander/deezefy-music/usecase/entity/artista"
+	"github.com/yohanalexander/deezefy-music/usecase/entity/ouvinte"
 	"github.com/yohanalexander/deezefy-music/usecase/entity/usuario"
 
 	"github.com/yohanalexander/deezefy-music/api/presenter"
@@ -12,7 +14,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func loginUsuario(service usuario.UseCase) http.Handler {
+func loginUsuario(usuarioService usuario.UseCase, ouvinteService ouvinte.UseCase, artistaService artista.UseCase) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
 		w.Header().Set("Content-Type", "application/json")
@@ -28,42 +30,40 @@ func loginUsuario(service usuario.UseCase) http.Handler {
 			return
 		}
 
-		user, err := service.GetUsuario(input.Email)
-		if err != nil {
+		toJ := &presenter.Login{}
+
+		o, err := ouvinteService.GetOuvinte(input.Email)
+		toJ.Ouvinte = &presenter.Sucesso{
+			Result:     o,
+			StatusCode: http.StatusOK,
+		}
+
+		erro := loginOuvinte(ouvinteService, input, toJ)
+
+		a, err := artistaService.GetArtista(input.Email)
+		toJ.Artista = &presenter.Sucesso{
+			Result:     a,
+			StatusCode: http.StatusOK,
+		}
+
+		erra := loginArtista(artistaService, input, toJ)
+
+		if erro == presenter.ErrUnexpected && erra == presenter.ErrUnexpected {
 			w.WriteHeader(http.StatusInternalServerError)
-			json.NewEncoder(w).Encode(presenter.Erro{
-				Message:    presenter.ErrUnexpected.Error(),
-				StatusCode: http.StatusInternalServerError,
-			})
-			return
 		}
 
-		if user == nil {
+		if erro == presenter.ErrUnexpected && erra == presenter.ErrUnexpected {
 			w.WriteHeader(http.StatusNotFound)
-			json.NewEncoder(w).Encode(presenter.Erro{
-				Message:    presenter.ErrNotFound.Error(),
-				StatusCode: http.StatusNotFound,
-			})
-			return
 		}
 
-		err = user.ValidatePassword(input.Password)
-		if err != nil {
+		if erro == presenter.ErrUnauthorized && erra == presenter.ErrUnauthorized {
 			w.WriteHeader(http.StatusUnauthorized)
-			json.NewEncoder(w).Encode(presenter.Erro{
-				Message:    presenter.ErrUnauthorized.Error(),
-				StatusCode: http.StatusUnauthorized,
-			})
-			return
 		}
-
-		toJ := &presenter.Usuario{}
-		toJ.MakeUsuario(*user)
 
 		w.WriteHeader(http.StatusOK)
-		err = json.NewEncoder(w).Encode(presenter.Sucesso{
-			Result:     toJ,
-			StatusCode: http.StatusOK,
+		err = json.NewEncoder(w).Encode(presenter.Login{
+			Artista: toJ.Artista,
+			Ouvinte: toJ.Ouvinte,
 		})
 
 		if err != nil {
@@ -77,9 +77,69 @@ func loginUsuario(service usuario.UseCase) http.Handler {
 	})
 }
 
+func loginOuvinte(ouvinteService ouvinte.UseCase, input *presenter.Usuario, login *presenter.Login) error {
+
+	ouvinte, err := ouvinteService.GetOuvinte(input.Email)
+	if err != nil {
+		login.Ouvinte = presenter.Erro{
+			Message:    presenter.ErrUnexpected.Error(),
+			StatusCode: http.StatusInternalServerError,
+		}
+		return presenter.ErrUnexpected
+	}
+
+	if ouvinte == nil {
+		login.Ouvinte = presenter.Erro{
+			Message:    presenter.ErrNotFound.Error(),
+			StatusCode: http.StatusNotFound,
+		}
+		return presenter.ErrNotFound
+	}
+
+	err = ouvinte.Usuario.ValidatePassword(input.Password)
+	if err != nil {
+		login.Ouvinte = presenter.Erro{
+			Message:    presenter.ErrUnauthorized.Error(),
+			StatusCode: http.StatusUnauthorized,
+		}
+		return presenter.ErrUnauthorized
+	}
+	return nil
+}
+
+func loginArtista(artistaService artista.UseCase, input *presenter.Usuario, login *presenter.Login) error {
+
+	artista, err := artistaService.GetArtista(input.Email)
+	if err != nil {
+		login.Artista = presenter.Erro{
+			Message:    presenter.ErrUnexpected.Error(),
+			StatusCode: http.StatusInternalServerError,
+		}
+		return presenter.ErrUnexpected
+	}
+
+	if artista == nil {
+		login.Artista = presenter.Erro{
+			Message:    presenter.ErrNotFound.Error(),
+			StatusCode: http.StatusNotFound,
+		}
+		return presenter.ErrNotFound
+	}
+
+	err = artista.Usuario.ValidatePassword(input.Password)
+	if err != nil {
+		login.Artista = presenter.Erro{
+			Message:    presenter.ErrUnauthorized.Error(),
+			StatusCode: http.StatusUnauthorized,
+		}
+		return presenter.ErrUnauthorized
+	}
+	return nil
+}
+
 // MakeLoginHandlers make url handlers
-func MakeLoginHandlers(r *mux.Router, n negroni.Negroni, service usuario.UseCase) {
+func MakeLoginHandlers(r *mux.Router, n negroni.Negroni, usuarioService usuario.UseCase, ouvinteService ouvinte.UseCase, artistaService artista.UseCase) {
 	r.Handle("/v1/login", n.With(
-		negroni.Wrap(loginUsuario(service)),
+		negroni.Wrap(loginUsuario(usuarioService, ouvinteService, artistaService)),
 	)).Methods("POST", "OPTIONS").Name("loginUsuario")
 }

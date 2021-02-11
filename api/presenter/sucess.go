@@ -8,3 +8,9 @@ type Sucesso struct {
 
 // SucessDelete delete sucess
 var SucessDelete = "Delete Sucessful"
+
+// Login presenter
+type Login struct {
+	Artista interface{} `json:"artista"`
+	Ouvinte interface{} `json:"ouvinte"`
+}
