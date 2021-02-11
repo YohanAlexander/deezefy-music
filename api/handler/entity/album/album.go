@@ -49,7 +49,7 @@ func listAlbums(service album.UseCase) http.Handler {
 			return
 		}
 
-		var toJ []*presenter.Album
+		var toJ []presenter.Album
 		for _, d := range data {
 			toJ = presenter.AppendAlbum(*d, toJ)
 		}
@@ -117,7 +117,7 @@ func createAlbum(service album.UseCase) http.Handler {
 		}
 
 		toJ := &presenter.Album{}
-		toJ.GetAlbum(*m)
+		toJ.MakeAlbum(*m)
 
 		w.WriteHeader(http.StatusCreated)
 		err = json.NewEncoder(w).Encode(presenter.Sucesso{
@@ -165,7 +165,7 @@ func getAlbum(service album.UseCase) http.Handler {
 		}
 
 		toJ := &presenter.Album{}
-		toJ.GetAlbum(*data)
+		toJ.MakeAlbum(*data)
 
 		w.WriteHeader(http.StatusOK)
 		err = json.NewEncoder(w).Encode(presenter.Sucesso{

@@ -58,7 +58,7 @@ func loginUsuario(service usuario.UseCase) http.Handler {
 		}
 
 		toJ := &presenter.Usuario{}
-		toJ.GetUsuario(*user)
+		toJ.MakeUsuario(*user)
 
 		w.WriteHeader(http.StatusOK)
 		err = json.NewEncoder(w).Encode(presenter.Sucesso{

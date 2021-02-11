@@ -10,20 +10,20 @@ import (
 type Usuario struct {
 	Email    string `json:"email"`
 	Password string `json:"senha"`
-	Birthday string `json:"datanascimento"`
+	Birthday string `json:"data_nascimento"`
 	Idade    int    `json:"idade"`
 }
 
 // AppendUsuario adiciona presenter na lista
-func AppendUsuario(usuario entity.Usuario, usuarios []*Usuario) []*Usuario {
+func AppendUsuario(usuario entity.Usuario, usuarios []Usuario) []Usuario {
 	u := &Usuario{}
-	u.GetUsuario(usuario)
-	usuarios = append(usuarios, u)
+	u.MakeUsuario(usuario)
+	usuarios = append(usuarios, *u)
 	return usuarios
 }
 
-// GetUsuario seta os valores a partir da entidade
-func (u *Usuario) GetUsuario(usuario entity.Usuario) {
+// MakeUsuario seta os valores a partir da entidade
+func (u *Usuario) MakeUsuario(usuario entity.Usuario) {
 	u.Email = usuario.Email
 	u.Password = usuario.Password
 	u.Birthday = usuario.Birthday

@@ -6,28 +6,32 @@ import (
 
 // Album entidade Album
 type Album struct {
-	Artista       entity.Artista   `json:"artista"`
-	ID            int              `json:"id"`
-	Titulo        string           `json:"titulo"`
-	AnoLancamento int              `json:"anolancamento"`
-	Ouvintes      []entity.Ouvinte `json:"ouvintes"`
-	Musicas       []entity.Musica  `json:"musicas"`
+	Artista       Artista   `json:"artista"`
+	ID            int       `json:"id"`
+	Titulo        string    `json:"titulo"`
+	AnoLancamento int       `json:"ano_lancamento"`
+	Ouvintes      []Ouvinte `json:"ouvintes"`
+	Musicas       []Musica  `json:"musicas"`
 }
 
 // AppendAlbum adiciona presenter na lista
-func AppendAlbum(album entity.Album, albums []*Album) []*Album {
+func AppendAlbum(album entity.Album, albums []Album) []Album {
 	a := &Album{}
-	a.GetAlbum(album)
-	albums = append(albums, a)
+	a.MakeAlbum(album)
+	albums = append(albums, *a)
 	return albums
 }
 
-// GetAlbum seta os valores a partir da entidade
-func (a *Album) GetAlbum(album entity.Album) {
-	a.Artista = album.Artista
+// MakeAlbum seta os valores a partir da entidade
+func (a *Album) MakeAlbum(album entity.Album) {
+	a.Artista.MakeArtista(album.Artista)
 	a.ID = album.ID
 	a.Titulo = album.Titulo
 	a.AnoLancamento = album.AnoLancamento
-	a.Ouvintes = album.Salvou
-	a.Musicas = album.Musicas
+	for _, ouvinte := range album.Salvou {
+		a.Ouvintes = AppendOuvinte(ouvinte, a.Ouvintes)
+	}
+	for _, musica := range album.Musicas {
+		a.Musicas = AppendMusica(musica, a.Musicas)
+	}
 }

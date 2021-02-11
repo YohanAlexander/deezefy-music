@@ -48,7 +48,7 @@ func listGeneros(service genero.UseCase) http.Handler {
 			return
 		}
 
-		var toJ []*presenter.Genero
+		var toJ []presenter.Genero
 		for _, d := range data {
 			toJ = presenter.AppendGenero(*d, toJ)
 		}
@@ -116,7 +116,7 @@ func createGenero(service genero.UseCase) http.Handler {
 		}
 
 		toJ := &presenter.Genero{}
-		toJ.GetGenero(*m)
+		toJ.MakeGenero(*m)
 
 		w.WriteHeader(http.StatusCreated)
 		err = json.NewEncoder(w).Encode(presenter.Sucesso{
@@ -163,7 +163,7 @@ func getGenero(service genero.UseCase) http.Handler {
 		}
 
 		toJ := &presenter.Genero{}
-		toJ.GetGenero(*data)
+		toJ.MakeGenero(*data)
 
 		w.WriteHeader(http.StatusOK)
 		err = json.NewEncoder(w).Encode(presenter.Sucesso{

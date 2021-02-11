@@ -48,7 +48,7 @@ func listArtistas(service artista.UseCase) http.Handler {
 			return
 		}
 
-		var toJ []*presenter.Artista
+		var toJ []presenter.Artista
 		for _, d := range data {
 			toJ = presenter.AppendArtista(*d, toJ)
 		}
@@ -116,7 +116,7 @@ func createArtista(service artista.UseCase) http.Handler {
 		}
 
 		toJ := &presenter.Artista{}
-		toJ.GetArtista(*a)
+		toJ.MakeArtista(*a)
 
 		w.WriteHeader(http.StatusCreated)
 		err = json.NewEncoder(w).Encode(presenter.Sucesso{
@@ -163,7 +163,7 @@ func getArtista(service artista.UseCase) http.Handler {
 		}
 
 		toJ := &presenter.Artista{}
-		toJ.GetArtista(*data)
+		toJ.MakeArtista(*data)
 
 		w.WriteHeader(http.StatusOK)
 		err = json.NewEncoder(w).Encode(presenter.Sucesso{

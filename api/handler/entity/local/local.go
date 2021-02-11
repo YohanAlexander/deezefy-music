@@ -49,7 +49,7 @@ func listLocals(service local.UseCase) http.Handler {
 			return
 		}
 
-		var toJ []*presenter.Local
+		var toJ []presenter.Local
 		for _, d := range data {
 			toJ = presenter.AppendLocal(*d, toJ)
 		}
@@ -117,7 +117,7 @@ func createLocal(service local.UseCase) http.Handler {
 		}
 
 		toJ := &presenter.Local{}
-		toJ.GetLocal(*m)
+		toJ.MakeLocal(*m)
 
 		w.WriteHeader(http.StatusCreated)
 		err = json.NewEncoder(w).Encode(presenter.Sucesso{
@@ -165,7 +165,7 @@ func getLocal(service local.UseCase) http.Handler {
 		}
 
 		toJ := &presenter.Local{}
-		toJ.GetLocal(*data)
+		toJ.MakeLocal(*data)
 
 		w.WriteHeader(http.StatusOK)
 		err = json.NewEncoder(w).Encode(presenter.Sucesso{

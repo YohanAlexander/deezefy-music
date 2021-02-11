@@ -48,7 +48,7 @@ func listUsuarios(service usuario.UseCase) http.Handler {
 			return
 		}
 
-		var toJ []*presenter.Usuario
+		var toJ []presenter.Usuario
 		for _, d := range data {
 			toJ = presenter.AppendUsuario(*d, toJ)
 		}
@@ -116,7 +116,7 @@ func createUsuario(service usuario.UseCase) http.Handler {
 		}
 
 		toJ := &presenter.Usuario{}
-		toJ.GetUsuario(*u)
+		toJ.MakeUsuario(*u)
 
 		w.WriteHeader(http.StatusCreated)
 		err = json.NewEncoder(w).Encode(presenter.Sucesso{
@@ -163,7 +163,7 @@ func getUsuario(service usuario.UseCase) http.Handler {
 		}
 
 		toJ := &presenter.Usuario{}
-		toJ.GetUsuario(*data)
+		toJ.MakeUsuario(*data)
 
 		w.WriteHeader(http.StatusOK)
 		err = json.NewEncoder(w).Encode(presenter.Sucesso{

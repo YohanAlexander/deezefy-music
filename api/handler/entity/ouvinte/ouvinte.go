@@ -48,7 +48,7 @@ func listOuvintes(service ouvinte.UseCase) http.Handler {
 			return
 		}
 
-		var toJ []*presenter.Ouvinte
+		var toJ []presenter.Ouvinte
 		for _, d := range data {
 			toJ = presenter.AppendOuvinte(*d, toJ)
 		}
@@ -116,7 +116,7 @@ func createOuvinte(service ouvinte.UseCase) http.Handler {
 		}
 
 		toJ := &presenter.Ouvinte{}
-		toJ.GetOuvinte(*o)
+		toJ.MakeOuvinte(*o)
 
 		w.WriteHeader(http.StatusCreated)
 		err = json.NewEncoder(w).Encode(presenter.Sucesso{
@@ -163,7 +163,7 @@ func getOuvinte(service ouvinte.UseCase) http.Handler {
 		}
 
 		toJ := &presenter.Ouvinte{}
-		toJ.GetOuvinte(*data)
+		toJ.MakeOuvinte(*data)
 
 		w.WriteHeader(http.StatusOK)
 		err = json.NewEncoder(w).Encode(presenter.Sucesso{

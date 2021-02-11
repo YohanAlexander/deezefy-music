@@ -49,7 +49,7 @@ func listEventos(service evento.UseCase) http.Handler {
 			return
 		}
 
-		var toJ []*presenter.Evento
+		var toJ []presenter.Evento
 		for _, d := range data {
 			toJ = presenter.AppendEvento(*d, toJ)
 		}
@@ -117,7 +117,7 @@ func createEvento(service evento.UseCase) http.Handler {
 		}
 
 		toJ := &presenter.Evento{}
-		toJ.GetEvento(*m)
+		toJ.MakeEvento(*m)
 
 		w.WriteHeader(http.StatusCreated)
 		err = json.NewEncoder(w).Encode(presenter.Sucesso{
@@ -165,7 +165,7 @@ func getEvento(service evento.UseCase) http.Handler {
 		}
 
 		toJ := &presenter.Evento{}
-		toJ.GetEvento(*data)
+		toJ.MakeEvento(*data)
 
 		w.WriteHeader(http.StatusOK)
 		err = json.NewEncoder(w).Encode(presenter.Sucesso{

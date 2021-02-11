@@ -48,7 +48,7 @@ func listPlaylists(service playlist.UseCase) http.Handler {
 			return
 		}
 
-		var toJ []*presenter.Playlist
+		var toJ []presenter.Playlist
 		for _, d := range data {
 			toJ = presenter.AppendPlaylist(*d, toJ)
 		}
@@ -116,7 +116,7 @@ func createPlaylist(service playlist.UseCase) http.Handler {
 		}
 
 		toJ := &presenter.Playlist{}
-		toJ.GetPlaylist(*m)
+		toJ.MakePlaylist(*m)
 
 		w.WriteHeader(http.StatusCreated)
 		err = json.NewEncoder(w).Encode(presenter.Sucesso{
@@ -163,7 +163,7 @@ func getPlaylist(service playlist.UseCase) http.Handler {
 		}
 
 		toJ := &presenter.Playlist{}
-		toJ.GetPlaylist(*data)
+		toJ.MakePlaylist(*data)
 
 		w.WriteHeader(http.StatusOK)
 		err = json.NewEncoder(w).Encode(presenter.Sucesso{

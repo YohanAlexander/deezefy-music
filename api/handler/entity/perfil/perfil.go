@@ -49,7 +49,7 @@ func listPerfils(service perfil.UseCase) http.Handler {
 			return
 		}
 
-		var toJ []*presenter.Perfil
+		var toJ []presenter.Perfil
 		for _, d := range data {
 			toJ = presenter.AppendPerfil(*d, toJ)
 		}
@@ -117,7 +117,7 @@ func createPerfil(service perfil.UseCase) http.Handler {
 		}
 
 		toJ := &presenter.Perfil{}
-		toJ.GetPerfil(*m)
+		toJ.MakePerfil(*m)
 
 		w.WriteHeader(http.StatusCreated)
 		err = json.NewEncoder(w).Encode(presenter.Sucesso{
@@ -165,7 +165,7 @@ func getPerfil(service perfil.UseCase) http.Handler {
 		}
 
 		toJ := &presenter.Perfil{}
-		toJ.GetPerfil(*data)
+		toJ.MakePerfil(*data)
 
 		w.WriteHeader(http.StatusOK)
 		err = json.NewEncoder(w).Encode(presenter.Sucesso{

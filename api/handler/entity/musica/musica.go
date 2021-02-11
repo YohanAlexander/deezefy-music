@@ -49,7 +49,7 @@ func listMusicas(service musica.UseCase) http.Handler {
 			return
 		}
 
-		var toJ []*presenter.Musica
+		var toJ []presenter.Musica
 		for _, d := range data {
 			toJ = presenter.AppendMusica(*d, toJ)
 		}
@@ -117,7 +117,7 @@ func createMusica(service musica.UseCase) http.Handler {
 		}
 
 		toJ := &presenter.Musica{}
-		toJ.GetMusica(*m)
+		toJ.MakeMusica(*m)
 
 		w.WriteHeader(http.StatusCreated)
 		err = json.NewEncoder(w).Encode(presenter.Sucesso{
@@ -165,7 +165,7 @@ func getMusica(service musica.UseCase) http.Handler {
 		}
 
 		toJ := &presenter.Musica{}
-		toJ.GetMusica(*data)
+		toJ.MakeMusica(*data)
 
 		w.WriteHeader(http.StatusOK)
 		err = json.NewEncoder(w).Encode(presenter.Sucesso{

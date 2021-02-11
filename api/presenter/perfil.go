@@ -4,26 +4,30 @@ import "github.com/yohanalexander/deezefy-music/entity"
 
 // Perfil entidade Perfil
 type Perfil struct {
-	Ouvinte               entity.Ouvinte   `json:"ouvinte"`
-	ID                    int              `json:"id"`
-	InformacoesRelevantes string           `json:"informacoesrelevantes"`
-	ArtistasFavoritos     []entity.Artista `json:"artistasfavoritos"`
-	GenerosFavoritos      []entity.Genero  `json:"generosfavoritos"`
+	Ouvinte               Ouvinte   `json:"ouvinte"`
+	ID                    int       `json:"id"`
+	InformacoesRelevantes string    `json:"informacoes_relevantes"`
+	ArtistasFavoritos     []Artista `json:"artistas_favoritos"`
+	GenerosFavoritos      []Genero  `json:"generos_favoritos"`
 }
 
 // AppendPerfil adiciona presenter na lista
-func AppendPerfil(perfil entity.Perfil, perfils []*Perfil) []*Perfil {
+func AppendPerfil(perfil entity.Perfil, perfils []Perfil) []Perfil {
 	p := &Perfil{}
-	p.GetPerfil(perfil)
-	perfils = append(perfils, p)
+	p.MakePerfil(perfil)
+	perfils = append(perfils, *p)
 	return perfils
 }
 
-// GetPerfil seta os valores a partir da entidade
-func (p *Perfil) GetPerfil(perfil entity.Perfil) {
-	p.Ouvinte = perfil.Ouvinte
+// MakePerfil seta os valores a partir da entidade
+func (p *Perfil) MakePerfil(perfil entity.Perfil) {
+	p.Ouvinte.MakeOuvinte(perfil.Ouvinte)
 	p.ID = perfil.ID
 	p.InformacoesRelevantes = perfil.InformacoesRelevantes
-	p.ArtistasFavoritos = perfil.ArtistasFavoritos
-	p.GenerosFavoritos = perfil.GenerosFavoritos
+	for _, artista := range perfil.ArtistasFavoritos {
+		p.ArtistasFavoritos = AppendArtista(artista, p.ArtistasFavoritos)
+	}
+	for _, genero := range perfil.GenerosFavoritos {
+		p.GenerosFavoritos = AppendGenero(genero, p.GenerosFavoritos)
+	}
 }
