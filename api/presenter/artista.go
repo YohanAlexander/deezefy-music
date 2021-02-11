@@ -4,7 +4,35 @@ import (
 	"github.com/yohanalexander/deezefy-music/entity"
 )
 
-// Artista entidade Artista
+// PostArtista entidade Artista
+type PostArtista struct {
+	Usuario       entity.Usuario   `json:"usuario"`
+	NomeArtistico string           `json:"nome_artistico"`
+	Biografia     string           `json:"biografia"`
+	AnoFormacao   int              `json:"ano_formacao"`
+	Organizador   []entity.Evento  `json:"eventos"`
+	Seguidores    []entity.Ouvinte `json:"seguidores"`
+	Musicas       []entity.Musica  `json:"musicas"`
+	Perfis        []entity.Perfil  `json:"perfis"`
+	Generos       []entity.Genero  `json:"generos"`
+	Albums        []entity.Album   `json:"albums"`
+}
+
+// MakeArtista seta os valores a partir da entidade
+func (a *PostArtista) MakeArtista(artista entity.Artista) {
+	a.Usuario = artista.Usuario
+	a.NomeArtistico = artista.NomeArtistico
+	a.Biografia = artista.Biografia
+	a.AnoFormacao = artista.AnoFormacao
+	a.Organizador = artista.Organizador
+	a.Seguidores = artista.Seguidores
+	a.Musicas = artista.Grava
+	a.Perfis = artista.Perfis
+	a.Generos = artista.Generos
+	a.Albums = artista.Albums
+}
+
+// Artista presenter Artista
 type Artista struct {
 	Usuario       Usuario   `json:"usuario"`
 	NomeArtistico string    `json:"nome_artistico"`

@@ -6,15 +6,15 @@ import (
 
 // Ouvinte entidade Ouvinte
 type Ouvinte struct {
-	Usuario      Usuario    `validate:"required"`
-	PrimeiroNome string     `validate:"required,gte=1"`
-	Sobrenome    string     `validate:"required,gte=1"`
-	Telefones    []string   `validate:""`
-	Cria         []Playlist `validate:""`
-	Seguindo     []Artista  `validate:""`
-	Curtidas     []Musica   `validate:""`
-	Playlists    []Playlist `validate:""`
-	Albums       []Album    `validate:""`
+	Usuario      Usuario    `json:"usuario" validate:"required"`
+	PrimeiroNome string     `json:"primeiro_nome" validate:"required,gte=1"`
+	Sobrenome    string     `json:"sobrenome" validate:"required,gte=1"`
+	Telefones    []string   `json:"telefones" validate:""`
+	Cria         []Playlist `json:"criadas" validate:""`
+	Seguindo     []Artista  `json:"seguindo" validate:""`
+	Curtidas     []Musica   `json:"curtidas" validate:""`
+	Playlists    []Playlist `json:"playlists" validate:""`
+	Albums       []Album    `json:"albums" validate:""`
 }
 
 // NewOuvinte cria um novo Ouvinte

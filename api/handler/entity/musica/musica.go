@@ -76,7 +76,7 @@ func createMusica(service musica.UseCase) http.Handler {
 
 		w.Header().Set("Content-Type", "application/json")
 
-		input := &presenter.Musica{}
+		input := &presenter.PostMusica{}
 		err := json.NewDecoder(r.Body).Decode(&input)
 		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)

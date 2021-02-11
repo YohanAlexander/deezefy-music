@@ -6,9 +6,9 @@ import (
 
 // Local entidade Local
 type Local struct {
-	ID     int    `validate:"required,gte=1"`
-	Cidade string `validate:"required,gte=1"`
-	Pais   string `validate:"required,gte=1"`
+	ID     int    `json:"id" validate:"required,gte=1"`
+	Cidade string `json:"cidade" validate:"required,gte=1"`
+	Pais   string `json:"pais" validate:"required,gte=1"`
 }
 
 // NewLocal cria um novo Local

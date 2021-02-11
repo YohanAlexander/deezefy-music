@@ -76,7 +76,7 @@ func createLocal(service local.UseCase) http.Handler {
 
 		w.Header().Set("Content-Type", "application/json")
 
-		input := &presenter.Local{}
+		input := &presenter.PostLocal{}
 		err := json.NewDecoder(r.Body).Decode(&input)
 		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)

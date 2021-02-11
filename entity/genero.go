@@ -6,11 +6,11 @@ import (
 
 // Genero entidade Genero
 type Genero struct {
-	Nome     string    `validate:"required,gte=1"`
-	Estilo   string    `validate:"required,oneof=blues rock mpb samba sertanejo jazz classica"`
-	Artistas []Artista `validate:""`
-	Musicas  []Musica  `validate:""`
-	Perfis   []Perfil  `validate:""`
+	Nome     string    `json:"nome" validate:"required,gte=1"`
+	Estilo   string    `json:"estilo" validate:"required,oneof=blues rock mpb samba sertanejo jazz classica"`
+	Artistas []Artista `json:"artistas" validate:""`
+	Musicas  []Musica  `json:"musicas" validate:""`
+	Perfis   []Perfil  `json:"perfis" validate:""`
 }
 
 // NewGenero cria um novo Genero

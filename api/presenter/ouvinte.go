@@ -4,7 +4,33 @@ import (
 	"github.com/yohanalexander/deezefy-music/entity"
 )
 
-// Ouvinte entidade Ouvinte
+// PostOuvinte entidade Ouvinte
+type PostOuvinte struct {
+	Usuario      entity.Usuario    `json:"usuario"`
+	PrimeiroNome string            `json:"primeiro_nome"`
+	Sobrenome    string            `json:"sobrenome"`
+	Telefones    []string          `json:"telefones"`
+	Cria         []entity.Playlist `json:"criadas"`
+	Seguindo     []entity.Artista  `json:"seguindo"`
+	Curtidas     []entity.Musica   `json:"curtidas"`
+	Playlists    []entity.Playlist `json:"playlists"`
+	Albums       []entity.Album    `json:"albums"`
+}
+
+// MakeOuvinte seta os valores a partir da entidade
+func (o *PostOuvinte) MakeOuvinte(ouvinte entity.Ouvinte) {
+	o.Usuario = ouvinte.Usuario
+	o.PrimeiroNome = ouvinte.PrimeiroNome
+	o.Sobrenome = ouvinte.Sobrenome
+	o.Telefones = ouvinte.Telefones
+	o.Cria = ouvinte.Cria
+	o.Seguindo = ouvinte.Seguindo
+	o.Curtidas = ouvinte.Curtidas
+	o.Playlists = ouvinte.Playlists
+	o.Albums = ouvinte.Albums
+}
+
+// Ouvinte presenter Ouvinte
 type Ouvinte struct {
 	Usuario      Usuario    `json:"usuario"`
 	PrimeiroNome string     `json:"primeiro_nome"`

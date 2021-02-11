@@ -6,8 +6,8 @@ import (
 
 // Telefone entidade multivalorada telefone
 type Telefone struct {
-	Ouvinte  string `validate:"required,email"`
-	Telefone string `validate:"e164"`
+	Ouvinte  string `json:"ouvinte" validate:"required,email"`
+	Telefone string `json:"telefone" validate:"e164"`
 }
 
 // NewTelefone cria um novo Telefone

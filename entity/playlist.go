@@ -6,12 +6,12 @@ import (
 
 // Playlist entidade Playlist
 type Playlist struct {
-	Usuario     Usuario   `validate:"required"`
-	Nome        string    `validate:"required,gte=1"`
-	Status      string    `validate:"required,oneof=ativo inativo"`
-	DataCriacao string    `validate:"required,datetime=2006-01-02"`
-	Salvou      []Ouvinte `validate:""`
-	Musicas     []Musica  `validate:""`
+	Usuario     Usuario   `json:"usuario" validate:"required"`
+	Nome        string    `json:"nome" validate:"required,gte=1"`
+	Status      string    `json:"status" validate:"required,oneof=ativo inativo"`
+	DataCriacao string    `json:"data_criacao" validate:"required,datetime=2006-01-02"`
+	Salvou      []Ouvinte `json:"ouvintes" validate:""`
+	Musicas     []Musica  `json:"musicas" validate:""`
 }
 
 // NewPlaylist cria um novo Playlist

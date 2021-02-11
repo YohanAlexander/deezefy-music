@@ -6,14 +6,14 @@ import (
 
 // Musica entidade Musica
 type Musica struct {
-	ID        int        `validate:"required,gte=1"`
-	Nome      string     `validate:"required,gte=1"`
-	Duracao   int        `validate:"required,gte=100"`
-	Curtiu    []Ouvinte  `validate:""`
-	Gravou    []Artista  `validate:""`
-	Playlists []Playlist `validate:""`
-	Albums    []Album    `validate:""`
-	Generos   []Genero   `validate:""`
+	ID        int        `json:"id" validate:"required,gte=1"`
+	Nome      string     `json:"nome" validate:"required,gte=1"`
+	Duracao   int        `json:"duracao" validate:"required,gte=100"`
+	Curtiu    []Ouvinte  `json:"curtiu" validate:""`
+	Gravou    []Artista  `json:"artistas" validate:""`
+	Playlists []Playlist `json:"playlists" validate:""`
+	Albums    []Album    `json:"albums" validate:""`
+	Generos   []Genero   `json:"generos" validate:""`
 }
 
 // NewMusica cria um novo Musica

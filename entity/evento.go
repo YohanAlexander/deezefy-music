@@ -6,11 +6,11 @@ import (
 
 // Evento entidade Evento
 type Evento struct {
-	Usuario Usuario `validate:"required"`
-	Local   Local   `validate:"required"`
-	ID      int     `validate:"required,gte=1"`
-	Nome    string  `validate:"required,gte=1"`
-	Data    string  `validate:"required,datetime=2006-01-02"`
+	Usuario Usuario `json:"usuario" validate:"required"`
+	Local   Local   `json:"local" validate:"required"`
+	ID      int     `json:"id" validate:"required,gte=1"`
+	Nome    string  `json:"nome" validate:"required,gte=1"`
+	Data    string  `json:"data" validate:"required,datetime=2006-01-02"`
 }
 
 // NewEvento cria um novo Evento

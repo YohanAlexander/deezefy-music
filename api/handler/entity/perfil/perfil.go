@@ -76,7 +76,7 @@ func createPerfil(service perfil.UseCase) http.Handler {
 
 		w.Header().Set("Content-Type", "application/json")
 
-		input := &presenter.Perfil{}
+		input := &presenter.PostPerfil{}
 		err := json.NewDecoder(r.Body).Decode(&input)
 		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)

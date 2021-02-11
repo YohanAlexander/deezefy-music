@@ -76,7 +76,7 @@ func createAlbum(service album.UseCase) http.Handler {
 
 		w.Header().Set("Content-Type", "application/json")
 
-		input := &presenter.Album{}
+		input := &presenter.PostAlbum{}
 		err := json.NewDecoder(r.Body).Decode(&input)
 		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)

@@ -75,7 +75,7 @@ func createUsuario(service usuario.UseCase) http.Handler {
 
 		w.Header().Set("Content-Type", "application/json")
 
-		input := &presenter.Usuario{}
+		input := &presenter.PostUsuario{}
 		err := json.NewDecoder(r.Body).Decode(&input)
 		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)

@@ -6,11 +6,11 @@ import (
 
 // Perfil entidade Perfil
 type Perfil struct {
-	Ouvinte               Ouvinte   `validate:"required"`
-	ID                    int       `validate:"required,gte=1"`
-	InformacoesRelevantes string    `validate:"required,gte=1"`
-	ArtistasFavoritos     []Artista `validate:""`
-	GenerosFavoritos      []Genero  `validate:""`
+	Ouvinte               Ouvinte   `json:"ouvinte" validate:"required"`
+	ID                    int       `json:"id" validate:"required,gte=1"`
+	InformacoesRelevantes string    `json:"informacoes_relevantes" validate:"required,gte=1"`
+	ArtistasFavoritos     []Artista `json:"artistas_favoritos" validate:""`
+	GenerosFavoritos      []Genero  `json:"generos_favoritos" validate:""`
 }
 
 // NewPerfil cria um novo Perfil

@@ -6,16 +6,16 @@ import (
 
 // Artista entidade Artista
 type Artista struct {
-	Usuario       Usuario   `validate:"required"`
-	NomeArtistico string    `validate:"required,gte=1"`
-	Biografia     string    `validate:"gte=1"`
-	AnoFormacao   int       `validate:"gte=1000"`
-	Organizador   []Evento  `validate:""`
-	Seguidores    []Ouvinte `validate:""`
-	Grava         []Musica  `validate:""`
-	Perfis        []Perfil  `validate:""`
-	Generos       []Genero  `validate:""`
-	Albums        []Album   `validate:""`
+	Usuario       Usuario   `json:"usuario" validate:"required"`
+	NomeArtistico string    `json:"nome_artistico" validate:"required,gte=1"`
+	Biografia     string    `json:"biografia" validate:"gte=1"`
+	AnoFormacao   int       `json:"ano_formacao" validate:"gte=1000"`
+	Organizador   []Evento  `json:"eventos" validate:""`
+	Seguidores    []Ouvinte `json:"seguidores" validate:""`
+	Grava         []Musica  `json:"musicas" validate:""`
+	Perfis        []Perfil  `json:"perfis" validate:""`
+	Generos       []Genero  `json:"generos" validate:""`
+	Albums        []Album   `json:"albums" validate:""`
 }
 
 // NewArtista cria um novo Artista

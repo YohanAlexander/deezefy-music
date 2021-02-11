@@ -6,12 +6,12 @@ import (
 
 // Album entidade Album
 type Album struct {
-	Artista       Artista   `validate:"required"`
-	ID            int       `validate:"required,gte=1"`
-	Titulo        string    `validate:"required,gte=1"`
-	AnoLancamento int       `validate:"required,gte=1000"`
-	Salvou        []Ouvinte `validate:""`
-	Musicas       []Musica  `validate:""`
+	Artista       Artista   `json:"artista" validate:"required"`
+	ID            int       `json:"id" validate:"required,gte=1"`
+	Titulo        string    `json:"titulo" validate:"required,gte=1"`
+	AnoLancamento int       `json:"ano_lancamento" validate:"required,gte=1000"`
+	Salvou        []Ouvinte `json:"ouvintes" validate:""`
+	Musicas       []Musica  `json:"musicas" validate:""`
 }
 
 // NewAlbum cria um novo Album

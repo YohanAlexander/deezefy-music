@@ -6,7 +6,21 @@ import (
 	"github.com/yohanalexander/deezefy-music/entity"
 )
 
-// Usuario entidade usuario
+// PostUsuario entidade Usuario
+type PostUsuario struct {
+	Email    string `json:"email"`
+	Password string `json:"senha"`
+	Birthday string `json:"data_nascimento"`
+}
+
+// MakeUsuario seta os valores a partir da entidade
+func (u *PostUsuario) MakeUsuario(usuario entity.Usuario) {
+	u.Email = usuario.Email
+	u.Password = usuario.Password
+	u.Birthday = usuario.Birthday
+}
+
+// Usuario presenter Usuario
 type Usuario struct {
 	Email    string `json:"email"`
 	Password string `json:"senha"`

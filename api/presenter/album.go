@@ -4,7 +4,27 @@ import (
 	"github.com/yohanalexander/deezefy-music/entity"
 )
 
-// Album entidade Album
+// PostAlbum entidade Album
+type PostAlbum struct {
+	Artista       entity.Artista   `json:"artista"`
+	ID            int              `json:"id"`
+	Titulo        string           `json:"titulo"`
+	AnoLancamento int              `json:"ano_lancamento"`
+	Ouvintes      []entity.Ouvinte `json:"ouvintes"`
+	Musicas       []entity.Musica  `json:"musicas"`
+}
+
+// MakeAlbum seta os valores a partir da entidade
+func (a *PostAlbum) MakeAlbum(album entity.Album) {
+	a.Artista = album.Artista
+	a.ID = album.ID
+	a.Titulo = album.Titulo
+	a.AnoLancamento = album.AnoLancamento
+	a.Ouvintes = album.Salvou
+	a.Musicas = album.Musicas
+}
+
+// Album presenter Album
 type Album struct {
 	Artista       Artista   `json:"artista"`
 	ID            int       `json:"id"`

@@ -7,9 +7,9 @@ import (
 
 // Usuario entidade usuario
 type Usuario struct {
-	Email    string     `validate:"required,email"`
-	Password string     `validate:"required,gte=8"`
-	Birthday string     `validate:"datetime=2006-01-02"`
+	Email    string `json:"email" validate:"required,email"`
+	Password string `json:"senha" validate:"required,gte=8"`
+	Birthday string `json:"data_nascimento" validate:"datetime=2006-01-02"`
 }
 
 // NewUsuario cria um novo usuario
