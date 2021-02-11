@@ -37,14 +37,15 @@ func (r *OuvintePSQL) Create(e *entity.Ouvinte) (string, error) {
 		return e.Usuario.Email, err
 	}
 	stmt, err = r.db.Prepare(`
-		insert into deezefy.Ouvinte (primeiro_nome, sobrenome)
-		values($1,$2)`)
+		insert into deezefy.Ouvinte (primeiro_nome, sobrenome, fk_usuario)
+		values($1,$2,$3)`)
 	if err != nil {
 		return e.Usuario.Email, err
 	}
 	_, err = stmt.Exec(
 		e.PrimeiroNome,
 		e.Sobrenome,
+		e.Usuario.Email,
 	)
 	if err != nil {
 		return e.Usuario.Email, err
