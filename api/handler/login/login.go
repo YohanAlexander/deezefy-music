@@ -61,7 +61,12 @@ func loginUsuario(service usuario.UseCase) http.Handler {
 		toJ.GetUsuario(*user)
 
 		w.WriteHeader(http.StatusOK)
-		if err := json.NewEncoder(w).Encode(toJ); err != nil {
+		err = json.NewEncoder(w).Encode(presenter.Sucesso{
+			Result:     toJ,
+			StatusCode: http.StatusOK,
+		})
+
+		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)
 			json.NewEncoder(w).Encode(presenter.Erro{
 				Message:    presenter.ErrJSON.Error(),

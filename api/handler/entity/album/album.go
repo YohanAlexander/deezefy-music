@@ -55,7 +55,12 @@ func listAlbums(service album.UseCase) http.Handler {
 		}
 
 		w.WriteHeader(http.StatusOK)
-		if err := json.NewEncoder(w).Encode(toJ); err != nil {
+		err = json.NewEncoder(w).Encode(presenter.Sucesso{
+			Result:     toJ,
+			StatusCode: http.StatusOK,
+		})
+
+		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)
 			json.NewEncoder(w).Encode(presenter.Erro{
 				Message:    presenter.ErrJSON.Error(),
@@ -115,7 +120,12 @@ func createAlbum(service album.UseCase) http.Handler {
 		toJ.GetAlbum(*m)
 
 		w.WriteHeader(http.StatusCreated)
-		if err := json.NewEncoder(w).Encode(toJ); err != nil {
+		err = json.NewEncoder(w).Encode(presenter.Sucesso{
+			Result:     toJ,
+			StatusCode: http.StatusCreated,
+		})
+
+		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)
 			json.NewEncoder(w).Encode(presenter.Erro{
 				Message:    presenter.ErrJSON.Error(),
@@ -158,7 +168,12 @@ func getAlbum(service album.UseCase) http.Handler {
 		toJ.GetAlbum(*data)
 
 		w.WriteHeader(http.StatusOK)
-		if err := json.NewEncoder(w).Encode(toJ); err != nil {
+		err = json.NewEncoder(w).Encode(presenter.Sucesso{
+			Result:     toJ,
+			StatusCode: http.StatusOK,
+		})
+
+		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)
 			json.NewEncoder(w).Encode(presenter.Erro{
 				Message:    presenter.ErrJSON.Error(),
@@ -181,6 +196,11 @@ func deleteAlbum(service album.UseCase) http.Handler {
 		err := service.DeleteAlbum(id)
 
 		w.WriteHeader(http.StatusOK)
+		err = json.NewEncoder(w).Encode(presenter.Sucesso{
+			Result:     presenter.SucessDelete,
+			StatusCode: http.StatusOK,
+		})
+
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			json.NewEncoder(w).Encode(presenter.Erro{

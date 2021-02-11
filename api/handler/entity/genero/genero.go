@@ -54,7 +54,12 @@ func listGeneros(service genero.UseCase) http.Handler {
 		}
 
 		w.WriteHeader(http.StatusOK)
-		if err := json.NewEncoder(w).Encode(toJ); err != nil {
+		err = json.NewEncoder(w).Encode(presenter.Sucesso{
+			Result:     toJ,
+			StatusCode: http.StatusOK,
+		})
+
+		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)
 			json.NewEncoder(w).Encode(presenter.Erro{
 				Message:    presenter.ErrJSON.Error(),
@@ -114,7 +119,12 @@ func createGenero(service genero.UseCase) http.Handler {
 		toJ.GetGenero(*m)
 
 		w.WriteHeader(http.StatusCreated)
-		if err := json.NewEncoder(w).Encode(toJ); err != nil {
+		err = json.NewEncoder(w).Encode(presenter.Sucesso{
+			Result:     toJ,
+			StatusCode: http.StatusCreated,
+		})
+
+		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)
 			json.NewEncoder(w).Encode(presenter.Erro{
 				Message:    presenter.ErrJSON.Error(),
@@ -156,7 +166,12 @@ func getGenero(service genero.UseCase) http.Handler {
 		toJ.GetGenero(*data)
 
 		w.WriteHeader(http.StatusOK)
-		if err := json.NewEncoder(w).Encode(toJ); err != nil {
+		err = json.NewEncoder(w).Encode(presenter.Sucesso{
+			Result:     toJ,
+			StatusCode: http.StatusOK,
+		})
+
+		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)
 			json.NewEncoder(w).Encode(presenter.Erro{
 				Message:    presenter.ErrJSON.Error(),
@@ -178,6 +193,11 @@ func deleteGenero(service genero.UseCase) http.Handler {
 		err := service.DeleteGenero(nome)
 
 		w.WriteHeader(http.StatusOK)
+		err = json.NewEncoder(w).Encode(presenter.Sucesso{
+			Result:     presenter.SucessDelete,
+			StatusCode: http.StatusOK,
+		})
+
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			json.NewEncoder(w).Encode(presenter.Erro{
