@@ -22,8 +22,8 @@ func NewAlbumPSQL(db *sql.DB) *AlbumPSQL {
 // Create an Album
 func (r *AlbumPSQL) Create(e *entity.Album) (int, error) {
 	stmt, err := r.db.Prepare(`
-		insert into deezefy.Album (id, titulo, ano_lancamento)
-		values($1,$2,$3)`)
+		insert into deezefy.Album (id, titulo, ano_lancamento, fk_artista)
+		values($1,$2,$3,$4)`)
 	if err != nil {
 		return e.ID, err
 	}
@@ -31,6 +31,7 @@ func (r *AlbumPSQL) Create(e *entity.Album) (int, error) {
 		e.ID,
 		e.Titulo,
 		e.AnoLancamento,
+		e.Artista.Usuario.Email,
 	)
 	if err != nil {
 		return e.ID, err
